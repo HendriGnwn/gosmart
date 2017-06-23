@@ -30,7 +30,6 @@ CREATE TABLE `course` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `cost` decimal(14,2) NOT NULL,
-  `teacher_cost` decimal(14,2) NOT NULL,
   `face_to_face` int(11) NOT NULL,
   `status` smallint(6) NOT NULL DEFAULT '1' COMMENT '1=Active;0=Inactive',
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -39,13 +38,13 @@ CREATE TABLE `course` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `course` (`id`, `course_level_id`, `name`, `description`, `cost`, `teacher_cost`, `face_to_face`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1,	1,	'Matematika I',	'Matematika Sekolah Dasar Kelas 1',	75000.00,	65000.00,	2,	1,	NULL,	'2017-06-20 12:01:47',	'2017-06-20 12:01:47'),
-(2,	1,	'Bahasa Indonesia I',	'Bahasa Indonesia Sekolah Dasar Kelas 1',	75000.00,	65000.00,	2,	1,	NULL,	'2017-06-20 12:04:06',	'2017-06-20 12:04:06'),
-(3,	2,	'Matematika II',	'Matematika Sekolah Dasar Kelas 2',	77000.00,	66000.00,	2,	1,	NULL,	'2017-06-20 12:04:06',	'2017-06-20 12:04:06'),
-(4,	2,	'Bahasa Indonesia II',	'Bahasa Indonesia Sekolah Dasar Kelas 2',	77000.00,	66000.00,	2,	1,	NULL,	'2017-06-20 12:04:06',	'2017-06-20 12:04:06'),
-(5,	3,	'Matematika III',	'Matematika Sekolah Dasar Kelas 3',	77000.00,	66000.00,	2,	1,	NULL,	'2017-06-20 12:04:06',	'2017-06-20 12:04:06'),
-(6,	3,	'Bahasa Indonesia III',	'Bahasa Indonesia Sekolah Dasar Kelas 3',	77000.00,	66000.00,	2,	1,	NULL,	'2017-06-20 12:04:06',	'2017-06-20 12:04:06');
+INSERT INTO `course` (`id`, `course_level_id`, `name`, `description`, `cost`, `face_to_face`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1,	1,	'Matematika I',	'Matematika Sekolah Dasar Kelas 1',	75000.00,	2,	1,	NULL,	'2017-06-20 12:01:47',	'2017-06-20 12:01:47'),
+(2,	1,	'Bahasa Indonesia I',	'Bahasa Indonesia Sekolah Dasar Kelas 1',	75000.00,	2,	1,	NULL,	'2017-06-20 12:04:06',	'2017-06-20 12:04:06'),
+(3,	2,	'Matematika II',	'Matematika Sekolah Dasar Kelas 2',	77000.00,	2,	1,	NULL,	'2017-06-20 12:04:06',	'2017-06-20 12:04:06'),
+(4,	2,	'Bahasa Indonesia II',	'Bahasa Indonesia Sekolah Dasar Kelas 2',	77000.00,	2,	1,	NULL,	'2017-06-20 12:04:06',	'2017-06-20 12:04:06'),
+(5,	3,	'Matematika III',	'Matematika Sekolah Dasar Kelas 3',	77000.00,	2,	1,	NULL,	'2017-06-20 12:04:06',	'2017-06-20 12:04:06'),
+(6,	3,	'Bahasa Indonesia III',	'Bahasa Indonesia Sekolah Dasar Kelas 3',	77000.00,	2,	1,	NULL,	'2017-06-20 12:04:06',	'2017-06-20 12:04:06');
 
 DROP TABLE IF EXISTS `course_level`;
 CREATE TABLE `course_level` (
@@ -77,6 +76,7 @@ DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL COMMENT 'as student',
+  `teacher_id` bigint(20) NOT NULL COMMENT 'as teacher',
   `code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `face_to_face` int(11) NOT NULL,
   `admin_fee` decimal(14,2) NOT NULL,
@@ -110,6 +110,8 @@ CREATE TABLE `order_detail` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `order_id` bigint(20) NOT NULL,
   `course_id` bigint(20) NOT NULL,
+  `section` int(11) NOT NULL,
+  `section_time` time NOT NULL,
   `amount` decimal(14,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -153,6 +155,8 @@ CREATE TABLE `private_detail` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `private_id` bigint(20) NOT NULL,
   `on_at` timestamp NULL DEFAULT NULL,
+  `section` int(11) DEFAULT NULL,
+  `section_time` time DEFAULT NULL,
   `student_check` smallint(1) DEFAULT '0' COMMENT '1=True;0=False;',
   `student_check_at` timestamp NULL DEFAULT NULL,
   `teacher_check` smallint(1) DEFAULT '0' COMMENT '1=True;0=False;',
@@ -186,6 +190,10 @@ CREATE TABLE `teacher_course` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
   `course_id` bigint(20) NOT NULL,
+  `expected_cost` decimal(14,2) NOT NULL,
+  `expected_cost_updated_at` timestamp NULL DEFAULT NULL,
+  `approved_expected_cost_by` bigint(20) DEFAULT NULL,
+  `approved_expected_cost_at` timestamp NULL DEFAULT NULL,
   `module` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
@@ -250,4 +258,4 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_number`, `latitude`, `longitude`, `address`, `email`, `password`, `remember_token`, `status`, `role`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (1,	'STU2017060001',	'Hendri',	'Student',	'08561471500',	-6.55592,	106.9928,	'Jl Batu Ceper X No 2Y, Kebon Kelapa Gambir Jakarta Pusat',	'hendri.gnw@gmail.com',	'admin123',	NULL,	1,	3,	NULL,	'2017-06-20 12:37:16',	'2017-06-20 12:37:16');
 
--- 2017-06-20 13:49:32
+-- 2017-06-23 19:08:04

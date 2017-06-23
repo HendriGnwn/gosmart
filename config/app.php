@@ -168,6 +168,7 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
 		'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
+		Themsaid\MailPreview\MailPreviewServiceProvider::class,
 
         /*
          * Application Service Providers...
