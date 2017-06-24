@@ -7,7 +7,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
+	
+	const STATUS_BLOCKED = 5;
+	
+	const ROLE_SUPERADMIN = 1;
+	const ROLE_TEACHER = 2;
+	const ROLE_STUDENT = 3;
 	
 	protected $table = 'user';
 
@@ -44,6 +50,15 @@ class User extends Authenticatable
         'password', 
 		'remember_token',
 		'deleted_at',
-		'role',
     ];
+	
+	public function studentProfile() 
+	{
+		return $this->hasMany('\App\StudentProfile', 'user_id', 'id');
+	}
+	
+	public function teacherProfile() 
+	{
+		return $this->hasMany('\App\TeacherProfile', 'user_id', 'id');
+	}
 }
