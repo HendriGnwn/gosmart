@@ -17,9 +17,9 @@ class RequiredParameterJson
     {
 		if (!$request->isJson()) {
 			return response()->json([
-				'status' => 500,
+				'status' => 400,
 				'message' => 'Parameters must be json.'
-			]);
+			], 400);
 		}
 		
         return $next($request);
