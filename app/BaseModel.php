@@ -26,4 +26,22 @@ class BaseModel extends Model
 	{
 		$this->_path = $value;
 	}
+	
+	/**
+	 * @param type $query
+	 * @return query
+	 */
+	public function scopeActived($query)
+	{
+		return $query->where($this->table . '.status', self::STATUS_ACTIVE);
+	}
+	
+	/**
+	 * @param type $query
+	 * @return query
+	 */
+	public function scopeOrdered($query)
+	{
+		return $query->orderBy($this->table . '.order');
+	}
 }
