@@ -17,6 +17,22 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 	
 	Route::group(['prefix' => 'auth'], function () {
 		Route::post('/login', 'Api\AuthController@login');
+		Route::post('/register-student', 'Api\AuthController@registerStudent');
+		Route::post('/register-teacher', 'Api\AuthController@registerTeacher');
+		Route::post('/forgot-password', 'Api\AuthController@forgotPassword');
 	});
+	
+	Route::group(['middleware' => ['jwt.auth']], function() {
+		Route::group(['prefix' => 'auth'], function() {
+			Route::post('/logout', 'Api\AuthController@logout');
+		});
+		Route::group(['prefix' => 'user'], function() {
+			Route::get('/get-by-unique/{uniqueNumber}', 'Api\UserController@getByUniqueNumber');
+			Route::put('/update-student', 'Api\UserController@updateStudentProfile');
+			Route::put('/update-teacher', 'Api\UserController@updateTeacherProfile');
+		});
+	});
+	
+	Route::get('/course-levels', 'Api\CourseController@getCourseLevelWithRelations');
 	
 });
