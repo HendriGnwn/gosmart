@@ -1,14 +1,11 @@
-@extends('layouts.app.frame')
+@extends('layouts.app')
 @section('title', 'Dashboard')
-@section('breadcrumbs')
-	@php echo \Breadcrumbs::render(['Dashboard']) @endphp
-@endsection
 @section('content')
 	<div class="panel panel-default">
 		<div class="panel-heading">Dashboard</div>
 
 		<div class="panel-body">
-			You are logged in!
+			Your application's dashboard.
 		</div>
 	</div>
 @endsection

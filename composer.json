@@ -12,7 +12,9 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.3",
         "themsaid/laravel-mail-preview": "^1.2",
-        "tymon/jwt-auth": "0.5.*"
+        "tymon/jwt-auth": "0.5.*",
+		"yajra/laravel-datatables-oracle": "^6.23",
+		"eventviva/php-image-resize": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
