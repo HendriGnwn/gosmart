@@ -48,15 +48,7 @@ class AuthController extends Controller
 			], 400);
 		}
 		
-		$user = User::with([
-				'studentProfile', 
-				'teacherProfile',
-				'teacherProfile.teacherCourses',
-				'teacherProfile.teacherCourses.course',
-				'teacherProfile.teacherCourses.course.courseLevel',
-				'teacherProfile.teacherTotalHistories',
-			])
-			->whereEmail($request->email)
+		$user = User::whereEmail($request->email)
 			->roleApps()
 			->appsActived()
 			->first();
@@ -103,15 +95,7 @@ class AuthController extends Controller
 		$user->password = bcrypt($request->password);
 		$user->insertStudent();
 		
-		$user = User::with([
-				'studentProfile', 
-				'teacherProfile',
-				'teacherProfile.teacherCourses',
-				'teacherProfile.teacherCourses.course',
-				'teacherProfile.teacherCourses.course.courseLevel',
-				'teacherProfile.teacherTotalHistories',
-			])
-			->whereId($user->id)
+		$user = User::whereId($user->id)
 			->roleApps()
 			->appsActived()
 			->first();
@@ -160,15 +144,7 @@ class AuthController extends Controller
 		$user->title = $request->title;
 		$user->insertTeacher();
 		
-		$user = User::with([
-				'studentProfile', 
-				'teacherProfile',
-				'teacherProfile.teacherCourses',
-				'teacherProfile.teacherCourses.course',
-				'teacherProfile.teacherCourses.course.courseLevel',
-				'teacherProfile.teacherTotalHistories',
-			])
-			->whereId($user->id)
+		$user = User::whereId($user->id)
 			->roleApps()
 			->appsActived()
 			->first();

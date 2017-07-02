@@ -44,4 +44,18 @@ class CourseController extends Controller
 			'data' => $courseLevels,
 		], 200);
 	}
+	
+	public function listCourseLevels()
+	{
+		$courseLevels = \App\CourseLevel::with(['courses'])
+				->actived()
+				->ordered()
+				->get();
+		
+		return response()->json([
+			'status' => 200,
+			'message' => 'success',
+			'data' => $courseLevels,
+		], 200);
+	}
 }

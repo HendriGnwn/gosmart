@@ -25,15 +25,7 @@ class UserController extends Controller
 			], 404);
 		}
 		
-		$user = User::with([
-				'studentProfile', 
-				'teacherProfile',
-				'teacherProfile.teacherCourses',
-				'teacherProfile.teacherCourses.course',
-				'teacherProfile.teacherCourses.course.courseLevel',
-				'teacherProfile.teacherTotalHistories',
-			])
-			->whereUniqueNumber($uniqueNumber)
+		$user = User::whereUniqueNumber($uniqueNumber)
 			->roleApps()
 			->appsActived()
 			->first();
@@ -167,15 +159,7 @@ class UserController extends Controller
 		$user->save();
 		$user->teacherProfile()->update($profileRequest);
 		
-		$result = User::with([
-				'studentProfile', 
-				'teacherProfile',
-				'teacherProfile.teacherCourses',
-				'teacherProfile.teacherCourses.course',
-				'teacherProfile.teacherCourses.course.courseLevel',
-				'teacherProfile.teacherTotalHistories',
-			])
-			->whereUniqueNumber($user->unique_number)
+		$result = User::whereUniqueNumber($user->unique_number)
 			->roleApps()
 			->appsActived()
 			->first();
@@ -285,15 +269,7 @@ class UserController extends Controller
 		}
 		$user->save();
 		
-		$result = User::with([
-				'studentProfile', 
-				'teacherProfile',
-				'teacherProfile.teacherCourses',
-				'teacherProfile.teacherCourses.course',
-				'teacherProfile.teacherCourses.course.courseLevel',
-				'teacherProfile.teacherTotalHistories',
-			])
-			->whereUniqueNumber($user->unique_number)
+		$result = User::whereUniqueNumber($user->unique_number)
 			->roleApps()
 			->appsActived()
 			->first();
