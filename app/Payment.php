@@ -16,7 +16,12 @@ class Payment extends BaseModel
 		'status',
 		'order',
 		'created_at', 
+		'updated_at'
     ];
+	
+	protected $with = [
+		'banks'
+	];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -24,10 +29,13 @@ class Payment extends BaseModel
      * @var array
      */
     protected $hidden = [
+		'status',
+		'created_at',
+		'updated_at'
     ];
 	
 	public function banks()
 	{
-		return $this->hasMany('\App\Bank', 'bank_id', 'id');
+		return $this->hasMany('\App\Bank', 'payment_id', 'id')->orderBy('name', 'asc');
 	}
 }

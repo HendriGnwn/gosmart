@@ -29,7 +29,9 @@ class Bank extends BaseModel
      * @var array
      */
     protected $hidden = [
-		'deleted_at'
+		'deleted_at',
+		'created_at',
+		'updated_at'
     ];
 	
 	public function payment()

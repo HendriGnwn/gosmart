@@ -15,6 +15,7 @@ class OrderConfirmation extends BaseModel
         'user_id', 
         'order_id', 
         'bank_id', 
+        'bank_number', 
         'bank_behalf_of', 
         'amount', 
         'upload_bukti', 

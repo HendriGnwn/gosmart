@@ -64,6 +64,15 @@ class User extends BaseModel implements
 		'deleted_at',
     ];
 	
+	protected $with = [
+		'studentProfile', 
+		'teacherProfile',
+		'teacherProfile.teacherCourses',
+		'teacherProfile.teacherCourses.course',
+		'teacherProfile.teacherCourses.course.courseLevel',
+		'teacherProfile.teacherTotalHistories',
+	];
+	
 	/**
 	 * @param type $role
 	 * @param type $padLength

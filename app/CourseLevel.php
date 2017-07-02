@@ -33,8 +33,12 @@ class CourseLevel extends BaseModel
 		'status'
     ];
 	
+	protected $with = [
+		'courses'
+	];
+
 	public function courses() 
 	{
-		return $this->hasMany('\App\Course', 'course_level_id', 'id')->actived();
+		return $this->hasMany('\App\Course', 'course_level_id', 'id')->actived()->orderBy('name', 'asc');
 	}
 }
