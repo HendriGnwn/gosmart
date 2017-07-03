@@ -43,6 +43,11 @@ class TeacherCourse extends BaseModel
 		'updated_at', 
     ];
 	
+	protected $with = [
+		'course',
+		'course.courseLevel',
+	];
+
 	public function __construct(array $attributes = array()) {
 		parent::__construct($attributes);
 		$this->setPath(public_path(self::DESTINATION_PATH));

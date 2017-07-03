@@ -68,7 +68,6 @@ class User extends BaseModel implements
 		'studentProfile', 
 		'teacherProfile',
 		'teacherProfile.teacherCourses',
-		'teacherProfile.teacherCourses.course',
 		'teacherProfile.teacherCourses.course.courseLevel',
 		'teacherProfile.teacherTotalHistories',
 	];

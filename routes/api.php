@@ -31,6 +31,9 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 			Route::put('/update-student', 'Api\UserController@updateStudentProfile');
 			Route::put('/update-teacher', 'Api\UserController@updateTeacherProfile');
 		});
+		Route::group(['prefix' => 'teacher'], function() {
+			Route::post('/choose-course/{uniqueNumber}', 'Api\CourseController@chooseCourse');
+		});
 	});
 	
 	Route::get('/course-levels', 'Api\CourseController@getCourseLevelWithRelations');
