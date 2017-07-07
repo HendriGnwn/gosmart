@@ -82,10 +82,12 @@
 		<div class="container">
 			
 			<div class="row">
+				@if (!Auth::guest())
 				<div class="col-xs-12 col-md-12 col-sm-12">
 					@yield('breadcrumbs', \Breadcrumbs::render(['Home']))
 				</div>
-				@include('admin.sidebar')
+					@include('admin.sidebar')
+				@endif
 
 				<div class="col-md-9">
 				@yield('content')
