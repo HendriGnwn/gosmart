@@ -18,7 +18,6 @@ class TeacherProfile extends BaseModel
         'title', 
         'ijazah_number', 
         'graduated', 
-        'photo', 
         'upload_ijazah', 
         'formal_photo', 
 		'total', 

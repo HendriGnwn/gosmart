@@ -19,7 +19,6 @@ class StudentProfile extends BaseModel
         'degree', 
         'department', 
         'school_address', 
-        'photo', 
         'formal_photo', 
 		'created_at', 
 		'updated_at', 

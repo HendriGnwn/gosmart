@@ -208,8 +208,9 @@ class AuthController extends Controller
 	 */
     public function logout(Request $request)
 	{
-		$user = JWTAuth::parseToken()->invalidate();
+		$user = JWTAuth::parseToken()->authenticate();
 		User::whereId($user->id)->update(['firebase_token' => null]);
+		JWTAuth::parseToken()->invalidate();
 		
         return response()->json([
 			'status' => 200,

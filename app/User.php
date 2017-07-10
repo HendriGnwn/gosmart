@@ -18,6 +18,8 @@ class User extends BaseModel implements
 {
     use Authenticatable, Authorizable, CanResetPassword, Notifiable, SoftDeletes;
 	
+	const DESTINATION_PATH = 'files/users/';
+	
 	const STATUS_BLOCKED = 5;
 	
 	const ROLE_SUPERADMIN = 1;
@@ -38,6 +40,7 @@ class User extends BaseModel implements
         'first_name', 
         'last_name', 
         'phone_number', 
+		'photo',
         'latitude', 
         'longitude', 
         'address', 
@@ -72,6 +75,16 @@ class User extends BaseModel implements
 		'teacherProfile.teacherCourses.course.courseLevel',
 		'teacherProfile.teacherTotalHistories',
 	];
+	
+	public function __construct(array $attributes = array())
+	{
+		parent::__construct($attributes);
+		
+		$this->setPath(public_path(self::DESTINATION_PATH));
+		if (!is_dir($this->getPath())) {
+			\File::makeDirectory($this->getPath(), '0755');
+		}
+	}
 	
 	/**
 	 * @param type $role
