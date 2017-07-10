@@ -24,6 +24,7 @@ class AuthController extends Controller
 		$validators = \Validator::make($request->all(), [
 			'email' => 'required|email',
 			'password' => 'required|min:6',
+			'firebase_token' => 'required',
 		]);
 		
 		if ($validators->fails()) {
@@ -61,6 +62,7 @@ class AuthController extends Controller
 		
 		$token = JWTAuth::fromUser($user);
 		$user->last_login_at = Carbon::now()->toDateTimeString();
+		$user->firebase_token = $request['firebase_token'];
 		$user->save();
 		$user['token'] = $token;
 		
@@ -206,7 +208,8 @@ class AuthController extends Controller
 	 */
     public function logout(Request $request)
 	{
-		JWTAuth::parseToken()->invalidate();
+		$user = JWTAuth::parseToken()->invalidate();
+		User::whereId($user->id)->update(['firebase_token' => null]);
 		
         return response()->json([
 			'status' => 200,

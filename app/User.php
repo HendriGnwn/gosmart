@@ -44,6 +44,7 @@ class User extends BaseModel implements
 		'email', 
 		'password',
 		'remember_token',
+		'firebase_token',
 		'status',
 		'role',
 		'last_login_at',
