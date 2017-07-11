@@ -1,0 +1,20 @@
+{
+   "fields": [
+        {
+            "name": "user_id",
+            "type": "smallint"
+        },
+        {
+            "name": "term_id",
+            "type": "smallint"
+        },
+        {
+            "name": "name",
+            "type": "string"
+        },
+        {
+            "name": "state",
+            "type": "tinyint"
+        }
+   ]
+}

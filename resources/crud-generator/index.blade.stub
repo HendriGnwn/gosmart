@@ -1,65 +1,165 @@
-@extends('layouts.app')
+@extends('layouts.app.frame')
 @section('title', '%%crudNameCap%%')
+@section('description', '%%crudNameCap%%')
 @section('breadcrumbs')
-	@php echo \Breadcrumbs::render(['%%crudNameCap%%']) @endphp
+	@php echo \Breadcrumbs::render(['%%modelName%%']) @endphp
 @endsection
+@section('button')
+	<a href="{{ url('/%%routeGroup%%%%viewName%%/create') }}" class="btn btn-info btn-xs no-border">Back</a>
+@endsection
+
 @section('content')
-	<div class="panel panel-default">
-		<div class="panel-heading">%%crudNameCap%%</div>
-		<div class="panel-body">
-			<a href="{{ url('/%%routeGroup%%%%viewName%%/create') }}" class="btn btn-success btn-sm" title="Add New %%modelName%%">
-				<i class="fa fa-plus" aria-hidden="true"></i> Add New
-			</a>
+    <input type="hidden" id="drs" name="drange"/>
+    <input type="hidden" id="did" name="did"/>
+    <div class="form-group-attached">
+        <div class="row clearfix">
+            <div class="col-sm-6 col-xs-12">
+                <div class="form-group form-group-default">
+                    <label>Pencarian</label>
+                    <form id="formsearch">
+                        <input type="text" id="search-table" class="form-control" name="firstName" placeholder="put your keyword">
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-6">
+                <div class="form-group form-group-default">
+                    <label>Start date</label>
+                    <input type="text" id="datepicker-start" class="form-control" name="firstName" placeholder="pick a start date">
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-6">
+                <div class="form-group form-group-default">
+                    <label>End date</label>
+                    <input type="text" id="datepicker-end" class="form-control" name="firstName" placeholder="pick an end date">
+                </div>
+            </div>
+        </div>
+    </div>
 
-			{!! Form::open(['method' => 'GET', 'url' => '/%%routeGroup%%%%viewName%%', 'class' => 'navbar-form navbar-right', 'role' => 'search'])  !!}
-			<div class="input-group">
-				<input type="text" class="form-control" name="search" placeholder="Search...">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="submit">
-						<i class="fa fa-search"></i>
-					</button>
-				</span>
-			</div>
-			{!! Form::close() !!}
+    <div class="clearfix"></div>
+    <table class="table table-hover" id="%%viewName%%-table">
+        <thead>
+            <tr>
+                %%formHeadingHtml%%
+				<th width="10%"> Actions </th>
+            </tr>
+        </thead>
+    </table>
 
-			<br/>
-			<br/>
-			<div class="table-responsive">
-				<table class="table table-borderless">
-					<thead>
-						<tr>
-							<th>ID</th>%%formHeadingHtml%%<th>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-					@foreach($%%crudName%% as $item)
-						<tr>
-							<td>{{ $item->id }}</td>
-							%%formBodyHtml%%
-							<td>
-								<a href="{{ url('/%%routeGroup%%%%viewName%%/' . $item->%%primaryKey%%) }}" title="View %%modelName%%"><button class="btn btn-info btn-xs"><i class="fa fa-eye" aria-hidden="true"></i> View</button></a>
-								<a href="{{ url('/%%routeGroup%%%%viewName%%/' . $item->%%primaryKey%% . '/edit') }}" title="Edit %%modelName%%"><button class="btn btn-primary btn-xs"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button></a>
-								{!! Form::open([
-									'method'=>'DELETE',
-									'url' => ['/%%routeGroup%%%%viewName%%', $item->%%primaryKey%%],
-									'style' => 'display:inline'
-								]) !!}
-									{!! Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete', array(
-											'type' => 'submit',
-											'class' => 'btn btn-danger btn-xs',
-											'title' => 'Delete %%modelName%%',
-											'onclick'=>'return confirm("Confirm delete?")'
-									)) !!}
-								{!! Form::close() !!}
-							</td>
-						</tr>
-					@endforeach
-					</tbody>
-				</table>
-				<div class="pagination-wrapper"> {!! $%%crudName%%->appends(['search' => Request::get('search')])->render() !!} </div>
-			</div>
-
-		</div>
-	</div>
-            
 @endsection
+
+@push("script")
+<script>
+
+var oTable;
+oTable = $('#%%viewName%%-table').DataTable({
+    processing: true,
+    serverSide: true,
+    dom: 'lBfrtip',
+    order:  [[ 0, "asc" ]],
+    buttons: [
+        {
+            extend: 'print',
+            autoPrint: true,
+            customize: function ( win ) {
+                $(win.document.body)
+                    .css( 'padding', '2px' )
+                    .prepend(
+                        '<img src="{{asset('img/logo.png')}}" style="float:right; top:0; left:0;height: 40px;right: 10px;background: #101010;padding: 8px;border-radius: 4px" /><h5 style="font-size: 9px;margin-top: 0px;"><br/><font style="font-size:14px;margin-top: 5px;margin-bottom:20px;"> Laporan %%modelName%%</font><br/><br/><font style="font-size:8px;margin-top:15px;">{{date('Y-m-d h:i:s')}}</font></h5><br/><br/>'
+                    );
+
+
+                $(win.document.body).find( 'div' )
+                    .css( {'padding': '2px', 'text-align': 'center', 'margin-top': '-50px'} )
+                    .prepend(
+                        ''
+                    );
+
+                $(win.document.body).find( 'table' )
+                    .addClass( 'compact' )
+                    .css( { 'font-size': '9px', 'padding': '2px' } );
+
+
+            },
+            title: '',
+            orientation: 'landscape',
+            exportOptions: {columns: ':visible'} ,
+            text: '<i class="fa fa-print" data-toggle="tooltip" title="" data-original-title="Print"></i>'
+        },
+        {extend: 'colvis', text: '<i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Column visible"></i>'},
+        {extend: 'csv', text: '<i class="fa fa-file-excel-o" data-toggle="tooltip" title="" data-original-title="Export CSV"></i>'}
+    ],
+    sDom: "<'table-responsive fixed't><'row'<p i>> B",
+    sPaginationType: "bootstrap",
+    destroy: true,
+    responsive: true,
+    scrollCollapse: true,
+    oLanguage: {
+        "sLengthMenu": "_MENU_ ",
+        "sInfo": "Showing <b>_START_ to _END_</b> of _TOTAL_ entries"
+    },
+    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+    ajax: {
+    url: '{!! route('%%viewName%%.data') !!}',
+        data: function (d) {
+            d.range = $('input[name=drange]').val();
+        }
+    },
+    columns: [
+        %%formBodyHtml%%,
+        { data: "action", name: "action", searchable: false, orderable: false },
+    ],
+}).on( 'processing.dt', function ( e, settings, processing ) {if(processing){Pace.start();} else {Pace.stop();}});
+
+$("#user-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
+
+
+$('#datepicker-start').datepicker({format: 'yyyy/mm/dd'}).on('changeDate', function (ev) {
+    $(this).datepicker('hide');
+    if($('#datepicker-end').val() != ""){
+        $('#drs').val($('#datepicker-start').val()+":"+$('#datepicker-end').val());
+        oTable.draw();
+    }else{
+        $('#datepicker-end').focus();
+    }
+
+});
+$('#datepicker-end').datepicker({format: 'yyyy/mm/dd'}).on('changeDate', function (ev) {
+    $(this).datepicker('hide');
+    if($('#datepicker-start').val() != ""){
+        $('#drs').val($('#datepicker-start').val()+":"+$('#datepicker-end').val());
+        oTable.draw();
+    }else{
+        $('#datepicker-start').focus();
+    }
+
+});
+
+$('#formsearch').submit(function () {
+    oTable.search( $('#search-table').val() ).draw();
+    return false;
+} );
+
+oTable.page.len(25).draw();
+
+
+
+function deleteData(id) {
+    $('#modalDelete').modal('show');
+    $('#did').val(id);
+}
+
+function hapus(){
+    $('#modalDelete').modal('hide');
+    var id = $('#did').val();
+    $.ajax({
+        url: '{{url("%%routeGroup%%%%viewName%%")}}' + "/" + id + '?' + $.param({"_token" : '{{ csrf_token() }}' }),
+        type: 'DELETE',
+        complete: function(data) {
+            oTable.draw();
+        }
+    });
+}
+
+</script>
+@endpush

@@ -1,0 +1,3 @@
+php artisan crud:generate MaterialFiles --fields="material_id#smallint; name#string; size#string; date#datetime;" --view-path=admin --controller-namespace=Admin --route-group=admin --validations="material_id#min:1|numeric|required" --relationships="materials#hasOne#App\Material" --localize --locales
+
+php artisan crud:generate Payment --fields="name#string; status#smallint; order#smallint;" --view-path=admin --controller-namespace=Admin --route-group=admin --validations="name#required" --relationships="banks#hasMany#App\Bank"

@@ -19,4 +19,7 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 	Route::get('/', 'Admin\\DashboardController@index');
+	
+	Route::get('/payment/data', ['as' => 'payment.data', 'uses' => 'Admin\\PaymentController@anyData']);
+	Route::resource('/payment', 'Admin\\PaymentController');
 });

@@ -44,4 +44,18 @@ class BaseModel extends Model
 	{
 		return $query->orderBy($this->table . '.order');
 	}
+	
+	public static function statusLabels()
+	{
+		return [
+			self::STATUS_ACTIVE => 'Active',
+			self::STATUS_INACTIVE => 'Inactive',
+		];
+	}
+	
+	public function getStatusLabel()
+	{
+		$list = self::statusLabels();
+		return isset($list[$this->status]) ? $list[$this->status] : '';
+	}
 }

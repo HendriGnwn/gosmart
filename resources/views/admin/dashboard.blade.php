@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app.frame')
 @section('title', 'Dashboard')
 @section('breadcrumbs')
 	@php echo \Breadcrumbs::render(['Dashboard']) @endphp
