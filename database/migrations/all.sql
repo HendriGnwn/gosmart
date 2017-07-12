@@ -232,9 +232,8 @@ CREATE TABLE `private_detail` (
   `section` int(11) DEFAULT NULL,
   `section_time` time DEFAULT NULL,
   `student_check` text COLLATE utf8_unicode_ci COMMENT '1=True;0=False;',
-  `student_check_at` text COLLATE utf8_unicode_ci,
-  `teacher_check` text COLLATE utf8_unicode_ci COMMENT '1=True;0=False;',
-  `teacher_check_at` text COLLATE utf8_unicode_ci,
+  `student_details` json DEFAULT NULL,
+  `teacher_details` json DEFAULT NULL,
   `checklist` smallint(1) DEFAULT NULL COMMENT '1=True;0=False;',
   `checklist_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -242,9 +241,9 @@ CREATE TABLE `private_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `private_detail` (`id`, `private_id`, `course_id`, `on_at`, `section`, `section_time`, `student_check`, `student_check_at`, `teacher_check`, `teacher_check_at`, `checklist`, `checklist_at`, `created_at`, `updated_at`) VALUES
-(1,	1,	13,	'2017-07-05 10:00:00,2017-07-06 10:00:00,2017-07-07 10:00:00,2017-07-08 10:00:00',	4,	'01:30:00',	'0,0,0,0',	'NULL,NULL,NULL,NULL',	'0,0,0,0',	'NULL,NULL,NULL,NULL',	0,	NULL,	'2017-07-02 04:28:57',	'2017-07-02 04:28:57'),
-(2,	1,	14,	'2017-07-05 11:30:00,2017-07-06 11:30:00,2017-07-07 11:30:00,2017-07-08 11:30:00',	4,	'01:30:00',	'0,0,0,0',	'NULL,NULL,NULL,NULL',	'0,0,0,0',	'NULL,NULL,NULL,NULL',	0,	NULL,	'2017-07-02 04:28:57',	'2017-07-02 04:28:57');
+INSERT INTO `private_detail` (`id`, `private_id`, `course_id`, `on_at`, `section`, `section_time`, `student_check`, `student_details`, `teacher_details`, `checklist`, `checklist_at`, `created_at`, `updated_at`) VALUES
+(1,	1,	13,	'2017-07-05 10:00:00,2017-07-06 10:00:00,2017-07-07 10:00:00,2017-07-08 10:00:00',	4,	'01:30:00',	'0,0,0,0',	NULL,	NULL,	0,	NULL,	'2017-07-02 04:28:57',	'2017-07-02 04:28:57'),
+(2,	1,	14,	'2017-07-05 11:30:00,2017-07-06 11:30:00,2017-07-07 11:30:00,2017-07-08 11:30:00',	4,	'01:30:00',	'0,0,0,0',	NULL,	NULL,	0,	NULL,	'2017-07-02 04:28:57',	'2017-07-02 04:28:57');
 
 DROP TABLE IF EXISTS `review`;
 CREATE TABLE `review` (
@@ -377,4 +376,4 @@ INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_num
 (6,	'STU2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina97@gmail.com',	'$2y$10$Db1NEtx4r9wu.TgeowxuCe434LzeAwT8rium6Qz.ID/syr4wFXwMK',	NULL,	NULL,	0,	3,	'2017-06-24 06:46:47',	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:46:47'),
 (12,	'TEA2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	-6.55592,	106.9928,	'PGRI Ciampea 2',	'winamarlina977@gmail.com',	'$2y$10$PeQ/lmOvrhLT4QIm5yrJW..jBt/d7zB0udhvzoIk9VO6muvs4xG7S',	NULL,	NULL,	0,	2,	'2017-07-02 04:58:47',	NULL,	'2017-06-24 06:45:40',	'2017-07-02 04:58:47');
 
--- 2017-07-12 02:11:46
+-- 2017-07-12 05:44:49
