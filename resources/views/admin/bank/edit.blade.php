@@ -18,7 +18,7 @@
             'id' => 'formValidate',
         ]) !!}
 
-        @include ('admin.payment.form', ['submitButtonText' => 'Update'])
+        @include ('admin.bank.form', ['submitButtonText' => 'Update'])
 
 	{!! Form::close() !!}
 @endsection

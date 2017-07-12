@@ -12,7 +12,13 @@ use DB;
 
 class BankController extends Controller
 {
-    /**
+	protected $rules = [
+		'name' => 'required',
+		'payment_id' => 'required'
+	];
+
+
+	/**
      * Display a listing of the resource.
      *
      * @return \Illuminate\View\View
@@ -41,15 +47,25 @@ class BankController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-			'name' => 'required'
-		]);
-        $requestData = $request->all();
+        $this->validate($request, $this->rules);
+		
+		if (isset($request->file)) {
+			$files = $request->file('file');
+			$path = Bank::DESTINATION_PATH;
+			$name = rand(10000,99999).'.'.$files->getClientOriginalExtension();
+			$request['image'] = $name;
+			$files->move($path,$name);
+		} else {
+			Session::flash('message', 'Image wajib diisi!'); 
+			return redirect('root/promo/create');
+		}
+		
+		$requestData = $request->all();
         
         Bank::create($requestData);
 
         Session::flash('flash_message', 'Bank added!');
-
+        
         return redirect('admin/bank');
     }
 
@@ -91,12 +107,21 @@ class BankController extends Controller
      */
     public function update($id, Request $request)
     {
-        $this->validate($request, [
-			'name' => 'required'
-		]);
+        $this->validate($request, $this->rules);
+		
+		$bank = Bank::findOrFail($id);
+		
+		if (isset($request->file)) {
+			$file = $request->file('file');
+			$path = Bank::DESTINATION_PATH;
+		    if (isset($bank->image)) {
+				$bank->deleteFile();
+			}
+			$name = rand(10000,99999).'.'.$file->getClientOriginalExtension();
+			$request['image'] = $name;
+            $file->move($path,$name);
+        }
         $requestData = $request->all();
-        
-        $bank = Bank::findOrFail($id);
         $bank->update($requestData);
 
         Session::flash('flash_message', 'Bank updated!');
@@ -113,7 +138,12 @@ class BankController extends Controller
      */
     public function destroy($id)
     {
-        Bank::destroy($id);
+		$bank = Bank::findOrFail($id);
+		if (isset($bank->image)) {
+			$bank->deleteFile();
+		}
+		
+		Bank::destroy($id);
 
         Session::flash('flash_message', 'Bank deleted!');
 

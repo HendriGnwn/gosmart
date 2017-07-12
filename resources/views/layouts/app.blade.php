@@ -37,7 +37,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Edec') }}
+                        {{ config('app.name', 'Go Smart') }}
                     </a>
                 </div>
 
