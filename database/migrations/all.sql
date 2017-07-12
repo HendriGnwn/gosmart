@@ -351,6 +351,7 @@ CREATE TABLE `user` (
   `first_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `last_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `phone_number` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `photo` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
   `address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -369,11 +370,11 @@ CREATE TABLE `user` (
   UNIQUE KEY `unique_number` (`unique_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Master User';
 
-INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_number`, `latitude`, `longitude`, `address`, `email`, `password`, `remember_token`, `firebase_token`, `status`, `role`, `last_login_at`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1,	'STU2017060001',	'Hendri',	'Student',	'08561471500',	-6.55592,	106.9928,	'Jl Batu Ceper X No 2Y, Kebon Kelapa Gambir Jakarta Pusat',	'hendri.gnw@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	'O5fxBE8LKrqIfZFr27bfSUf0BNp7ygiaXVD1aGEl7QXqIw9p7rQ9Bt8zmtTz',	NULL,	1,	3,	'2017-06-30 06:22:44',	NULL,	'2017-06-20 12:37:16',	'2017-06-30 06:22:44'),
-(2,	'TEA2017060001',	'Hendri',	'Teacher',	'085711202889',	-6.920291,	106.9292812,	'Jl Lapangan Tembak 300 Ciaruteun Ilir Cibungbulang Bogor',	'hendrigunawan195@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	NULL,	NULL,	1,	2,	'2017-07-02 06:05:59',	NULL,	'2017-06-24 07:12:21',	'2017-07-02 06:05:59'),
-(3,	'USR2017060001',	'Administrator',	NULL,	'08561471500',	-6.920291,	106.9292812,	'Jl Batu Ceper X No 2Y Jakarta',	'administrator@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	NULL,	NULL,	1,	1,	'2017-06-24 00:31:12',	NULL,	'2017-06-24 07:12:21',	'2017-06-24 00:31:12'),
-(6,	'STU2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina97@gmail.com',	'$2y$10$Db1NEtx4r9wu.TgeowxuCe434LzeAwT8rium6Qz.ID/syr4wFXwMK',	NULL,	NULL,	0,	3,	'2017-06-24 06:46:47',	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:46:47'),
-(12,	'TEA2017060002',	'Wina',	'Marlina',	'085711202889',	-6.55592,	106.9928,	'PGRI Ciampea 2',	'winamarlina977@gmail.com',	'$2y$10$PeQ/lmOvrhLT4QIm5yrJW..jBt/d7zB0udhvzoIk9VO6muvs4xG7S',	NULL,	NULL,	0,	2,	'2017-07-02 04:58:47',	NULL,	'2017-06-24 06:45:40',	'2017-07-02 04:58:47');
+INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_number`, `photo`, `latitude`, `longitude`, `address`, `email`, `password`, `remember_token`, `firebase_token`, `status`, `role`, `last_login_at`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1,	'STU2017060001',	'Hendri',	'Student',	'08561471500',	NULL,	-6.55592,	106.9928,	'Jl Batu Ceper X No 2Y, Kebon Kelapa Gambir Jakarta Pusat',	'hendri.gnw@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	'O5fxBE8LKrqIfZFr27bfSUf0BNp7ygiaXVD1aGEl7QXqIw9p7rQ9Bt8zmtTz',	NULL,	1,	3,	'2017-06-30 06:22:44',	NULL,	'2017-06-20 12:37:16',	'2017-06-30 06:22:44'),
+(2,	'TEA2017060001',	'Hendri',	'Teacher',	'085711202889',	NULL,	-6.920291,	106.9292812,	'Jl Lapangan Tembak 300 Ciaruteun Ilir Cibungbulang Bogor',	'hendrigunawan195@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	NULL,	NULL,	1,	2,	'2017-07-02 06:05:59',	NULL,	'2017-06-24 07:12:21',	'2017-07-02 06:05:59'),
+(3,	'USR2017060001',	'Administrator',	NULL,	'08561471500',	NULL,	-6.920291,	106.9292812,	'Jl Batu Ceper X No 2Y Jakarta',	'administrator@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	'8Pyf6K0qtcNTAwV7CnYS8zzXhNodCRtsoP32FDD6b2CWUZnmeGMS9aqLkOm0',	NULL,	1,	1,	'2017-06-24 00:31:12',	NULL,	'2017-06-24 07:12:21',	'2017-06-24 00:31:12'),
+(6,	'STU2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina97@gmail.com',	'$2y$10$Db1NEtx4r9wu.TgeowxuCe434LzeAwT8rium6Qz.ID/syr4wFXwMK',	NULL,	NULL,	0,	3,	'2017-06-24 06:46:47',	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:46:47'),
+(12,	'TEA2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	-6.55592,	106.9928,	'PGRI Ciampea 2',	'winamarlina977@gmail.com',	'$2y$10$PeQ/lmOvrhLT4QIm5yrJW..jBt/d7zB0udhvzoIk9VO6muvs4xG7S',	NULL,	NULL,	0,	2,	'2017-07-02 04:58:47',	NULL,	'2017-06-24 06:45:40',	'2017-07-02 04:58:47');
 
--- 2017-07-10 07:51:31
+-- 2017-07-12 02:11:46
