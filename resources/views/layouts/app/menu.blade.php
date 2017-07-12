@@ -11,26 +11,20 @@
 <li class="
 	{{ (Request::is('admin/bank*') || 
 				Request::is('admin/payment*') || 
-				Request::is('admin/appetizer*') || 
-				Request::is('admin/main-dishes*') || 
-				Request::is('admin/desserts*') || 
-				Request::is('admin/drinks*')
+				Request::is('admin/course*') || 
+				Request::is('admin/course-level*')
 		) ? 'open active' : ''}}">
     <a href="javascript:;"><span class="title">Master Data</span> 
         <span class="arrow {{ (Request::is('admin/bank*') || 
 				Request::is('admin/payment*') || 
-				Request::is('admin/appetizer*') || 
-				Request::is('admin/main-dishes*') || 
-				Request::is('admin/desserts*') || 
-				Request::is('admin/drinks*')
+				Request::is('admin/course*') || 
+				Request::is('admin/course-level*')
 		) ? 'open active' : ''}}"></span>
     </a> 
     <span class="{{ (Request::is('admin/bank*') || 
 				Request::is('admin/payment*') || 
-				Request::is('admin/appetizer*') || 
-				Request::is('admin/main-dishes*') || 
-				Request::is('admin/desserts*') || 
-				Request::is('admin/drinks*')
+				Request::is('admin/course*') || 
+				Request::is('admin/course-level*')
 		) ? 'bg-success' : ''}} icon-thumbnail">
         <i class="fa fa-briefcase"></i>
     </span>
@@ -44,13 +38,13 @@
             <a href="{{url('admin/payment')}}">Payment</a> 
             <span class="{{ (Request::is('admin/payment*')) ? 'bg-success' : '' }} icon-thumbnail"><i class="fa fa-money"></i></span>
         </li>
-        <li class="{{ (Request::is('admin/appetizer*')) ? 'active' : '' }}">
-            <a href="{{url('admin/appetizer')}}">Course</a> 
-            <span class="{{ (Request::is('admin/appetizer*')) ? 'bg-success' : '' }} icon-thumbnail"><i class="fa fa-book"></i></span>
+        <li class="{{ (Request::is('admin/course*')) ? 'active' : '' }}">
+            <a href="{{url('admin/course')}}">Course</a> 
+            <span class="{{ (Request::is('admin/course*')) ? 'bg-success' : '' }} icon-thumbnail"><i class="fa fa-book"></i></span>
         </li>
-        <li class="{{ (Request::is('admin/main-dishes*')) ? 'active' : '' }}">
-            <a href="{{url('admin/main-dishes')}}">Course Level</a> 
-            <span class="{{ (Request::is('admin/main-dishes*')) ? 'bg-success' : '' }} icon-thumbnail"><i class="fa fa-book"></i></span>
+        <li class="{{ (Request::is('admin/course-level*')) ? 'active' : '' }}">
+            <a href="{{url('admin/course-level')}}">Course Level</a> 
+            <span class="{{ (Request::is('admin/course-level*')) ? 'bg-success' : '' }} icon-thumbnail"><i class="fa fa-book"></i></span>
         </li>
     </ul>
 </li>

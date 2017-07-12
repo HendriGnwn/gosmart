@@ -25,4 +25,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 	
 	Route::get('/bank/data', ['as' => 'bank.data', 'uses' => 'Admin\\BankController@anyData']);
 	Route::resource('/bank', 'Admin\\BankController');
+	
+	Route::get('/course-level/data', ['as' => 'course-level.data', 'uses' => 'Admin\\CourseLevelController@anyData']);
+	Route::resource('/course-level', 'Admin\\CourseLevelController');
 });
