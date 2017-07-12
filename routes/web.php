@@ -28,4 +28,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 	
 	Route::get('/course-level/data', ['as' => 'course-level.data', 'uses' => 'Admin\\CourseLevelController@anyData']);
 	Route::resource('/course-level', 'Admin\\CourseLevelController');
+	
+	Route::get('/course/data', ['as' => 'course.data', 'uses' => 'Admin\\CourseController@anyData']);
+	Route::resource('/course', 'Admin\\CourseController');
 });
