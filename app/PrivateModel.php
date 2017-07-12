@@ -4,6 +4,7 @@ namespace App;
 
 class PrivateModel extends BaseModel
 {
+	const STATUS_NOT_YET_GOING = 1;
 	const STATUS_ON_GOING = 5;
 	const STATUS_DONE = 10;
 	
@@ -57,4 +58,25 @@ class PrivateModel extends BaseModel
 	{
 		return $this->hasMany('\App\PrivateDetail', 'id', 'private_id');
 	}
+	
+    public static function generateCode($prefix = 'PRI', $padLength = 4, $separator = '-') 
+    {
+        $left = strtoupper($prefix) . $separator . date('Ym') . $separator;
+        $leftLen = strlen($left);
+        $increment = 1;
+
+        $last = self::where('code', 'LIKE', "'%$left%'")
+                ->orderBy('id', 'desc')
+                ->limit(1)
+                ->first();
+
+        if ($last) {
+            $increment = (int) substr($last->code, $leftLen, $padLength);
+            $increment++;
+        }
+
+        $number = str_pad($increment, $padLength, '0', STR_PAD_LEFT);
+
+        return $left . $number;
+    }
 }

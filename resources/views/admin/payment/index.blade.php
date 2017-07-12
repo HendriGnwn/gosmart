@@ -113,7 +113,7 @@ oTable = $('#payment-table').DataTable({
     ],
 }).on( 'processing.dt', function ( e, settings, processing ) {if(processing){Pace.start();} else {Pace.stop();}});
 
-$("#user-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
+$("#payment-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
 
 
 $('#datepicker-start').datepicker({format: 'yyyy/mm/dd'}).on('changeDate', function (ev) {

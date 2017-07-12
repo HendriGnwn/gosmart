@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
+	Route::get('/dashboard/list-teacher', ['as' => 'dashboard.listteacher', 'uses' => 'Admin\\DashboardController@listTeachers']);
 	Route::get('/', 'Admin\\DashboardController@index');
 	
 	Route::get('/payment/data', ['as' => 'payment.data', 'uses' => 'Admin\\PaymentController@anyData']);
@@ -31,4 +32,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 	
 	Route::get('/course/data', ['as' => 'course.data', 'uses' => 'Admin\\CourseController@anyData']);
 	Route::resource('/course', 'Admin\\CourseController');
+	
+	Route::get('/order/data', ['as' => 'order.data', 'uses' => 'Admin\\OrderController@anyData']);
+	Route::resource('/order', 'Admin\\OrderController');
+	
+	Route::get('/student/data', ['as' => 'student.data', 'uses' => 'Admin\\StudentController@anyData']);
+	Route::resource('/student', 'Admin\\StudentController');
+	
+	Route::get('/teacher/data', ['as' => 'teacher.data', 'uses' => 'Admin\\TeacherController@anyData']);
+	Route::resource('/teacher', 'Admin\\TeacherController');
+	
+	Route::get('/user/data', ['as' => 'user.data', 'uses' => 'Admin\\UserController@anyData']);
+	Route::resource('/user', 'Admin\\UserController');
 });

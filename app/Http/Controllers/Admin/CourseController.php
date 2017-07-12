@@ -139,6 +139,9 @@ class CourseController extends Controller
             DB::raw('@rownum  := @rownum  + 1 AS rownum'), 'course.*'])->orderBy('course.name');
 
          $datatables = app('datatables')->of($course)
+			->editColumn('course_level_id', function ($course) {
+				return isset($course->courseLevel) ? $course->courseLevel->name : null;
+			})
 			->editColumn('status', function ($course) {
 				return $course->getStatusLabel();
 			})

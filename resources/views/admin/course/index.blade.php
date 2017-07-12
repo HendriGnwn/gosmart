@@ -1,11 +1,11 @@
 @extends('layouts.app.frame')
-@section('title', 'Bank')
-@section('description', 'Bank')
+@section('title', 'Course')
+@section('description', 'Course')
 @section('breadcrumbs')
 	@php echo \Breadcrumbs::render(['Bank']) @endphp
 @endsection
 @section('button')
-	<a href="{{ url('/admin/bank/create') }}" class="btn btn-primary btn-xs no-border">Add Data</a>
+	<a href="{{ url('/admin/course/create') }}" class="btn btn-primary btn-xs no-border">Add Data</a>
 @endsection
 
 @section('content')
@@ -37,10 +37,10 @@
     </div>
 
     <div class="clearfix"></div>
-    <table class="table table-hover" id="bank-table">
+    <table class="table table-hover" id="course-table">
         <thead>
             <tr>
-                <th>Name</th><th>Payment</th>
+                <th>Name</th><th>Course Level</th><th>Section</th><th>Section Time</th>
 				<th width="14%"> Actions </th>
             </tr>
         </thead>
@@ -52,7 +52,7 @@
 <script>
 
 var oTable;
-oTable = $('#bank-table').DataTable({
+oTable = $('#course-table').DataTable({
     processing: true,
     serverSide: true,
     dom: 'lBfrtip',
@@ -100,19 +100,21 @@ oTable = $('#bank-table').DataTable({
     },
     lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
     ajax: {
-    url: '{!! route('bank.data') !!}',
+    url: '{!! route('course.data') !!}',
         data: function (d) {
             d.range = $('input[name=drange]').val();
         }
     },
     columns: [
 		{ data: "name", name: "name" },
-		{ data: "payment_id", name: "payment_id" },
+		{ data: "course_level_id", name: "course_level_id" },
+		{ data: "section", name: "section" },
+		{ data: "section_time", name: "section_time" },
         { data: "action", name: "action", searchable: false, orderable: false },
     ],
 }).on( 'processing.dt', function ( e, settings, processing ) {if(processing){Pace.start();} else {Pace.stop();}});
 
-$("#user-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
+$("#course-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
 
 
 $('#datepicker-start').datepicker({format: 'yyyy/mm/dd'}).on('changeDate', function (ev) {
@@ -154,7 +156,7 @@ function hapus(){
     $('#modalDelete').modal('hide');
     var id = $('#did').val();
     $.ajax({
-        url: '{{url("admin/bank")}}' + "/" + id + '?' + $.param({"_token" : '{{ csrf_token() }}' }),
+        url: '{{url("admin/course")}}' + "/" + id + '?' + $.param({"_token" : '{{ csrf_token() }}' }),
         type: 'DELETE',
         complete: function(data) {
             oTable.draw();

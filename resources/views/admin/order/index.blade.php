@@ -1,11 +1,7 @@
 @extends('layouts.app.frame')
-@section('title', 'Bank')
-@section('description', 'Bank')
+@section('title', 'Order')
 @section('breadcrumbs')
-	@php echo \Breadcrumbs::render(['Bank']) @endphp
-@endsection
-@section('button')
-	<a href="{{ url('/admin/bank/create') }}" class="btn btn-primary btn-xs no-border">Add Data</a>
+	@php echo \Breadcrumbs::render(['Order']) @endphp
 @endsection
 
 @section('content')
@@ -37,10 +33,24 @@
     </div>
 
     <div class="clearfix"></div>
-    <table class="table table-hover" id="bank-table">
+    <table class="table table-hover" id="order-table">
         <thead>
             <tr>
-                <th>Name</th><th>Payment</th>
+                <th>Code</th>
+				<th>Student</th>
+				<th>Teacher</th>
+				<th>Section</th>
+				<th>Start Date</th>
+				<th>End Date</th>
+				<th>Admin Fee</th>
+				<th>Final Amount</th>
+				<th>Payment</th>
+				<th>Status</th>
+				<th>Confirmed At</th>
+				<th>Paid By</th>
+				<th>Paid At</th>
+				<th>Created At</th>
+				<th>Updated At</th>
 				<th width="14%"> Actions </th>
             </tr>
         </thead>
@@ -52,11 +62,11 @@
 <script>
 
 var oTable;
-oTable = $('#bank-table').DataTable({
+oTable = $('#order-table').DataTable({
     processing: true,
     serverSide: true,
     dom: 'lBfrtip',
-    order:  [[ 0, "asc" ]],
+    order:  [[ 13, "asc" ]],
     buttons: [
         {
             extend: 'print',
@@ -65,7 +75,7 @@ oTable = $('#bank-table').DataTable({
                 $(win.document.body)
                     .css( 'padding', '2px' )
                     .prepend(
-                        '<img src="{{asset('img/logo.png')}}" style="float:right; top:0; left:0;height: 40px;right: 10px;background: #101010;padding: 8px;border-radius: 4px" /><h5 style="font-size: 9px;margin-top: 0px;"><br/><font style="font-size:14px;margin-top: 5px;margin-bottom:20px;"> Laporan Payment</font><br/><br/><font style="font-size:8px;margin-top:15px;">{{date('Y-m-d h:i:s')}}</font></h5><br/><br/>'
+                        '<img src="{{asset('img/logo.png')}}" style="float:right; top:0; left:0;height: 40px;right: 10px;background: #101010;padding: 8px;border-radius: 4px" /><h5 style="font-size: 9px;margin-top: 0px;"><br/><font style="font-size:14px;margin-top: 5px;margin-bottom:20px;"> Order Report</font><br/><br/><font style="font-size:8px;margin-top:15px;">{{date('Y-m-d h:i:s')}}</font></h5><br/><br/>'
                     );
 
 
@@ -100,19 +110,32 @@ oTable = $('#bank-table').DataTable({
     },
     lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
     ajax: {
-    url: '{!! route('bank.data') !!}',
+		url: '{!! route('order.data') !!}',
         data: function (d) {
             d.range = $('input[name=drange]').val();
         }
     },
     columns: [
-		{ data: "name", name: "name" },
+		{ data: "code", name: "code" },
+		{ data: "user_id", name: "user_id" },
+		{ data: "teacher_id", name: "teacher_id" },
+		{ data: "section", name: "section", visible:false  },
+		{ data: "start_date", name: "start_date", visible:false },
+		{ data: "end_date", name: "end_date", visible:false },
+		{ data: "admin_fee", name: "admin_fee", visible:false },
+		{ data: "final_amount", name: "final_amount" },
 		{ data: "payment_id", name: "payment_id" },
+		{ data: "status", name: "status" },
+		{ data: "confirmed_at", name: "confirmed_at", visible:false },
+		{ data: "paid_by", name: "paid_by", visible:false },
+		{ data: "paid_at", name: "paid_at", visible:false },
+		{ data: "created_at", name: "created_at", visible:false  },
+		{ data: "updated_at", name: "updated_at", visible:false  },
         { data: "action", name: "action", searchable: false, orderable: false },
     ],
 }).on( 'processing.dt', function ( e, settings, processing ) {if(processing){Pace.start();} else {Pace.stop();}});
 
-$("#bank-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
+$("#order-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
 
 
 $('#datepicker-start').datepicker({format: 'yyyy/mm/dd'}).on('changeDate', function (ev) {
@@ -154,7 +177,7 @@ function hapus(){
     $('#modalDelete').modal('hide');
     var id = $('#did').val();
     $.ajax({
-        url: '{{url("admin/bank")}}' + "/" + id + '?' + $.param({"_token" : '{{ csrf_token() }}' }),
+        url: '{{url("admin/order")}}' + "/" + id + '?' + $.param({"_token" : '{{ csrf_token() }}' }),
         type: 'DELETE',
         complete: function(data) {
             oTable.draw();

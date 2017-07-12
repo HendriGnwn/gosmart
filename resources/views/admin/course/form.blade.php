@@ -21,11 +21,11 @@
 </div>
 {!! $errors->first('section', '<p class="help-block">:message</p>') !!}
 
-<div aria-required="true" class="form-group required form-group-default {{ $errors->has('name') ? 'has-error' : ''}}">
-    {!! Form::label('name', 'Name') !!}
-    {!! Form::text('name', null, ['class' => 'form-control', 'required' => 'required']) !!}
+<div aria-required="true" class="form-group required form-group-default {{ $errors->has('section_time') ? 'has-error' : ''}}">
+    {!! Form::label('section_time', 'Section Time (in Minutes)') !!}
+    {!! Form::text('section_time', null, ['class' => 'form-control', 'required' => 'required']) !!}
 </div>
-{!! $errors->first('name', '<p class="help-block">:message</p>') !!}
+{!! $errors->first('section_time', '<p class="help-block">:message</p>') !!}
 
 <div aria-required="true" class="form-group required form-group-default {{ $errors->has('description') ? 'has-error' : ''}}">
     {!! Form::label('description', 'Description') !!}

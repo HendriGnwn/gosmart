@@ -2,8 +2,12 @@
 
 namespace App;
 
+use App\Helpers\FormatConverter;
+
 class OrderConfirmation extends BaseModel
 {
+	const DESTINATION_PATH = 'files/order-confirmation/';
+	
 	protected $table = 'order_confirmation';
 
 	/**
@@ -34,18 +38,43 @@ class OrderConfirmation extends BaseModel
 		'teacher_id',
     ];
 	
+	public function __construct(array $attributes = array())
+	{
+		parent::__construct($attributes);
+		
+		$this->setPath(public_path(self::DESTINATION_PATH));
+		if (!is_dir($this->getPath())) {
+			\File::makeDirectory($this->getPath(), '0775');
+		}
+	}
+	
 	public function user() 
 	{
-		return $this->hasOne('\App\User', 'user_id', 'id');
+		return $this->hasOne('\App\User', 'id', 'user_id');
 	}
 	
 	public function order() 
 	{
-		return $this->hasOne('\App\Order', 'order_id', 'id');
+		return $this->hasOne('\App\Order', 'id', 'user_id');
 	}
 	
 	public function bank() 
 	{
-		return $this->hasOne('\App\Bank', 'bank_id', 'id');
+		return $this->hasOne('\App\Bank', 'id', 'bank_id');
+	}
+	
+	public function getFormattedAmount()
+	{
+		return FormatConverter::rupiahFormat($this->amount, 2);
+	}
+	
+	public function getUploadBuktiUrl()
+	{
+		return url(self::DESTINATION_PATH . $this->upload_bukti);
+	}
+	
+	public function getUploadBuktiHtml()
+	{
+		return "<a href='".url(self::DESTINATION_PATH . $this->upload_bukti)."' target='_blank'>".$this->upload_bukti."</a>";
 	}
 }

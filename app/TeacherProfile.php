@@ -4,6 +4,11 @@ namespace App;
 
 class TeacherProfile extends BaseModel
 {
+	const TITLE_D3 = 1;
+	const TITLE_S1 = 2;
+	const TITLE_S2 = 3;
+	const TITLE_S3 = 4;
+	
 	const DESTINATION_PATH = 'files/teacher-profile/';
 	
 	protected $table = 'teacher_profile';
@@ -63,5 +68,21 @@ class TeacherProfile extends BaseModel
 	public function teacherTotalHistories()
 	{
 		return $this->hasMany('\App\TeacherTotalHistory', 'user_id', 'user_id');
+	}
+	
+	public static function titleLabels()
+	{
+		return [
+			self::TITLE_D3 => 'D3',
+			self::TITLE_S1 => 'Sarjana',
+			self::TITLE_S2 => 'Master',
+			self::TITLE_S3 => 'Doctor',
+		];
+	}
+	
+	public function getTitleLabel()
+	{
+		$list = self::titleLabels();
+		return isset($list[$this->title]) ? $list[$this->title] : '';
 	}
 }

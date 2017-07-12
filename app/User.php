@@ -166,6 +166,11 @@ class User extends BaseModel implements
 		return $query->whereIn($this->table . '.status', [self::STATUS_ACTIVE, self::STATUS_INACTIVE]);
 	}
 	
+	public function scopeStatusInactive($query)
+	{
+		return $query->where($this->table . '.status', '=', self::STATUS_INACTIVE);
+	}
+	
 	public function getFullName()
 	{
 		return $this->first_name . ' ' . $this->last_name;

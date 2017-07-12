@@ -45,6 +45,14 @@
 							<th> Order </th>
 							<td> {{ $payment->order }} </td>
 						</tr>
+						<tr>
+							<th> Created At </th>
+							<td> {{ $payment->created_at }} </td>
+						</tr>
+						<tr>
+							<th> Updated At </th>
+							<td> {{ $payment->updated_at }} </td>
+						</tr>
 					</tbody>
 				</table>
 			</div>

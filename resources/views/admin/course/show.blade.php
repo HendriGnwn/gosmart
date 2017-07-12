@@ -1,20 +1,20 @@
 @extends('layouts.app.frame')
-@section('title', 'Bank #' . $bank->id)
-@section('description', 'Bank Details')
+@section('title', 'Course #' . $model->id)
+@section('description', 'Course Details')
 @section('breadcrumbs')
-	@php echo \Breadcrumbs::render([['title' => 'Bank', 'url' => url('/admin/bank')], 'View '.$bank->name]) @endphp
+	@php echo \Breadcrumbs::render([['title' => 'Bank', 'url' => url('/admin/course')], 'View '.$model->name]) @endphp
 @endsection
 @section('button')
-	<a href="{{ url('/admin/bank') }}" class="btn btn-info btn-xs no-border">Back</a>
+	<a href="{{ url('/admin/course') }}" class="btn btn-info btn-xs no-border">Back</a>
 @endsection
 
 @section('content')
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<a href="{{ url('admin/bank/' . $bank->id . '/edit') }}" class="btn btn-primary btn-xs" title="Edit Bank"><span class="glyphicon glyphicon-pencil" aria-hidden="true"/></a>
+			<a href="{{ url('admin/course/' . $model->id . '/edit') }}" class="btn btn-primary btn-xs" title="Edit Course"><span class="glyphicon glyphicon-pencil" aria-hidden="true"/></a>
 			{!! Form::open([
 				'method'=>'DELETE',
-				'url' => ['admin/bank', $bank->id],
+				'url' => ['admin/course', $model->id],
 				'style' => 'display:inline'
 			]) !!}
 				{!! Form::button('<span class="glyphicon glyphicon-trash" aria-hidden="true"/>', array(
@@ -31,35 +31,39 @@
 				<table class="table table-condensed">
 					<tbody>
 						<tr>
-							<th>ID</th><td>{{ $bank->id }}</td>
+							<th>ID</th><td>{{ $model->id }}</td>
 						</tr>
 						<tr>
 							<th> Name </th>
-							<td> {{ $bank->name }} </td>
+							<td> {{ $model->name }} </td>
 						</tr>
 						<tr>
-							<th> Payment </th>
-							<td> {{ isset($bank->payment) ? $bank->payment->name : null }} </td>
+							<th> Course Level </th>
+							<td> {{ isset($model->courseLevel) ? $model->courseLevel->name : null }} </td>
 						</tr>
 						<tr>
 							<th> Description </th>
-							<td> {{ $bank->description }} </td>
+							<td> {{ $model->description }} </td>
 						</tr>
 						<tr>
-							<th> Branch </th>
-							<td> {{ $bank->branch }} </td>
+							<th> Section </th>
+							<td> {{ $model->section }} </td>
 						</tr>
 						<tr>
-							<th> Behalf of </th>
-							<td> {{ $bank->behalf_of }} </td>
+							<th> Section Time </th>
+							<td> {{ $model->section_time }} </td>
+						</tr>
+						<tr>
+							<th> Status </th>
+							<td> {{ $model->getStatusLabel() }} </td>
 						</tr>
 						<tr>
 							<th> Created At </th>
-							<td> {{ $bank->created_at }} </td>
+							<td> {{ $model->created_at }} </td>
 						</tr>
 						<tr>
 							<th> Updated At </th>
-							<td> {{ $bank->updated_at }} </td>
+							<td> {{ $model->updated_at }} </td>
 						</tr>
 					</tbody>
 				</table>
