@@ -22,4 +22,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 	
 	Route::get('/payment/data', ['as' => 'payment.data', 'uses' => 'Admin\\PaymentController@anyData']);
 	Route::resource('/payment', 'Admin\\PaymentController');
+	
+	Route::get('/bank/data', ['as' => 'bank.data', 'uses' => 'Admin\\BankController@anyData']);
+	Route::resource('/bank', 'Admin\\BankController');
 });
