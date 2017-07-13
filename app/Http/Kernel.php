@@ -60,5 +60,6 @@ class Kernel extends HttpKernel
 		'jwt.auth' => \App\Http\Middleware\GetUserFromToken::class, 
         'jwt.refresh' => \App\Http\Middleware\RefreshToken::class,
 		'requiredParameterJson' => \App\Http\Middleware\RequiredParameterJson::class,
+		'AdminAccess' => \App\Http\Middleware\AdminAccess::class,
     ];
 }

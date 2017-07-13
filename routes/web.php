@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
+Route::group(['middleware' => ['auth', 'AdminAccess'], 'prefix' => 'admin'], function() {
 	Route::get('/dashboard/list-teacher', ['as' => 'dashboard.listteacher', 'uses' => 'Admin\\DashboardController@listTeachers']);
 	Route::get('/', 'Admin\\DashboardController@index');
 	
@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 	Route::get('/student/data', ['as' => 'student.data', 'uses' => 'Admin\\StudentController@anyData']);
 	Route::resource('/student', 'Admin\\StudentController');
 	
+	Route::get('/teacher/course/data/{id}', 'Admin\\TeacherController@listTeacherCourses');
 	Route::get('/teacher/data', ['as' => 'teacher.data', 'uses' => 'Admin\\TeacherController@anyData']);
 	Route::resource('/teacher', 'Admin\\TeacherController');
 	

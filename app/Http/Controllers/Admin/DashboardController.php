@@ -39,8 +39,8 @@ class DashboardController extends Controller
 				return $model->getFullName();
 			})
             ->addColumn('action', function ($model) {
-                return '<a href="user/'.$model->id.'" class="btn btn-xs btn-success rounded" data-toggle="tooltip" title="" data-original-title="'. trans('systems.edit') .'"><i class="fa fa-eye"></i></a> '
-						. '<a href="user/'.$model->id.'/update-status" class="btn btn-xs btn-primary rounded" data-toggle="tooltip" title="Update To Active" data-original-title="'. trans('systems.edit') .'"><i class="fa fa-check"></i></a> ';
+                return '<a href="admin/user/'.$model->id.'" class="btn btn-xs btn-success rounded" data-toggle="tooltip" title="" data-original-title="'. trans('systems.edit') .'"><i class="fa fa-eye"></i></a> '
+						. '<a href="admin/user/'.$model->id.'/edit" class="btn btn-xs btn-primary rounded" data-toggle="tooltip" title="Update To Active" data-original-title="'. trans('systems.edit') .'"><i class="fa fa-check"></i></a> ';
             });
 
         if ($keyword = $request->get('search')['value']) {

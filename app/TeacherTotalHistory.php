@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Helpers\FormatConverter;
+
 class TeacherTotalHistory extends BaseModel
 {
 	protected $table = 'teacher_total_history';
@@ -42,5 +44,10 @@ class TeacherTotalHistory extends BaseModel
 	public function privateModel()
 	{
 		return $this->hasOne('\App\PrivateModel', 'id', 'private_id');
+	}
+	
+	public function getFormattedTotal()
+	{
+		return FormatConverter::rupiahFormat($this->total, 2);
 	}
 }
