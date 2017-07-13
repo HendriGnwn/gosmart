@@ -53,7 +53,7 @@
 				Request::is('admin/teacher*') || 
 				Request::is('admin/user*')
 		) ? 'open active' : ''}}">
-    <a href="javascript:;"><span class="title">Master Data</span> 
+    <a href="javascript:;"><span class="title">User Managements</span> 
         <span class="arrow {{ (Request::is('admin/student*') || 
 				Request::is('admin/teacher*') || 
 				Request::is('admin/user*')
@@ -63,7 +63,7 @@
 				Request::is('admin/teacher*') || 
 				Request::is('admin/user*')
 		) ? 'bg-success' : ''}} icon-thumbnail">
-        <i class="fa fa-briefcase"></i>
+        <i class="fa fa-users"></i>
     </span>
 
     <ul class="sub-menu">

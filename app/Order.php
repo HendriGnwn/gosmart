@@ -88,7 +88,7 @@ class Order extends BaseModel
 	
 	public function getFormattedFinalAmount()
 	{
-		return FormatConverter::rupiahFormat($this->admin_fee, 2);
+		return FormatConverter::rupiahFormat($this->final_amount, 2);
 	}
 	
 	public static function statusLabels()
@@ -189,5 +189,16 @@ class Order extends BaseModel
 		}
 		
 		return true;
+	}
+	
+	public function getDetailUrl()
+	{
+		return url('/admin/order/' . $this->id);
+	}
+	
+	public function getDetailHtml($label = null)
+	{
+		$label = $label == null ? $this->getDetailUrl() : $label;
+		return "<a href='{$this->getDetailUrl()}' target='_blank'>{$label}</a>";
 	}
 }

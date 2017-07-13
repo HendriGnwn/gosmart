@@ -41,7 +41,7 @@ class PrivateModel extends BaseModel
 	
 	public function order() 
 	{
-		return $this->hasOne('\App\Order', 'order_id', 'id');
+		return $this->hasOne('\App\Order', 'id', 'order_id');
 	}
 	
 	public function student()
@@ -95,13 +95,14 @@ class PrivateModel extends BaseModel
 		return isset($list[$this->status]) ? $list[$this->status] : '';
 	}
 	
-	public function getOrderDetailurl()
+	public function getDetailUrl()
 	{
-		return url('/admin/order/' . $this->order_id);
+		return url('/admin/private/' . $this->order_id);
 	}
 	
-	public function getOrderDetailHtml()
+	public function getDetailHtml($label = null)
 	{
-		return "<a href='{$this->getOrderDetailurl()}' target='_blank'>{$this->getOrderDetailurl()}</a>";
+		$label = $label == null ? $this->getDetailUrl() : $label;
+		return "<a href='{$this->getDetailUrl()}' target='_blank'>{$label}</a>";
 	}
 }

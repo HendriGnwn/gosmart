@@ -154,6 +154,9 @@ class UserController extends Controller
             DB::raw('@rownum  := @rownum  + 1 AS rownum'), 'user.*'])->orderBy('user.role');
 
          $datatables = app('datatables')->of($model)
+			->editColumn('first_name', function ($model) {
+				return $model->getFullName();
+			})
 			->editColumn('status', function ($model) {
 				return $model->getStatusLabel();
 			})

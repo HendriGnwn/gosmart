@@ -75,7 +75,7 @@
 						</tr>
 						<tr>
 							<th> Order Detail </th>
-							<td> {!! $model->getOrderDetailHtml() !!} </td>
+							<td> {!! $model->order->getDetailHtml() !!} </td>
 						</tr>
 					</tbody>
 				</table>

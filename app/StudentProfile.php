@@ -49,6 +49,21 @@ class StudentProfile extends BaseModel
 		return $this->hasOne('\App\User', 'id', 'user_id');
 	}
 	
+	public function privateModels()
+	{
+		return $this->hasMany('\App\PrivateModel', 'user_id', 'id')->orderBy('private.created_at', 'desc');
+	}
+	
+	public function orders()
+	{
+		return $this->hasMany('\App\Order', 'user_id', 'id')->orderBy('order.created_at', 'desc');
+	}
+	
+	public function reviews()
+	{
+		return $this->hasMany('\App\Review', 'user_id', 'id')->orderBy('review.created_at', 'desc');
+	}
+	
 	public function getPhotoUrl()
 	{
 		return url(self::DESTINATION_PATH . $this->photo);

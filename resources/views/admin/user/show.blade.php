@@ -42,7 +42,7 @@
 							<td> {{ $model->getFullName() }} </td>
 						</tr>
 						<tr>
-							<th> Course Level </th>
+							<th> Phone Number </th>
 							<td> {{ $model->phone_number }} </td>c
 						</tr>
 						<tr>

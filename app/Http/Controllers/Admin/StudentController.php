@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Course;
 use App\Http\Controllers\Controller;
-use App\Order;
+use App\User;
 use DB;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +15,13 @@ use Session;
 class StudentController extends Controller
 {
 	protected $rules = [
-		'status' => 'required'
+		'first_name' => 'required',
+		'phone_number' => 'required|numeric',
+		'address' => 'required',
+		'email' => 'required|email|max:100|unique:user,email',
+		'password' => 'required|min:6|max:255',
+		'role' => 'required',
+		'status' => 'required',
 	];
 
 
@@ -26,7 +32,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        return view('admin.order.index');
+        return view('admin.student.index');
     }
 
     /**
@@ -36,7 +42,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('admin.order.create');
+        return view('admin.student.create');
     }
 
     /**
@@ -50,13 +56,26 @@ class StudentController extends Controller
     {
         $this->validate($request, $this->rules);
 		
+		$request['unique_number'] = User::generateUniqueNumber($request->role);
 		$requestData = $request->all();
+		$user = new User();
+		$user->fill($requestData);
+		
+		switch ($request->role) {
+			case User::ROLE_SUPERADMIN :
+				$user->save();
+				break;
+			case User::ROLE_TEACHER :
+				$user->insertTeacher();
+				break;
+			case User::ROLE_STUDENT :
+				$user->insertStudent();
+				break;
+		}
+		
+        Session::flash('flash_message', 'User added!');
         
-        Order::create($requestData);
-
-        Session::flash('flash_message', 'Order added!');
-        
-        return redirect('admin/order');
+        return redirect('admin/student');
     }
 
     /**
@@ -68,9 +87,9 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        $model = Order::findOrFail($id);
+        $model = User::findOrFail($id);
 
-        return view('admin.order.show', compact('model'));
+        return view('admin.student.show', compact('model'));
     }
 
     /**
@@ -82,9 +101,9 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $model = Order::findOrFail($id);
+        $model = User::findOrFail($id);
 
-        return view('admin.order.edit', compact('model'));
+        return view('admin.student.edit', compact('model'));
     }
 
     /**
@@ -99,20 +118,14 @@ class StudentController extends Controller
     {
         $this->validate($request, $this->rules);
 		
-		$model = Order::findOrFail($id);
+		$model = User::findOrFail($id);
 		
         $requestData = $request->all();
-		if ($requestData['status'] == Order::STATUS_PAID) {
-			$requestData['paid_by'] = \Auth::user()->id;
-			$requestData['paid_at'] = \Carbon\Carbon::now();
-		}
-		
         $model->update($requestData);
-		$model->insertToPrivateModel();
 
-        Session::flash('flash_message', 'Order updated!');
+        Session::flash('flash_message', 'User updated!');
 
-        return redirect('admin/order/' . $id);
+        return redirect('admin/student');
     }
 
     /**
@@ -124,11 +137,11 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-		//Order::destroy($id);
+		User::destroy($id);
 
-        //Session::flash('flash_message', 'Order deleted!');
+        Session::flash('flash_message', 'User deleted!');
 
-        return redirect('admin/order');
+        return redirect('admin/student');
     }
 	
 	/**
@@ -137,34 +150,19 @@ class StudentController extends Controller
 	public function anyData(Request $request)
     {
         DB::statement(DB::raw('set @rownum=0'));
-        $model = Order::select([
-            DB::raw('@rownum  := @rownum  + 1 AS rownum'), 'order.*']);
+        $model = User::select([
+            DB::raw('@rownum  := @rownum  + 1 AS rownum'), 'user.*'])->roleStudent()->orderBy('user.first_name');
 
          $datatables = app('datatables')->of($model)
-			->editColumn('user_id', function ($model) {
-				return isset($model->student) ? $model->student->getFullName() : $model->user_id;
-			})
-			->editColumn('teacher_id', function ($model) {
-				return isset($model->teacher) ? $model->teacher->getFullName() : $model->teacher_id;
-			})
-			->editColumn('admin_fee', function ($model) {
-				return $model->getFormattedAdminFee();
-			})
-			->editColumn('final_amount', function ($model) {
-				return $model->getFormattedFinalAmount();
-			})
-			->editColumn('payment_id', function ($model) {
-				return isset($model->payment) ? $model->payment->name : $model->payment_id;
-			})
-			->editColumn('paid_by', function ($model) {
-				return isset($model->paidBy) ? $model->paidBy->getFullName() : $model->paid_by;
+			->editColumn('first_name', function ($model) {
+				return $model->getFullName();
 			})
 			->editColumn('status', function ($model) {
 				return $model->getStatusLabel();
 			})
-            ->addColumn('action', function ($model) {
-                return '<a href="order/'.$model->id.'" class="btn btn-xs btn-success rounded" data-toggle="tooltip" title="" data-original-title="'. trans('systems.edit') .'"><i class="fa fa-eye"></i></a> '
-						. '<a href="order/'.$model->id.'/edit" class="btn btn-xs btn-primary rounded" data-toggle="tooltip" title="" data-original-title="'. trans('systems.edit') .'"><i class="fa fa-pencil"></i></a> '
+			->addColumn('action', function ($model) {
+                return '<a href="student/'.$model->id.'" class="btn btn-xs btn-success rounded" data-toggle="tooltip" title="" data-original-title="'. trans('systems.edit') .'"><i class="fa fa-eye"></i></a> '
+						. '<a href="student/'.$model->id.'/edit" class="btn btn-xs btn-primary rounded" data-toggle="tooltip" title="" data-original-title="'. trans('systems.edit') .'"><i class="fa fa-pencil"></i></a> '
 						. '<a onclick="deleteData('.$model->id.')" class="btn btn-xs btn-danger rounded" data-toggle="tooltip" title="" data-original-title="'. trans('systems.delete') .'"><i class="fa fa-trash"></i></a>';
             });
 
@@ -175,9 +173,9 @@ class StudentController extends Controller
         if ($range = $datatables->request->get('range')) {
             $rang = explode(":", $range);
             if($rang[0] != "Invalid date" && $rang[1] != "Invalid date" && $rang[0] != $rang[1]){
-                $datatables->whereBetween('order.created_at', ["$rang[0] 00:00:00", "$rang[1] 23:59:59"]);
+                $datatables->whereBetween('user.created_at', ["$rang[0] 00:00:00", "$rang[1] 23:59:59"]);
             }else if($rang[0] != "Invalid date" && $rang[1] != "Invalid date" && $rang[0] == $rang[1]) {
-                $datatables->whereBetween('order.created_at', ["$rang[0] 00:00:00", "$rang[1] 23:59:59"]);
+                $datatables->whereBetween('user.created_at', ["$rang[0] 00:00:00", "$rang[1] 23:59:59"]);
             }
         }
 		
