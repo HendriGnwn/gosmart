@@ -140,7 +140,7 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `order` (`id`, `user_id`, `teacher_id`, `code`, `section`, `section_time`, `start_date`, `end_date`, `admin_fee`, `final_amount`, `payment_id`, `status`, `confirmed_at`, `paid_by`, `paid_at`, `created_at`, `updated_at`) VALUES
-(1,	1,	2,	'INV-201707-00001',	8,	'12:00:00',	'2017-07-05',	'2017-07-08',	5000.00,	235000.00,	1,	10,	'2017-07-02 04:20:14',	3,	'2017-07-02 04:23:14',	'2017-07-02 04:10:57',	'2017-07-02 04:10:57');
+(1,	1,	2,	'INV-201707-00001',	8,	'12:00:00',	'2017-07-05',	'2017-07-08',	5000.00,	235000.00,	1,	10,	'2017-07-02 04:20:14',	3,	'2017-07-13 06:17:28',	'2017-07-02 04:10:57',	'2017-07-13 06:17:28');
 
 DROP TABLE IF EXISTS `order_confirmation`;
 CREATE TABLE `order_confirmation` (
@@ -221,7 +221,7 @@ CREATE TABLE `private` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `private` (`id`, `user_id`, `teacher_id`, `order_id`, `section`, `section_time`, `code`, `start_date`, `end_date`, `status`, `created_at`, `updated_at`) VALUES
-(1,	1,	2,	1,	8,	'12:00:00',	'PRI-201707-00001',	'2017-07-05',	'2017-07-08',	5,	'2017-07-02 04:27:34',	'2017-07-02 04:27:34');
+(1,	1,	2,	1,	8,	'12:00:00',	'PRI-201707-0001',	'2017-07-05',	'2017-07-08',	1,	'2017-07-13 06:17:29',	'2017-07-13 06:17:29');
 
 DROP TABLE IF EXISTS `private_detail`;
 CREATE TABLE `private_detail` (
@@ -242,8 +242,8 @@ CREATE TABLE `private_detail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `private_detail` (`id`, `private_id`, `course_id`, `on_at`, `section`, `section_time`, `student_check`, `student_details`, `teacher_details`, `checklist`, `checklist_at`, `created_at`, `updated_at`) VALUES
-(1,	1,	13,	'2017-07-05 10:00:00,2017-07-06 10:00:00,2017-07-07 10:00:00,2017-07-08 10:00:00',	4,	'01:30:00',	'0,0,0,0',	NULL,	NULL,	0,	NULL,	'2017-07-02 04:28:57',	'2017-07-02 04:28:57'),
-(2,	1,	14,	'2017-07-05 11:30:00,2017-07-06 11:30:00,2017-07-07 11:30:00,2017-07-08 11:30:00',	4,	'01:30:00',	'0,0,0,0',	NULL,	NULL,	0,	NULL,	'2017-07-02 04:28:57',	'2017-07-02 04:28:57');
+(1,	1,	13,	'2017-07-05 10:00:00,2017-07-06 10:00:00,2017-07-07 10:00:00,2017-07-08 10:00:00',	4,	'01:30:00',	NULL,	'[{\"on_at\":\"2017-07-05 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 10:00:00\",\"check\":0,\"check_at\":\"\"}]',	'[{\"on_at\":\"2017-07-05 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 10:00:00\",\"check\":0,\"check_at\":\"\"}]',	0,	NULL,	'2017-07-13 06:17:29',	'2017-07-13 06:17:29'),
+(2,	1,	14,	'2017-07-05 11:30:00,2017-07-06 11:30:00,2017-07-07 11:30:00,2017-07-08 11:30:00',	4,	'01:30:00',	NULL,	'[{\"on_at\":\"2017-07-05 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 11:30:00\",\"check\":0,\"check_at\":\"\"}]',	'[{\"on_at\":\"2017-07-05 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 11:30:00\",\"check\":0,\"check_at\":\"\"}]',	0,	NULL,	'2017-07-13 06:17:29',	'2017-07-13 06:17:29');
 
 DROP TABLE IF EXISTS `review`;
 CREATE TABLE `review` (
@@ -259,6 +259,8 @@ CREATE TABLE `review` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `review` (`id`, `user_id`, `teacher_id`, `private_id`, `rate`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1,	1,	2,	1,	3,	'etaswetsdrt',	1,	'2017-07-13 09:31:42',	NULL);
 
 DROP TABLE IF EXISTS `student_profile`;
 CREATE TABLE `student_profile` (
@@ -376,4 +378,4 @@ INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_num
 (6,	'STU2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina97@gmail.com',	'$2y$10$Db1NEtx4r9wu.TgeowxuCe434LzeAwT8rium6Qz.ID/syr4wFXwMK',	NULL,	NULL,	0,	3,	'2017-06-24 06:46:47',	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:46:47'),
 (12,	'TEA2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	-6.55592,	106.9928,	'PGRI Ciampea 2',	'winamarlina977@gmail.com',	'$2y$10$PeQ/lmOvrhLT4QIm5yrJW..jBt/d7zB0udhvzoIk9VO6muvs4xG7S',	NULL,	NULL,	0,	2,	'2017-07-02 04:58:47',	NULL,	'2017-06-24 06:45:40',	'2017-07-02 04:58:47');
 
--- 2017-07-12 06:23:04
+-- 2017-07-13 10:00:55
