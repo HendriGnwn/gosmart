@@ -85,9 +85,9 @@
 
 							<ul class="dropdown-menu profile-dropdown" role="menu">
 
-								<li>
+<!--								<li>
 									<a href="{{ url('profil/'.Auth::User()->id."/edit") }}"><i class="pg-settings_small"></i> Settings</a>
-								</li>
+								</li>-->
 
 
 								<li class="bg-master-lighter">

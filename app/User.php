@@ -243,4 +243,47 @@ class User extends BaseModel implements
 	{
 		return true;
 	}
+	
+	public static function statusLabels()
+	{
+		return [
+			self::STATUS_ACTIVE => 'Active',
+			self::STATUS_INACTIVE => 'Inactive',
+			self::STATUS_BLOCKED => 'Block',
+		];
+	}
+	
+	public function getStatusLabel()
+	{
+		$list = self::statusLabels();
+		return isset($list[$this->status]) ? $list[$this->status] : '';
+	}
+	
+	public static function roleLabels()
+	{
+		return [
+			self::ROLE_SUPERADMIN => 'Super Admin',
+			self::ROLE_TEACHER => 'Teacher',
+			self::ROLE_STUDENT => 'Student',
+		];
+	}
+	
+	public function getRoleLabel()
+	{
+		$list = self::roleLabels();
+		return isset($list[$this->role]) ? $list[$this->role] : '';
+	}
+	
+	public function getPhotoUrl()
+	{
+		return url(self::DESTINATION_PATH . $this->photo);
+	}
+	
+	public function getPhotoHtml()
+	{
+		if ($this->photo != '') {
+			return "<a href='{$this->getPhotoUrl()}' target='_blank'>{$this->getPhotoUrl()}</a>";
+		}
+		return '-';
+	}
 }
