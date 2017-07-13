@@ -46,6 +46,11 @@ Route::group(['middleware' => ['auth', 'AdminAccess'], 'prefix' => 'admin'], fun
 	Route::get('/teacher/data', ['as' => 'teacher.data', 'uses' => 'Admin\\TeacherController@anyData']);
 	Route::resource('/teacher', 'Admin\\TeacherController');
 	
+	Route::get('/teacher/course/create/{id}', 'Admin\\TeacherController@createCourse');
+	Route::post('/teacher/course/create/{id}', 'Admin\\TeacherController@storeCourse');
+	
+	Route::get('/teacher/{id}/edit-course', 'Admin\\TeacherController@editCourse');
+	
 	Route::get('/user/data', ['as' => 'user.data', 'uses' => 'Admin\\UserController@anyData']);
 	Route::resource('/user', 'Admin\\UserController');
 });

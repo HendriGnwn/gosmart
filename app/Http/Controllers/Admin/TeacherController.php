@@ -44,7 +44,7 @@ class TeacherController extends Controller
     {
         return view('admin.teacher.create');
     }
-
+	
     /**
      * Store a newly created resource in storage.
      *
@@ -236,5 +236,36 @@ class TeacherController extends Controller
         }
 		
         return $datatables->make(true);
+    }
+	
+	/**
+     * Show the form for creating a new resource.
+     *
+     * @return View
+     */
+    public function createCourse($id)
+    {
+        return view('admin.teacher.create-course', [
+			'userId' => $id,
+		]);
+    }
+	
+	public function storeCourse($id, Request $request)
+	{
+		
+	}
+	
+	/**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     *
+     * @return View
+     */
+    public function editCourse($id)
+    {
+        $model = \App\TeacherCourse::findOrFail($id);
+
+        return view('admin.teacher.edit-course', compact('model'));
     }
 }
