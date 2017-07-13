@@ -44,19 +44,19 @@ class PrivateModel extends BaseModel
 		return $this->hasOne('\App\Order', 'order_id', 'id');
 	}
 	
-	public function user()
+	public function student()
 	{
-		return $this->hasOne('\App\User', 'user_id', 'id');
+		return $this->hasOne('\App\User', 'id', 'user_id');
 	}
 	
 	public function teacher()
 	{
-		return $this->hasOne('\App\User', 'teacher_id', 'id');
+		return $this->hasOne('\App\User', 'id', 'teacher_id');
 	}
 	
 	public function privateDetails()
 	{
-		return $this->hasMany('\App\PrivateDetail', 'id', 'private_id');
+		return $this->hasMany('\App\PrivateDetail', 'private_id', 'id');
 	}
 	
     public static function generateCode($prefix = 'PRI', $padLength = 4, $separator = '-') 
@@ -79,4 +79,29 @@ class PrivateModel extends BaseModel
 
         return $left . $number;
     }
+	
+	public static function statusLabels()
+	{
+		return [
+			self::STATUS_NOT_YET_GOING => 'Not yet Going',
+			self::STATUS_ON_GOING => 'On Going',
+			self::STATUS_DONE => 'Done',
+		];
+	}
+	
+	public function getStatusLabel()
+	{
+		$list = self::statusLabels();
+		return isset($list[$this->status]) ? $list[$this->status] : '';
+	}
+	
+	public function getOrderDetailurl()
+	{
+		return url('/admin/order/' . $this->order_id);
+	}
+	
+	public function getOrderDetailHtml()
+	{
+		return "<a href='{$this->getOrderDetailurl()}' target='_blank'>{$this->getOrderDetailurl()}</a>";
+	}
 }

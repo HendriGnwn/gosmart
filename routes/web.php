@@ -36,6 +36,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function() {
 	Route::get('/order/data', ['as' => 'order.data', 'uses' => 'Admin\\OrderController@anyData']);
 	Route::resource('/order', 'Admin\\OrderController');
 	
+	Route::get('/private/data', ['as' => 'private.data', 'uses' => 'Admin\\PrivateController@anyData']);
+	Route::resource('/private', 'Admin\\PrivateController');
+	
 	Route::get('/student/data', ['as' => 'student.data', 'uses' => 'Admin\\StudentController@anyData']);
 	Route::resource('/student', 'Admin\\StudentController');
 	

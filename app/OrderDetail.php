@@ -45,7 +45,6 @@ class OrderDetail extends BaseModel
 	public function getOnAt($replace = '<br/>')
 	{
 		return str_replace(',', $replace, $this->on_at);
-		
 	}
 	
 	public function getFormattedAmount()
