@@ -26,6 +26,7 @@ class TeacherCourse extends BaseModel
 		'final_cost',
         'approved_by', 
 		'approved_at', 
+		'module', 
 		'status', 
 		'created_at', 
 		'updated_at', 
@@ -56,6 +57,11 @@ class TeacherCourse extends BaseModel
 		if(!is_dir($this->getPath())) {
 			\File::makeDirectory($this->getPath());
 		}
+	}
+	
+	public function deleteFile()
+	{
+		@unlink($this->getPath()  . $this->module);
 	}
 	
 	public function user() 
@@ -98,10 +104,11 @@ class TeacherCourse extends BaseModel
 		return url(self::DESTINATION_PATH . $this->module);
 	}
 	
-	public function getModuleHtml()
+	public function getModuleHtml($label = null)
 	{
-		if ($this->upload_izajah != '') {
-			return "<a href='{$this->getModuleUrl()}' target='_blank'>{$this->getModuleUrl()}</a>";
+		$label = $label == null ? isset($this->course) ? $this->course->name : '' : $label;
+		if ($this->module != '') {
+			return "<a href='{$this->getModuleUrl()}' target='_blank'>{$label}</a>";
 		}
 		return '-';
 	}

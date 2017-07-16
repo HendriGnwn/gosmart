@@ -94,6 +94,7 @@ class AuthController extends Controller
 		
 		$user = new User();
 		$user->fill($request->all());
+		$user->created_at = $user->updated_at = Carbon::now()->toDateTimeString();
 		$user->password = bcrypt($request->password);
 		$user->insertStudent();
 		
@@ -142,6 +143,7 @@ class AuthController extends Controller
 		
 		$user = new User();
 		$user->fill($request->all());
+		$user->created_at = $user->updated_at = Carbon::now()->toDateTimeString();
 		$user->password = bcrypt($request->password);
 		$user->title = $request->title;
 		$user->insertTeacher();
@@ -192,6 +194,7 @@ class AuthController extends Controller
 		
 		$password = str_random(8);
 		$user->password = bcrypt($password);
+		$user->updated_at = Carbon::now()->toDateTimeString();
 		$user->save();
 		
 		$user->sendEmailForgotPassword($password);
@@ -217,4 +220,72 @@ class AuthController extends Controller
 			'message' => 'Logout is success',
 		], 200);
     }
+	
+	/**
+	 * @param type $uniqueNumber
+	 * @param Request $request
+	 * @return type
+	 */
+	public function changePassword($uniqueNumber, Request $request)
+	{
+		$token = JWTAuth::parseToken()->authenticate();
+		if ($token->unique_number != $uniqueNumber) {
+			return response()->json([
+				'status' => 403,
+				'message' => 'Token not syncronize with parameter username',
+			], 403);
+		}
+
+		$user = User::whereUniqueNumber($uniqueNumber)->roleApps()->first();
+		
+		$validator = \Validator::make($request->all(), [
+			'current_password' => 'required',
+			'new_password' => 'required|min:6',
+			'confirm_password' => 'required|min:6',
+		]);
+		
+		if ($validator->fails()) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Some Parameters is invalid',
+				'validators' => FormatConverter::parseValidatorErrors($validator),
+			], 400);
+		}
+		
+		if (!\Hash::check($request->current_password, $user->password)) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Current Password do not match with database.',
+				'validators' => FormatConverter::parseValidatorErrors($validator),
+			], 400);
+		}
+		
+		if ($request->new_password != $request->confirm_password) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'New Password do not match with Confirmation Password',
+				'validators' => FormatConverter::parseValidatorErrors($validator),
+			], 400);
+		}
+		
+		$user->password = bcrypt($request->new_password);
+		$user->save();
+		
+		$user = User::whereUniqueNumber($uniqueNumber)
+			->roleApps()
+			->appsActived()
+			->first();
+		if (!$user) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		return response()->json([
+			'status' => 200,
+			'message' => 'change password is successfully saved.',
+			'data' => $user,
+		], 200);
+	}
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\FormatConverter;
 use App\Helpers\ImageHelper;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -155,7 +156,7 @@ class UserController extends Controller
 		
 		$user = User::whereId($user->id)->roleTeacher()->first();
 		$user->fill($userRequest);
-		$user->updated_at = \Carbon\Carbon::now();
+		$user->updated_at = Carbon::now()->toDateTimeString();
 		$user->save();
 		$user->teacherProfile()->update($profileRequest);
 		
@@ -254,7 +255,7 @@ class UserController extends Controller
 		
 		$user = User::whereId($user->id)->roleStudent()->first();
 		$user->fill($userRequest);
-		$user->updated_at = \Carbon\Carbon::now();
+		$user->updated_at = Carbon::now()->toDateTimeString();
 		$user->save();
 		$user->studentProfile()->update($profileRequest);
 		

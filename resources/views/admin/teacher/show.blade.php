@@ -28,7 +28,7 @@
 			<br/>
 
 			<div class="table-responsive">
-				<table class="table table-condensed">
+				<table class="table table-bordered">
 					<tbody>
 						<tr>
 							<th>ID</th><td>{{ $model->id }}</td>
@@ -129,7 +129,37 @@
 					</tbody>
 				</table>
 			</div>
-
+			
+			@php
+			if (isset($profile->teacherBank)) {
+				$bank = $profile->teacherBank;
+			} else {
+				$bank = new \App\TeacherBank();
+			}
+			@endphp
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Bank Information Details</h3>
+				</div>
+				<div class="panel-body table-responsive">
+					<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<th>Bank Name</th><td>{{ $bank->name }}</td>
+						</tr>
+						<tr>
+							<th>Rekening Number</th><th>{{ $bank->number }}</th>
+						</tr>
+						<tr>
+							<th>Bank Behalf Of</th><td>{{ $bank->behalf_of }}</td>
+						</tr>
+						<tr>
+							<th>Branch</th><td>{{ $bank->branch }}</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h3 class="panel-title">Private Histories</h3>
@@ -218,29 +248,45 @@
 					<h3 class="panel-title">Total Honor Histories</h3>
 				</div>
 				<div class="panel-body table-responsive">
-					<table class="table">
+					<input type="hidden" id="drs" name="drange"/>
+					<input type="hidden" id="did" name="did"/>
+					<div class="form-group-attached">
+						<div class="row clearfix">
+							<div class="col-sm-6 col-xs-12">
+								<div class="form-group form-group-default">
+									<label>Pencarian</label>
+									<form id="formsearchhistory">
+										<input type="text" id="search-history-table" class="form-control" name="firstName" placeholder="put your keyword">
+									</form>
+								</div>
+							</div>
+							<div class="col-sm-3 col-xs-6">
+								<div class="form-group form-group-default">
+									<label>Start date</label>
+									<input type="text" id="datepicker-start-history" class="form-control" name="firstName" placeholder="pick a start date">
+								</div>
+							</div>
+							<div class="col-sm-3 col-xs-6">
+								<div class="form-group form-group-default">
+									<label>End date</label>
+									<input type="text" id="datepicker-end-history" class="form-control" name="firstName" placeholder="pick an end date">
+								</div>
+							</div>
+						</div>
+					</div>
+					<table class="table" id="history-table">
 						<thead>
 							<tr>
 								<th>Private</th>
-								<th>Student</th>
 								<th>Operation</th>
 								<th>Total</th>
+								<th>Status</th>
+								<th>Bukti Transfer</th>
 								<th>Created At</th>
 								<th>Updated At</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
-						<tbody>
-							@foreach ($profile->teacherTotalHistories as $detail)
-							<tr>
-								<td> {!! isset($detail->privateModel) ? $detail->privateModel->getDetailHtml($detail->privateModel->code) : $detail->private_id !!} </td>
-								<td> {{ isset($private->student) ? $private->student->getFullName() : $private->student_id }} </td>
-								<td> {{ $detail->operation }} </td>
-								<td>{{ $detail->getFormattedTotal() }}</td>
-								<td>{{ $detail->created_at }}</td>
-								<td>{{ $detail->updated_at }}</td>
-							</tr>
-							@endforeach
-						</tbody>
 					</table>
 				</div>
 			</div>
@@ -372,6 +418,99 @@ function hapus(){
         }
     });
 }
+
+var oTable1;
+oTable1 = $('#history-table').DataTable({
+    processing: true,
+    serverSide: true,
+    dom: 'lBfrtip',
+    order:  [[ 0, "asc" ]],
+    buttons: [
+        {
+            extend: 'print',
+            autoPrint: true,
+            customize: function ( win ) {
+                $(win.document.body)
+                    .css( 'padding', '2px' )
+                    .prepend(
+                        '<img src="{{asset('img/logo.png')}}" style="float:right; top:0; left:0;height: 40px;right: 10px;background: #101010;padding: 8px;border-radius: 4px" /><h5 style="font-size: 9px;margin-top: 0px;"><br/><font style="font-size:14px;margin-top: 5px;margin-bottom:20px;"> Laporan Payment</font><br/><br/><font style="font-size:8px;margin-top:15px;">{{date('Y-m-d h:i:s')}}</font></h5><br/><br/>'
+                    );
+
+
+                $(win.document.body).find( 'div' )
+                    .css( {'padding': '2px', 'text-align': 'center', 'margin-top': '-50px'} )
+                    .prepend(
+                        ''
+                    );
+
+                $(win.document.body).find( 'table' )
+                    .addClass( 'compact' )
+                    .css( { 'font-size': '9px', 'padding': '2px' } );
+
+
+            },
+            title: '',
+            orientation: 'landscape',
+            exportOptions: {columns: ':visible'} ,
+            text: '<i class="fa fa-print" data-toggle="tooltip" title="" data-original-title="Print"></i>'
+        },
+        {extend: 'colvis', text: '<i class="fa fa-eye" data-toggle="tooltip" title="" data-original-title="Column visible"></i>'},
+        {extend: 'csv', text: '<i class="fa fa-file-excel-o" data-toggle="tooltip" title="" data-original-title="Export CSV"></i>'}
+    ],
+    sDom: "<'table-responsive fixed't><'row'<p i>> B",
+    sPaginationType: "bootstrap",
+    destroy: true,
+    responsive: true,
+    scrollCollapse: true,
+    oLanguage: {
+        "sLengthMenu": "_MENU_ ",
+        "sInfo": "Showing <b>_START_ to _END_</b> of _TOTAL_ entries"
+    },
+    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+    ajax: {
+    url: '{!! url('admin/teacher/history/data/' . $model->id) !!}',
+        data: function (d) {
+            d.range = $('input[name=drange]').val();
+        }
+    },
+    columns: [
+		{ data: "private_id", name: "private_id" },
+		{ data: "operation", name: "operation" },
+		{ data: "total", name: "total" },
+		{ data: "status", name: "status" },
+		{ data: "evidence", name: "evidence" },
+		{ data: "created_at", name: "created_at" },
+		{ data: "updated_at", name: "updated_at", visible:false },
+		{ data: "action", name: "action", searchable: false, orderable: false },
+    ],
+}).on( 'processing.dt', function ( e, settings, processing ) {if(processing){Pace.start();} else {Pace.stop();}});
+
+$('#datepicker-start-history').datepicker({format: 'yyyy/mm/dd'}).on('changeDate', function (ev) {
+    $(this).datepicker('hide');
+    if($('#datepicker-end-history').val() != ""){
+        $('#drs').val($('#datepicker-start-history').val()+":"+$('#datepicker-end-history').val());
+        oTable.draw();
+    }else{
+        $('#datepicker-end-history').focus();
+    }
+
+});
+$('#datepicker-end-history').datepicker({format: 'yyyy/mm/dd'}).on('changeDate', function (ev) {
+    $(this).datepicker('hide');
+    if($('#datepicker-start-history').val() != ""){
+        $('#drs').val($('#datepicker-start-history').val()+":"+$('#datepicker-end-history').val());
+        oTable.draw();
+    }else{
+        $('#datepicker-start-history').focus();
+    }
+
+});
+$('#formsearchhistory').submit(function () {
+    oTable1.search( $('#search-history-table').val() ).draw();
+    return false;
+} );
+
+oTable.page.len(25).draw();
 
 </script>
 @endpush

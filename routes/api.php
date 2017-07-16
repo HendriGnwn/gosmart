@@ -24,6 +24,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 	
 	Route::group(['middleware' => ['jwt.auth']], function() {
 		Route::group(['prefix' => 'auth'], function() {
+			Route::post('/change-password/{uniqueNumber}', 'Api\AuthController@changePassword');
 			Route::post('/logout', 'Api\AuthController@logout');
 		});
 		Route::group(['prefix' => 'user'], function() {

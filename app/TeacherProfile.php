@@ -67,6 +67,11 @@ class TeacherProfile extends BaseModel
 		return $this->hasMany('\App\TeacherCourse', 'user_id', 'user_id');
 	}
 	
+	public function teacherBank()
+	{
+		return $this->hasOne('\App\TeacherBank', 'user_id', 'user_id');
+	}
+	
 	public function teacherTotalHistories()
 	{
 		return $this->hasMany('\App\TeacherTotalHistory', 'user_id', 'user_id');

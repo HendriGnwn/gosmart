@@ -1,15 +1,6 @@
 
 @php
-$teacherCourses = \App\TeacherCourse::whereUserId($userId)->get();
-if (count($teacherCourses) > 0) {
-	$courseIds = [];
-	foreach($teacherCourses as $cour) {
-		$courseIds[] = $cour->course_id;
-	}
-	$courses = \App\Course::whereNotIn('id', $courseIds)->actived()->pluck('name', 'id')->prepend('Select a Course', null);
-} else {
 	$courses = \App\Course::actived()->pluck('name', 'id')->prepend('Select a Course', null);
-}
 @endphp
 <div aria-required="true" class="form-group required form-group-default form-group-default-select2 {{ $errors->has('course_id') ? 'has-error' : ''}}">
     {!! Form::label('course_id', 'Course') !!}
