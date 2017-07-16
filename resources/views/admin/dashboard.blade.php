@@ -47,7 +47,9 @@
             </tr>
         </thead>
     </table>
-
+	
+	<br/>
+	<br/>
 	<h4>Teachers must be confirmation</h4>
     <input type="hidden" id="drs" name="drange"/>
     <input type="hidden" id="did" name="did"/>
@@ -167,7 +169,7 @@ oTable = $('#user-table').DataTable({
     ],
 }).on( 'processing.dt', function ( e, settings, processing ) {if(processing){Pace.start();} else {Pace.stop();}});
 
-$("#user-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
+//$("#user-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
 
 
 $('#datepicker-start').datepicker({format: 'yyyy/mm/dd'}).on('changeDate', function (ev) {
@@ -282,7 +284,7 @@ oTable1 = $('#history-table').DataTable({
     ],
 }).on( 'processing.dt', function ( e, settings, processing ) {if(processing){Pace.start();} else {Pace.stop();}});
 
-$("#history-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
+//$("#history-table_wrapper > .dt-buttons").appendTo("div.export-options-container");
 
 
 $('#datepicker-start-history').datepicker({format: 'yyyy/mm/dd'}).on('changeDate', function (ev) {
