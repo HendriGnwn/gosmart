@@ -42,6 +42,11 @@ class TeacherProfile extends BaseModel
         'user_id', 
     ];
 	
+	protected $with = [
+		'teacherBank'
+	];
+
+
 	public function __construct(array $attributes = array())
 	{
 		parent::__construct($attributes);

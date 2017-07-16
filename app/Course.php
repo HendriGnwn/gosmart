@@ -22,7 +22,7 @@ class Course extends BaseModel
 		'created_at', 
 		'updated_at', 
     ];
-
+	
     /**
      * The attributes that should be hidden for arrays.
      *
