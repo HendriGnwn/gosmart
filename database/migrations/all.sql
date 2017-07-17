@@ -1,4 +1,4 @@
--- Adminer 4.3.1 MySQL dump
+-- Adminer 4.2.5 MySQL dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -14,16 +14,15 @@ CREATE TABLE `bank` (
   `description` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `branch` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `behalf_of` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `blob` blob NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `bank` (`id`, `payment_id`, `name`, `image`, `description`, `branch`, `behalf_of`, `blob`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1,	1,	'BCA',	'bca.jpg',	'Bank Central Asia',	'Sawah Besar, Jakarta Pusat',	'Hendri Gunawan',	'{\"tes\":\"ok\", \"ma\":\"test\"}',	NULL,	'2017-06-18 07:38:11',	'2017-06-18 07:38:11'),
-(2,	1,	'DANAMON',	'danamon.jpg',	'Bank Danamon',	'Sawah Besar, Jakarta Pusat',	'Hendri Gunawan',	'{\"tes\":\"ok\", \"ma\":\"test\"}',	NULL,	'2017-06-18 07:38:11',	'2017-06-18 07:38:11');
+INSERT INTO `bank` (`id`, `payment_id`, `name`, `image`, `description`, `branch`, `behalf_of`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1,	1,	'BCA',	'bca.jpg',	'Bank Central Asia',	'Sawah Besar, Jakarta Pusat',	'Hendri Gunawan',	NULL,	'2017-06-18 07:38:11',	'2017-06-18 07:38:11'),
+(2,	1,	'DANAMON',	'danamon.jpg',	'Bank Danamon',	'Sawah Besar, Jakarta Pusat',	'Hendri Gunawan',	NULL,	'2017-06-18 07:38:11',	'2017-06-18 07:38:11');
 
 DROP TABLE IF EXISTS `config`;
 CREATE TABLE `config` (
@@ -140,7 +139,7 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `order` (`id`, `user_id`, `teacher_id`, `code`, `section`, `section_time`, `start_date`, `end_date`, `admin_fee`, `final_amount`, `payment_id`, `status`, `confirmed_at`, `paid_by`, `paid_at`, `created_at`, `updated_at`) VALUES
-(1,	1,	2,	'INV-201707-00001',	8,	'12:00:00',	'2017-07-05',	'2017-07-08',	5000.00,	235000.00,	1,	10,	'2017-07-02 04:20:14',	3,	'2017-07-13 06:17:28',	'2017-07-02 04:10:57',	'2017-07-13 06:17:28');
+(1,	1,	2,	'INV-201707-00001',	8,	'12:00:00',	'2017-07-05',	'2017-07-08',	5000.00,	235000.00,	1,	10,	'2017-07-02 04:20:14',	3,	'2017-07-12 15:01:44',	'2017-07-02 04:10:57',	'2017-07-12 15:01:44');
 
 DROP TABLE IF EXISTS `order_confirmation`;
 CREATE TABLE `order_confirmation` (
@@ -213,7 +212,7 @@ CREATE TABLE `private` (
   `code` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
-  `status` smallint(6) NOT NULL DEFAULT '5' COMMENT '5=On Going;10=Done;',
+  `status` smallint(6) NOT NULL DEFAULT '1' COMMENT '1=Belum Mulai;5=On Going;10=Done;',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -221,7 +220,7 @@ CREATE TABLE `private` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `private` (`id`, `user_id`, `teacher_id`, `order_id`, `section`, `section_time`, `code`, `start_date`, `end_date`, `status`, `created_at`, `updated_at`) VALUES
-(1,	1,	2,	1,	8,	'12:00:00',	'PRI-201707-0001',	'2017-07-05',	'2017-07-08',	1,	'2017-07-13 06:17:29',	'2017-07-13 06:17:29');
+(1,	1,	2,	1,	8,	'12:00:00',	'PRI-201707-0001',	'2017-07-05',	'2017-07-08',	1,	'2017-07-12 15:01:35',	'2017-07-12 15:01:35');
 
 DROP TABLE IF EXISTS `private_detail`;
 CREATE TABLE `private_detail` (
@@ -231,7 +230,6 @@ CREATE TABLE `private_detail` (
   `on_at` text COLLATE utf8_unicode_ci,
   `section` int(11) DEFAULT NULL,
   `section_time` time DEFAULT NULL,
-  `student_check` text COLLATE utf8_unicode_ci COMMENT '1=True;0=False;',
   `student_details` text COLLATE utf8_unicode_ci,
   `teacher_details` text COLLATE utf8_unicode_ci,
   `checklist` smallint(1) DEFAULT NULL COMMENT '1=True;0=False;',
@@ -241,9 +239,9 @@ CREATE TABLE `private_detail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `private_detail` (`id`, `private_id`, `course_id`, `on_at`, `section`, `section_time`, `student_check`, `student_details`, `teacher_details`, `checklist`, `checklist_at`, `created_at`, `updated_at`) VALUES
-(1,	1,	13,	'2017-07-05 10:00:00,2017-07-06 10:00:00,2017-07-07 10:00:00,2017-07-08 10:00:00',	4,	'01:30:00',	NULL,	'[{\"on_at\":\"2017-07-05 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 10:00:00\",\"check\":0,\"check_at\":\"\"}]',	'[{\"on_at\":\"2017-07-05 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 10:00:00\",\"check\":0,\"check_at\":\"\"}]',	0,	NULL,	'2017-07-13 06:17:29',	'2017-07-13 06:17:29'),
-(2,	1,	14,	'2017-07-05 11:30:00,2017-07-06 11:30:00,2017-07-07 11:30:00,2017-07-08 11:30:00',	4,	'01:30:00',	NULL,	'[{\"on_at\":\"2017-07-05 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 11:30:00\",\"check\":0,\"check_at\":\"\"}]',	'[{\"on_at\":\"2017-07-05 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 11:30:00\",\"check\":0,\"check_at\":\"\"}]',	0,	NULL,	'2017-07-13 06:17:29',	'2017-07-13 06:17:29');
+INSERT INTO `private_detail` (`id`, `private_id`, `course_id`, `on_at`, `section`, `section_time`, `student_details`, `teacher_details`, `checklist`, `checklist_at`, `created_at`, `updated_at`) VALUES
+(1,	1,	13,	'2017-07-05 10:00:00,2017-07-06 10:00:00,2017-07-07 10:00:00,2017-07-08 10:00:00',	4,	'01:30:00',	'[{\"on_at\":\"2017-07-05 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 10:00:00\",\"check\":0,\"check_at\":\"\"}]',	'[{\"on_at\":\"2017-07-05 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 10:00:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 10:00:00\",\"check\":0,\"check_at\":\"\"}]',	0,	NULL,	'2017-07-12 15:01:35',	'2017-07-12 15:01:35'),
+(2,	1,	14,	'2017-07-05 11:30:00,2017-07-06 11:30:00,2017-07-07 11:30:00,2017-07-08 11:30:00',	4,	'01:30:00',	'[{\"on_at\":\"2017-07-05 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 11:30:00\",\"check\":0,\"check_at\":\"\"}]',	'[{\"on_at\":\"2017-07-05 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-06 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-07 11:30:00\",\"check\":0,\"check_at\":\"\"},{\"on_at\":\"2017-07-08 11:30:00\",\"check\":0,\"check_at\":\"\"}]',	0,	NULL,	'2017-07-12 15:01:35',	'2017-07-12 15:01:35');
 
 DROP TABLE IF EXISTS `review`;
 CREATE TABLE `review` (
@@ -281,6 +279,23 @@ INSERT INTO `student_profile` (`id`, `user_id`, `school`, `degree`, `department`
 (1,	1,	'SMP Negeri Ciampea - Bogor',	'7',	NULL,	'Jl Letnan Sukarna Ciampea Bogor',	'hendri.jpg',	NULL,	NULL,	'2017-06-30 06:09:45'),
 (2,	6,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:37:26');
 
+DROP TABLE IF EXISTS `teacher_bank`;
+CREATE TABLE `teacher_bank` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `number` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `branch` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `behalf_of` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `teacher_bank` (`id`, `user_id`, `name`, `number`, `branch`, `behalf_of`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1,	2,	'BCA',	'2240026255',	'KCP Sawah Besar',	'Hendri Gunawan',	NULL,	'2017-07-16 10:22:12',	'2017-07-16 10:22:12');
+
 DROP TABLE IF EXISTS `teacher_course`;
 CREATE TABLE `teacher_course` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -306,7 +321,7 @@ INSERT INTO `teacher_course` (`id`, `user_id`, `course_id`, `description`, `expe
 (2,	2,	13,	'Matematika kelas 7',	80000.00,	'2017-06-24 07:33:51',	30000.00,	5000.00,	115000.00,	3,	'2017-06-24 07:33:51',	'module-matematika.pdf',	1,	'2017-06-24 07:33:51',	'2017-06-24 14:33:51'),
 (3,	2,	14,	'Bahasa indonesia kelas 7',	80000.00,	'2017-06-24 07:33:51',	30000.00,	5000.00,	115000.00,	3,	'2017-06-24 07:33:51',	'module-bahasaindonesia.pdf',	1,	'2017-06-24 07:33:51',	'2017-06-24 14:33:51'),
 (4,	2,	2,	'lorem ipsum dolor de',	80000.00,	'2017-07-02 06:12:35',	30000.00,	5000.00,	115000.00,	NULL,	NULL,	NULL,	0,	'2017-07-02 06:12:35',	'2017-07-02 13:12:35'),
-(5,	2,	3,	'lorem ipsum dolor de',	80000.00,	'2017-07-02 06:13:20',	30000.00,	5000.00,	115000.00,	NULL,	NULL,	NULL,	0,	'2017-07-02 06:13:20',	'2017-07-02 13:13:20');
+(7,	2,	16,	'Saya ingin mengajar Bahasa Indonesia Viii',	160000.00,	'2017-07-14 11:31:25',	30000.00,	5000.00,	195000.00,	3,	'2017-07-14 11:31:25',	'45161.pdf',	1,	'2017-07-14 11:31:25',	'2017-07-14 18:31:25');
 
 DROP TABLE IF EXISTS `teacher_profile`;
 CREATE TABLE `teacher_profile` (
@@ -338,12 +353,20 @@ CREATE TABLE `teacher_total_history` (
   `private_id` bigint(20) NOT NULL,
   `operation` smallint(1) NOT NULL COMMENT '1=+;0=-',
   `total` decimal(14,2) NOT NULL,
+  `evidence` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` smallint(6) NOT NULL DEFAULT '5' COMMENT '0=Rejected;5=Waiting;1=Approved;10=Done',
+  `approved_by` bigint(20) DEFAULT NULL,
+  `approved_at` timestamp NULL DEFAULT NULL,
+  `done_by` bigint(20) DEFAULT NULL,
+  `done_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Teacher History Total (Honor)';
 
+INSERT INTO `teacher_total_history` (`id`, `user_id`, `private_id`, `operation`, `total`, `evidence`, `status`, `approved_by`, `approved_at`, `done_by`, `done_at`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1,	2,	1,	1,	10000.00,	'32777.jpg',	1,	3,	'2017-07-16 11:56:11',	3,	'2017-07-16 11:54:34',	NULL,	'2017-07-14 11:46:37',	'2017-07-16 11:56:11');
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -372,10 +395,9 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Master User';
 
 INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_number`, `photo`, `latitude`, `longitude`, `address`, `email`, `password`, `remember_token`, `firebase_token`, `status`, `role`, `last_login_at`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1,	'STU2017060001',	'Hendri',	'Student',	'08561471500',	NULL,	-6.55592,	106.9928,	'Jl Batu Ceper X No 2Y, Kebon Kelapa Gambir Jakarta Pusat',	'hendri.gnw@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	'O5fxBE8LKrqIfZFr27bfSUf0BNp7ygiaXVD1aGEl7QXqIw9p7rQ9Bt8zmtTz',	NULL,	1,	3,	'2017-06-30 06:22:44',	NULL,	'2017-06-20 12:37:16',	'2017-06-30 06:22:44'),
-(2,	'TEA2017060001',	'Hendri',	'Teacher',	'085711202889',	NULL,	-6.920291,	106.9292812,	'Jl Lapangan Tembak 300 Ciaruteun Ilir Cibungbulang Bogor',	'hendrigunawan195@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	NULL,	NULL,	1,	2,	'2017-07-02 06:05:59',	NULL,	'2017-06-24 07:12:21',	'2017-07-02 06:05:59'),
+(1,	'STU2017060001',	'Hendri',	'Student',	'08561471500',	NULL,	-6.55592,	106.9928,	'Jl Batu Ceper X No 2Y, Kebon Kelapa Gambir Jakarta Pusat',	'hendri.gnw@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	'JnDMEpUe4vbuvW7hXQNVdQeVUwXlJB3OE8Hm7iRHq6tuLL0N0aKLf1RMbgo4',	'testes',	1,	3,	'2017-07-16 14:29:48',	NULL,	'2017-06-20 12:37:16',	'2017-07-16 14:29:48'),
+(2,	'TEA2017060001',	'Hendri',	'Teacher',	'085711202889',	NULL,	-6.920291,	106.9292812,	'Jl Lapangan Tembak 300 Ciaruteun Ilir Cibungbulang Bogor',	'hendrigunawan195@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	NULL,	'testes',	1,	2,	'2017-07-16 14:31:11',	NULL,	'2017-06-24 07:12:21',	'2017-07-16 14:31:11'),
 (3,	'USR2017060001',	'Administrator',	NULL,	'08561471500',	NULL,	-6.920291,	106.9292812,	'Jl Batu Ceper X No 2Y Jakarta',	'administrator@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	'8Pyf6K0qtcNTAwV7CnYS8zzXhNodCRtsoP32FDD6b2CWUZnmeGMS9aqLkOm0',	NULL,	1,	1,	'2017-06-24 00:31:12',	NULL,	'2017-06-24 07:12:21',	'2017-06-24 00:31:12'),
 (6,	'STU2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina97@gmail.com',	'$2y$10$Db1NEtx4r9wu.TgeowxuCe434LzeAwT8rium6Qz.ID/syr4wFXwMK',	NULL,	NULL,	0,	3,	'2017-06-24 06:46:47',	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:46:47'),
 (12,	'TEA2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	-6.55592,	106.9928,	'PGRI Ciampea 2',	'winamarlina977@gmail.com',	'$2y$10$PeQ/lmOvrhLT4QIm5yrJW..jBt/d7zB0udhvzoIk9VO6muvs4xG7S',	NULL,	NULL,	0,	2,	'2017-07-02 04:58:47',	NULL,	'2017-06-24 06:45:40',	'2017-07-02 04:58:47');
 
--- 2017-07-13 10:00:55

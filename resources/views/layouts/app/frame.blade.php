@@ -28,7 +28,11 @@
 		<nav class="page-sidebar" data-pages="sidebar">
 
 			<div class="sidebar-header">
-				<span style="z-index:-999; font-size:20px;" alt="logo" class="brand" height="22"width="78">Go Smart</span>
+				<span style="font-size:20px;" alt="logo" class="brand" height="22"width="78">
+					<a href="{{ url('/admin') }}">
+						Go Smart
+					</a>
+				</span>
 
 				<div class="sidebar-header-controls"> <button class="btn btn-link visible-lg-inline" data-toggle-pin="sidebar" type="button"><i class="fa fs-12"></i></button>
 				</div>
@@ -56,7 +60,11 @@
 					<div class="pull-center hidden-md hidden-lg">
 						<div class="header-inner">
 							<div class="brand inline">
-								<span style="z-index:-999; font-size:20px;" alt="logo" class="brand" height="22"width="78">Go Smart</span>
+								<span style="font-size:20px;" alt="logo" class="brand" height="22"width="78">
+									<a href="{{ url('/admin') }}">
+										Go Smart
+									</a>
+								</span>
 							</div>
 						</div>
 					</div>
@@ -67,7 +75,11 @@
 				<div class=" pull-left sm-table hidden-xs hidden-sm">
 					<div class="header-inner">
 						<div class="brand inline">
-							<span style="z-index:-999; font-size:20px;" alt="logo" class="brand" height="22"width="78">Go Smart</span>
+							<span style="font-size:20px;" alt="logo" class="brand" height="22"width="78">
+								<a href="{{ url('/admin') }}">
+									Go Smart
+								</a>
+							</span>
 						</div>
 
 					</div>

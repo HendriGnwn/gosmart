@@ -97,13 +97,14 @@ class CourseController extends Controller
 		}
 		
 		$request['user_id'] = $user->id;
-		$request['expected_cost_updated_at'] = Carbon::now();
+		$request['expected_cost_updated_at'] = Carbon::now()->toDateTimeString();
 		$request['additional_cost'] = \App\Config::getAdditionalCost();
 		$request['admin_fee'] = \App\Config::getTeacherCourseAdminFee();
 		$request['final_cost'] = (int) $request['expected_cost'] + \App\Config::getAdditionalCost() + \App\Config::getTeacherCourseAdminFee();
 		$request['status'] = \App\TeacherCourse::STATUS_INACTIVE;
 		$teacherCourse = new \App\TeacherCourse();
 		$teacherCourse->fill($request->all());
+		$teacherCourse->created_at = $teacherCourse->updated_at = Carbon::now()->toDateTimeString();
 		$teacherCourse->save();
 		
 		$teacherCourse = \App\TeacherCourse::find($teacherCourse->id);

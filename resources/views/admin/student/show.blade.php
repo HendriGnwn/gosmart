@@ -2,7 +2,7 @@
 @section('title', 'Student #' . $model->id)
 @section('description', 'Student Details')
 @section('breadcrumbs')
-	@php echo \Breadcrumbs::render([['title' => 'Bank', 'url' => url('/admin/student')], 'View '.$model->first_name]) @endphp
+	@php echo \Breadcrumbs::render([['title' => 'Student', 'url' => url('/admin/student')], 'View '.$model->first_name]) @endphp
 @endsection
 @section('button')
 	<a href="{{ url('/admin/student') }}" class="btn btn-info btn-xs no-border">Back</a>
@@ -14,7 +14,7 @@
 			<a href="{{ url('admin/student/' . $model->id . '/edit') }}" class="btn btn-primary btn-xs" title="Edit User"><span class="glyphicon glyphicon-pencil" aria-hidden="true"/></a>
 			{!! Form::open([
 				'method'=>'DELETE',
-				'url' => ['admin/user', $model->id],
+				'url' => ['admin/student', $model->id],
 				'style' => 'display:inline'
 			]) !!}
 				{!! Form::button('<span class="glyphicon glyphicon-trash" aria-hidden="true"/>', array(

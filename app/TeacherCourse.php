@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Helpers\FormatConverter;
+
 class TeacherCourse extends BaseModel
 {
 	const DESTINATION_PATH = 'files/teacher-course/';
@@ -24,6 +26,7 @@ class TeacherCourse extends BaseModel
 		'final_cost',
         'approved_by', 
 		'approved_at', 
+		'module', 
 		'status', 
 		'created_at', 
 		'updated_at', 
@@ -56,13 +59,57 @@ class TeacherCourse extends BaseModel
 		}
 	}
 	
+	public function deleteFile()
+	{
+		@unlink($this->getPath()  . $this->module);
+	}
+	
 	public function user() 
 	{
 		return $this->hasOne('\App\User', 'id', 'user_id')->actived();
 	}
 	
+	public function approvedBy() 
+	{
+		return $this->hasOne('\App\User', 'id', 'approved_by');
+	}
+	
 	public function course()
 	{
 		return $this->hasOne('\App\Course', 'id', 'course_id');
+	}
+	
+	public function getFormattedExpectedCost()
+	{
+		return FormatConverter::rupiahFormat($this->expected_cost, 2);
+	}
+	
+	public function getFormattedAdditionalCost()
+	{
+		return FormatConverter::rupiahFormat($this->additional_cost, 2);
+	}
+	
+	public function getFormattedAdminFee()
+	{
+		return FormatConverter::rupiahFormat($this->admin_fee, 2);
+	}
+	
+	public function getFormattedFinalCost()
+	{
+		return FormatConverter::rupiahFormat($this->final_cost, 2);
+	}
+	
+	public function getModuleUrl()
+	{
+		return url(self::DESTINATION_PATH . $this->module);
+	}
+	
+	public function getModuleHtml($label = null)
+	{
+		$label = $label == null ? isset($this->course) ? $this->course->name : '' : $label;
+		if ($this->module != '') {
+			return "<a href='{$this->getModuleUrl()}' target='_blank'>{$label}</a>";
+		}
+		return '-';
 	}
 }

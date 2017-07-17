@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -186,6 +187,7 @@ class User extends BaseModel implements
 		
 		$student = new StudentProfile();
 		$student->user_id = $this->id;
+		$student->created_at = $student->updated_at = Carbon::now()->toDateTimeString();
 		$student->save();
 		
 		$this->sendWelcomeMessageToStudent();
@@ -204,6 +206,7 @@ class User extends BaseModel implements
 		$teacher = new TeacherProfile();
 		$teacher->user_id = $this->id;
 		$teacher->title = $this->title;
+		$student->created_at = $student->updated_at = Carbon::now()->toDateTimeString();
 		$teacher->save();
 		
 		$this->sendWelcomeMessageToTeacher();

@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Helpers\FormatConverter;
+
 class TeacherProfile extends BaseModel
 {
 	const TITLE_D3 = 1;
@@ -40,6 +42,11 @@ class TeacherProfile extends BaseModel
         'user_id', 
     ];
 	
+	protected $with = [
+		'teacherBank'
+	];
+
+
 	public function __construct(array $attributes = array())
 	{
 		parent::__construct($attributes);
@@ -65,9 +72,19 @@ class TeacherProfile extends BaseModel
 		return $this->hasMany('\App\TeacherCourse', 'user_id', 'user_id');
 	}
 	
+	public function teacherBank()
+	{
+		return $this->hasOne('\App\TeacherBank', 'user_id', 'user_id');
+	}
+	
 	public function teacherTotalHistories()
 	{
 		return $this->hasMany('\App\TeacherTotalHistory', 'user_id', 'user_id');
+	}
+	
+	public function privateModels()
+	{
+		return $this->hasMany('\App\PrivateModel', 'user_id', 'id')->orderBy('private.created_at', 'desc');
 	}
 	
 	public static function titleLabels()
@@ -84,5 +101,23 @@ class TeacherProfile extends BaseModel
 	{
 		$list = self::titleLabels();
 		return isset($list[$this->title]) ? $list[$this->title] : '';
+	}
+	
+	public function getUploadIzajahUrl()
+	{
+		return url(self::DESTINATION_PATH . $this->upload_izajah);
+	}
+	
+	public function getUploadIzajahHtml()
+	{
+		if ($this->upload_izajah != '') {
+			return "<a href='{$this->getUploadIzajahUrl()}' target='_blank'>{$this->getUploadIzajahUrl()}</a>";
+		}
+		return '-';
+	}
+	
+	public function getFormattedTotal()
+	{
+		return FormatConverter::rupiahFormat($this->total, 2);
 	}
 }
