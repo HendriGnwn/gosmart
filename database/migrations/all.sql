@@ -258,6 +258,8 @@ CREATE TABLE `review` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO `review` (`id`, `user_id`, `teacher_id`, `private_id`, `rate`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1,	1,	2,	1,	3,	'etaswetsdrt',	1,	'2017-07-13 09:31:42',	NULL);
 
 DROP TABLE IF EXISTS `student_profile`;
 CREATE TABLE `student_profile` (
@@ -400,4 +402,3 @@ INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_num
 (6,	'STU2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina97@gmail.com',	'$2y$10$Db1NEtx4r9wu.TgeowxuCe434LzeAwT8rium6Qz.ID/syr4wFXwMK',	NULL,	NULL,	0,	3,	'2017-06-24 06:46:47',	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:46:47'),
 (12,	'TEA2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	-6.55592,	106.9928,	'PGRI Ciampea 2',	'winamarlina977@gmail.com',	'$2y$10$PeQ/lmOvrhLT4QIm5yrJW..jBt/d7zB0udhvzoIk9VO6muvs4xG7S',	NULL,	NULL,	0,	2,	'2017-07-02 04:58:47',	NULL,	'2017-06-24 06:45:40',	'2017-07-02 04:58:47');
 
--- 2017-07-18 13:18:17
