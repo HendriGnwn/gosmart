@@ -83,6 +83,8 @@ class UserController extends Controller
 			], 400);
 		}
 		
+		$user = User::whereId($user->id)->roleTeacher()->first();
+		
 		if (!empty($request->photo)) {
 			$photoBase64 = $request->photo;
 			if (!ImageHelper::isImageBase64($photoBase64)) {
@@ -105,8 +107,14 @@ class UserController extends Controller
 				]);
 			}
 			$photoData = ImageHelper::getImageBase64Information($photoBase64);
+			$img = \Eventviva\ImageResize::createFromString(base64_decode($photoData['data']));
+			$img->resizeToWidth(500);
 			
-			$request['photo'] = null;
+			$user->deleteFile();
+			$imageFilename = str_slug($request->first_name . ' ' . $request->last_name . ' ' . time()) . '.' . $photoData['extension'];
+			
+			$img->save($user->getPath() . $imageFilename);
+			$request['photo'] = $imageFilename;
 		}
 		
 		if (!empty($request->upload_izajah)) {
@@ -131,8 +139,13 @@ class UserController extends Controller
 				]);
 			}
 			$data = ImageHelper::getImageBase64Information($izajahBase64);
+			$img = \Eventviva\ImageResize::createFromString(base64_decode($data['data']));
 			
-			$request['upload_izajah'] = null;
+			$user->teacherProfile->deleteFile();
+			$imageFilename = str_slug($request->first_name . ' ' . $request->last_name . ' ' . time()) . '.' . $data['extension'];
+			
+			$img->save($user->teacherProfile->getPath() . $imageFilename);
+			$request['upload_izajah'] = $imageFilename;
 		}
 		
 		$userRequest = $request->only([
@@ -143,6 +156,7 @@ class UserController extends Controller
 			'longitude',
 			'address',
 			'email',
+			'photo',
 		]);
 		
 		$profileRequest = $request->only([
@@ -150,11 +164,9 @@ class UserController extends Controller
 			'izajah_number',
 			'graduated',
 			'bio',
-			'photo',
 			'upload_izajah',
 		]);
 		
-		$user = User::whereId($user->id)->roleTeacher()->first();
 		$user->fill($userRequest);
 		$user->updated_at = Carbon::now()->toDateTimeString();
 		$user->save();
@@ -210,6 +222,8 @@ class UserController extends Controller
 			], 400);
 		}
 		
+		$user = User::whereId($user->id)->roleStudent()->first();
+		
 		if (!empty($request->photo)) {
 			$photoBase64 = $request->photo;
 			if (!ImageHelper::isImageBase64($photoBase64)) {
@@ -231,8 +245,14 @@ class UserController extends Controller
 				]);
 			}
 			$photoData = ImageHelper::getImageBase64Information($photoBase64);
+			$img = \Eventviva\ImageResize::createFromString(base64_decode($photoData['data']));
+			$img->resizeToWidth(500);
 			
-			$request['photo'] = null;
+			$user->deleteFile();
+			$imageFilename = str_slug($request->first_name . ' ' . $request->last_name . ' ' . time()) . '.' . $photoData['extension'];
+			
+			$img->save($user->getPath() . $imageFilename);
+			$request['photo'] = $imageFilename;
 		}
 		
 		$userRequest = $request->only([
@@ -243,6 +263,7 @@ class UserController extends Controller
 			'longitude',
 			'address',
 			'email',
+			'photo',
 		]);
 		
 		$profileRequest = $request->only([
@@ -250,10 +271,8 @@ class UserController extends Controller
 			'degree',
 			'department',
 			'school_address',
-			'photo',
 		]);
 		
-		$user = User::whereId($user->id)->roleStudent()->first();
 		$user->fill($userRequest);
 		$user->updated_at = Carbon::now()->toDateTimeString();
 		$user->save();
@@ -263,7 +282,7 @@ class UserController extends Controller
 		if (!empty($profile->school) &&
 			!empty($profile->degree) &&
 			!empty($profile->school_address) &&
-			!empty($profile->photo)) {
+			!empty($user->photo)) {
 			$user->status = User::STATUS_ACTIVE;
 		} else {
 			$user->status = User::STATUS_INACTIVE;

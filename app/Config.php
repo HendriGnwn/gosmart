@@ -61,4 +61,9 @@ class Config extends BaseModel
 	{
 		return (double) self::getValueByName('teacher_course_admin_fee');
 	}
+	
+	public static function getTermConditionTeacher()
+	{
+		return (string) self::getValueByName('term_condition_teacher');
+	}
 }

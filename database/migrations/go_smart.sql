@@ -276,7 +276,9 @@ CREATE TABLE `student_profile` (
 
 INSERT INTO `student_profile` (`id`, `user_id`, `school`, `degree`, `department`, `school_address`, `photo`, `formal_photo`, `created_at`, `updated_at`) VALUES
 (1,	1,	'SMP Negeri Ciampea - Bogor',	'7',	NULL,	'Jl Letnan Sukarna Ciampea Bogor',	'hendri.jpg',	NULL,	NULL,	'2017-06-30 06:09:45'),
-(2,	6,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:37:26');
+(2,	6,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:37:26'),
+(3,	17,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'2017-07-18 13:27:14',	'2017-07-18 13:27:14'),
+(4,	18,	'SMP Negeri Ciampea - Bogor',	'7',	NULL,	'Jl Letnan Sukarna Ciampea Bogor',	NULL,	NULL,	'2017-07-18 13:45:39',	'2017-07-18 14:10:56');
 
 DROP TABLE IF EXISTS `teacher_bank`;
 CREATE TABLE `teacher_bank` (
@@ -320,13 +322,14 @@ INSERT INTO `teacher_course` (`id`, `user_id`, `course_id`, `description`, `expe
 (2,	2,	13,	'Matematika kelas 7',	80000.00,	'2017-06-24 07:33:51',	30000.00,	5000.00,	115000.00,	3,	'2017-06-24 07:33:51',	'module-matematika.pdf',	1,	'2017-06-24 07:33:51',	'2017-06-24 14:33:51'),
 (3,	2,	14,	'Bahasa indonesia kelas 7',	80000.00,	'2017-06-24 07:33:51',	30000.00,	5000.00,	115000.00,	3,	'2017-06-24 07:33:51',	'module-bahasaindonesia.pdf',	1,	'2017-06-24 07:33:51',	'2017-06-24 14:33:51'),
 (4,	2,	2,	'lorem ipsum dolor de',	80000.00,	'2017-07-02 06:12:35',	30000.00,	5000.00,	115000.00,	NULL,	NULL,	NULL,	0,	'2017-07-02 06:12:35',	'2017-07-02 13:12:35'),
-(7,	2,	16,	'Saya ingin mengajar Bahasa Indonesia Viii',	160000.00,	'2017-07-14 11:31:25',	30000.00,	5000.00,	195000.00,	3,	'2017-07-14 11:31:25',	'45161.pdf',	1,	'2017-07-14 11:31:25',	'2017-07-14 18:31:25');
+(7,	2,	16,	'Saya ingin mengajar Bahasa Indonesia Viii',	160000.00,	'2017-07-14 11:31:25',	30000.00,	5000.00,	195000.00,	3,	'2017-07-14 11:31:25',	'45161.pdf',	1,	'2017-07-14 11:31:25',	'2017-07-14 18:31:25'),
+(9,	2,	3,	'lorem ipsum dolor de',	80000.00,	'2017-07-18 14:34:41',	30000.00,	5000.00,	115000.00,	NULL,	NULL,	NULL,	0,	'2017-07-18 14:34:41',	'2017-07-18 21:34:41');
 
 DROP TABLE IF EXISTS `teacher_profile`;
 CREATE TABLE `teacher_profile` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
-  `title` smallint(6) NOT NULL COMMENT '1=S1;2=S2;3=S3',
+  `title` smallint(6) DEFAULT NULL COMMENT '1=S1;2=S2;3=S3',
   `izajah_number` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `graduated` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'College',
   `bio` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -337,13 +340,14 @@ CREATE TABLE `teacher_profile` (
   `total_updated_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `izajah_number` (`izajah_number`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Master User Teacher';
 
 INSERT INTO `teacher_profile` (`id`, `user_id`, `title`, `izajah_number`, `graduated`, `bio`, `photo`, `upload_izajah`, `formal_photo`, `total`, `total_updated_at`, `created_at`, `updated_at`) VALUES
 (1,	2,	1,	'NC821920192',	'Universitas Mercu Buana Jakarta',	NULL,	'hendri-teacher.jpg',	'ijazah-hendri.jpg',	NULL,	0.00,	NULL,	NULL,	'2017-06-24 07:25:16'),
-(2,	12,	1,	'DC-0290-01292',	'Universitas Mercu Buana Jakarta',	NULL,	NULL,	NULL,	NULL,	0.00,	NULL,	'2017-06-24 06:45:40',	'2017-06-30 06:24:23');
+(2,	12,	1,	'DC-0290-01292',	'Universitas Mercu Buana Jakarta',	NULL,	NULL,	NULL,	NULL,	0.00,	NULL,	'2017-06-24 06:45:40',	'2017-06-30 06:24:23'),
+(3,	16,	2,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0.00,	NULL,	'2017-07-18 13:25:10',	'2017-07-18 13:25:10'),
+(4,	19,	2,	'DC-0290-01292',	'Universitas Mercu Buana Jakarta',	'I\'m Web Developer',	'gunawan-teacher-1500386440.png',	'gunawan-teacher-1500386527.png',	NULL,	0.00,	NULL,	'2017-07-18 13:46:01',	'2017-07-18 14:02:07');
 
 DROP TABLE IF EXISTS `teacher_total_history`;
 CREATE TABLE `teacher_total_history` (
@@ -398,6 +402,10 @@ INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_num
 (2,	'TEA2017060001',	'Hendri',	'Teacher',	'085711202889',	NULL,	-6.920291,	106.9292812,	'Jl Lapangan Tembak 300 Ciaruteun Ilir Cibungbulang Bogor',	'hendrigunawan195@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	NULL,	'testes',	1,	2,	'2017-07-16 14:31:11',	NULL,	'2017-06-24 07:12:21',	'2017-07-16 14:31:11'),
 (3,	'USR2017060001',	'Administrator',	NULL,	'08561471500',	NULL,	-6.920291,	106.9292812,	'Jl Batu Ceper X No 2Y Jakarta',	'administrator@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	'8Pyf6K0qtcNTAwV7CnYS8zzXhNodCRtsoP32FDD6b2CWUZnmeGMS9aqLkOm0',	NULL,	1,	1,	'2017-06-24 00:31:12',	NULL,	'2017-06-24 07:12:21',	'2017-06-24 00:31:12'),
 (6,	'STU2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina97@gmail.com',	'$2y$10$Db1NEtx4r9wu.TgeowxuCe434LzeAwT8rium6Qz.ID/syr4wFXwMK',	NULL,	NULL,	0,	3,	'2017-06-24 06:46:47',	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:46:47'),
-(12,	'TEA2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	-6.55592,	106.9928,	'PGRI Ciampea 2',	'winamarlina977@gmail.com',	'$2y$10$PeQ/lmOvrhLT4QIm5yrJW..jBt/d7zB0udhvzoIk9VO6muvs4xG7S',	NULL,	NULL,	0,	2,	'2017-07-02 04:58:47',	NULL,	'2017-06-24 06:45:40',	'2017-07-02 04:58:47');
+(12,	'TEA2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	-6.55592,	106.9928,	'PGRI Ciampea 2',	'winamarlina977@gmail.com',	'$2y$10$PeQ/lmOvrhLT4QIm5yrJW..jBt/d7zB0udhvzoIk9VO6muvs4xG7S',	NULL,	NULL,	0,	2,	'2017-07-02 04:58:47',	NULL,	'2017-06-24 06:45:40',	'2017-07-02 04:58:47'),
+(16,	'TEA2017070001',	'Gunawan',	'Teacher',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2 Bogor',	'gunawan.teacher@gmail.com',	'$2y$10$gNaLYctRyPz.EWW1L4ZreuLU5jycsNXUQ128kg.Z.fhCwWfHXlBfu',	NULL,	NULL,	0,	2,	'2017-07-18 13:25:10',	NULL,	'2017-07-18 13:25:10',	'2017-07-18 13:25:10'),
+(17,	'STU2017070001',	'Gunawan',	'Student',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2 Jakarta',	'gunawan.student@gmail.com',	'$2y$10$Tlc8qU9ylLn541j3r8vImu3V/DkV1I8T8Y3xEHPzy4nvuEdjIBCJC',	NULL,	NULL,	0,	3,	'2017-07-18 13:27:14',	NULL,	'2017-07-18 13:27:14',	'2017-07-18 13:38:51'),
+(18,	'STU2017070002',	'Gunawan',	'Student',	'085711202889',	'gunawan-student-1500387056.png',	-6.55592,	106.9928,	'PGRI Ciampea 2 Jakarta',	'gunawan.students@gmail.com',	'$2y$10$DXHg/pC4YSC24htDJP.H2uBee0zhOtDCrwXMtvSht.wuJRNc/oCBO',	NULL,	NULL,	1,	3,	'2017-07-18 13:45:39',	NULL,	'2017-07-18 13:45:39',	'2017-07-18 14:10:56'),
+(19,	'TEA2017070002',	'Gunawan',	'Teacher',	'085711202889',	'gunawan-teacher-1500386527.png',	-6.55592,	106.9928,	'PGRI Ciampea 2 Bogor',	'gunawan.teachers@gmail.com',	'$2y$10$8IzlTx9JlLve3ptfBg8Whe.2E2W/IsoWlzVLvDR499y29N3m3n81K',	NULL,	NULL,	0,	2,	'2017-07-18 13:46:01',	NULL,	'2017-07-18 13:46:00',	'2017-07-18 14:02:07');
 
--- 2017-07-18 13:18:17
+-- 2017-07-18 15:06:20

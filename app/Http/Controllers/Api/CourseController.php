@@ -23,8 +23,6 @@ class CourseController extends Controller
 				'courses',
 				'courses.teacherCourses',
 				'courses.teacherCourses.user',
-				'courses.teacherCourses.user.studentProfile',
-				'courses.teacherCourses.user.teacherProfile',
 			])
 			->join('course', 'course_level.id', '=', 'course.course_level_id')
 			->join('teacher_course', 'teacher_course.course_id', '=', 'course.id')
@@ -113,11 +111,126 @@ class CourseController extends Controller
 			'status' => 201,
 			'message' => 'save success',
 			'data' => $teacherCourse,
+		], 201);
+	}
+	
+	public function updateChooseCourse($uniqueNumber, $id, Request $request)
+	{
+		$user = JWTAuth::parseToken()->authenticate();
+		if ($user->unique_number != $uniqueNumber || $user->role != User::ROLE_TEACHER || $user->status != User::STATUS_ACTIVE) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$model = \App\TeacherCourse::whereId($id)->first();
+		$validators = \Validator::make($request->all(), [
+			'course_id' => 'required|exists:course,id,' . $model->course_id,
+			'description' => 'required',
+			'expected_cost' => 'required|numeric',
+		]);
+		
+		if ($validators->fails()) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Some parameters is invalid',
+				'validators' => FormatConverter::parseValidatorErrors($validators),
+			], 400);
+		}
+		
+		
+		$available = \App\TeacherCourse::whereNot('course_id', '=', $model->course_id)->whereCourseId($request['course_id'])->whereUserId($user->id)->count();
+		if ($available > 0) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Some parameters is invalid',
+				'validators' => [
+					'course_id' => 'Course is already to use',
+					'description' => null,
+					'expected_cost' => null
+				],
+			], 400);
+		}
+		
+		$request['user_id'] = $user->id;
+		$request['expected_cost_updated_at'] = Carbon::now()->toDateTimeString();
+		$request['additional_cost'] = \App\Config::getAdditionalCost();
+		$request['admin_fee'] = \App\Config::getTeacherCourseAdminFee();
+		$request['final_cost'] = (int) $request['expected_cost'] + \App\Config::getAdditionalCost() + \App\Config::getTeacherCourseAdminFee();
+		$request['status'] = \App\TeacherCourse::STATUS_INACTIVE;
+		$model->fill($request->all());
+		$model->updated_at = Carbon::now()->toDateTimeString();
+		$model->save();
+		
+		$model = \App\TeacherCourse::find($model->id);
+		
+		return response()->json([
+			'status' => 200,
+			'message' => 'save success',
+			'data' => $model,
 		], 200);
 	}
 	
-	public function updateChooseCourse($id, Request $request)
+	public function deleteChooseCourse($uniqueNumber, $id, Request $request)
 	{
+		$user = JWTAuth::parseToken()->authenticate();
+		if ($user->unique_number != $uniqueNumber || $user->role != User::ROLE_TEACHER || $user->status != User::STATUS_ACTIVE) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
 		
+		$model = \App\TeacherCourse::whereId($id)->first();
+		$model->deleteFile();
+		$model->delete();
+		
+		return response()->json([
+			'status' => 200,
+			'message' => 'delete success',
+			'data' => [],
+		], 200);
+	}
+	
+	public function listAvailability(Request $request)
+	{
+		$search = $request->get('search');
+		$sort = $request->get('sort');
+		$latitude = $request->get('latitude');
+		$longitude = $request->get('longitude');
+		$radius = $request->get('radius');
+		$R = 6371;
+		$perPage = 16;
+		
+		$models = \App\TeacherCourse::select([
+				'teacher_course.*',
+			])->with([
+				'course',
+				'user',
+			])
+			->join('user', 'user.id', '=', 'teacher_course.user_id')
+			->join('course', 'course.id', '=', 'teacher_course.course_id')
+				->actived();
+		
+        if (!empty($search)) {
+            $models = $models->where('course.name', 'LIKE', "%$search%");
+        }
+		if (!empty($latitude) && !empty($longitude) && !empty($radius)) {
+			$maxLatitude = $latitude + rad2deg($radius/$R);
+			$minLatitude = $latitude - rad2deg($radius/$R);
+			$maxLongitude = $longitude + rad2deg(asin($radius/$R) / cos(deg2rad($latitude)));
+			$minLongitude = $longitude - rad2deg(asin($radius/$R) / cos(deg2rad($latitude)));
+			
+			$models = $models->whereBetween('user.latitude', [$minLatitude, $maxLatitude])
+				->whereBetween('user.longitude', [$minLongitude, $maxLongitude]);
+		}
+		
+		$models = $models->paginate($perPage);
+		
+		$models = $models->toArray();
+		$models['status'] = 200;
+		
+		return response()->json($models, 200);
 	}
 }

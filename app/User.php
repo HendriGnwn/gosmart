@@ -87,6 +87,13 @@ class User extends BaseModel implements
 		}
 	}
 	
+	public function deleteFile()
+	{
+		if ($this->photo != null) {
+			@unlink($this->getPath() . $this->photo);
+		}
+	}
+	
 	/**
 	 * @param type $role
 	 * @param type $padLength
@@ -206,7 +213,7 @@ class User extends BaseModel implements
 		$teacher = new TeacherProfile();
 		$teacher->user_id = $this->id;
 		$teacher->title = $this->title;
-		$student->created_at = $student->updated_at = Carbon::now()->toDateTimeString();
+		$teacher->created_at = $teacher->updated_at = Carbon::now()->toDateTimeString();
 		$teacher->save();
 		
 		$this->sendWelcomeMessageToTeacher();
@@ -216,34 +223,43 @@ class User extends BaseModel implements
 	
 	public function sendWelcomeMessageToStudent()
 	{
-		$user = $this;
-//		Mail::send('emails.user.new-user-student', [
-//			'user' => $user
-//		], function ($message) use ($user)
-//		{
-//			$message->to($user->email, $user->getFullName())
-//					->subject('Welcome to ' . config('app.name'));
-//		});
+		$model = $this;
+		\Mail::send('emails.user.new-user-student', [
+			'model' => $model
+		], function ($message) use ($model)
+		{
+			$message->to($model->email, $model->getFullName())
+					->subject('Welcome to ' . config('app.name'));
+		});
 		
 		return true;
 	}
 	
 	public function sendWelcomeMessageToTeacher()
 	{
-		$user = $this;
-//		Mail::send('emails.user.new-user-teacher', [
-//			'user' => $user
-//		], function ($message) use ($user)
-//		{
-//			$message->to($user->email, $user->getFullName())
-//					->subject('Welcome to ' . config('app.name'));
-//		});
+		$model = $this;
+		\Mail::send('emails.user.new-user-teacher', [
+			'model' => $model
+		], function ($message) use ($model)
+		{
+			$message->to($model->email, $model->getFullName())
+					->subject('Welcome to ' . config('app.name'));
+		});
 		
 		return true;
 	}
 	
 	public function sendEmailForgotPassword($password)
 	{
+		$model = $this;
+		\Mail::send('emails.user.forgot-password', [
+			'model' => $model,
+			'password' => $password
+		], function ($message) use($model) {
+			$message->to($model->email, $model->getFullName())
+					->subject('Forgot Password - ' . config('app.name', 'Go Smart'));
+		});
+		
 		return true;
 	}
 	

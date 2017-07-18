@@ -34,11 +34,17 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 		});
 		Route::group(['prefix' => 'teacher'], function() {
 			Route::post('/choose-course/{uniqueNumber}', 'Api\CourseController@chooseCourse');
+			Route::put('/choose-course/update/{uniqueNumber}/{id}', 'Api\CourseController@updateChooseCourse');
+			Route::delete('/choose-course/delete/{uniqueNumber}/{id}', 'Api\CourseController@deleteChooseCourse');
 		});
+		
+		Route::get('/courses-availability', 'Api\CourseController@listAvailability');
 	});
 	
 	Route::get('/course-levels', 'Api\CourseController@getCourseLevelWithRelations');
 	Route::get('/courses-spinner', 'Api\CourseController@listCourseLevels');
 	Route::get('/payments', 'Api\PaymentController@listPayments');
+	
+	Route::get('/teacher-term-condition', 'Api\RequestController@teacherTermCondition');
 	
 });

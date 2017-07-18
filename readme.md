@@ -53,21 +53,21 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 API
 - Login [ok]
-- Term and condition before register teacher
-- Register Teacher
-- Register Student
+- Term and condition before register teacher [ok]
+- Register Teacher [ok]
+- Register Student [ok]
 - forgot password [ok]
 - change password [ok]
-- edit profile teacher
-- edit profile student
-- list teacher courses
-- create teacher course by token
-- update teacher course by token
-- delete teacher course by token
+- edit profile teacher [ok]
+- edit profile student [ok]
+- list teacher courses [ok]
+- create teacher course by token [ok]
+- update teacher course by token [ok] -
+- delete teacher course by token [ok] -
 - update teacher bank
 - list teacher total histories
 - create request honor
-- list availably courses with teachers
+- list availably courses with teachers [ok]
 - create order with order details
 	- choose on at in order details
 - create order confirmation with upload photo (base64)

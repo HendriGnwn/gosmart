@@ -57,6 +57,13 @@ class TeacherProfile extends BaseModel
 		}
 	}
 	
+	public function deleteFile()
+	{
+		if ($this->upload_ijazah != null) {
+			@unlink($this->getPath() . $this->upload_ijazah);
+		}
+	}
+	
 	public function user() 
 	{
 		return $this->hasOne('\App\User', 'id', 'user_id');
