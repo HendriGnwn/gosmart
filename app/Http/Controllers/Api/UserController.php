@@ -300,4 +300,64 @@ class UserController extends Controller
 			'data' => $result,
 		], 200);
 	}
+	
+	public function updateTeacherBank($uniqueNumber, Request $request)
+	{
+		$user = JWTAuth::parseToken()->authenticate();
+		if ($user->unique_number != $uniqueNumber && $user->role != User::ROLE_TEACHER) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$model = User::whereId($user->id)->roleTeacher()->actived()->first();
+		if (!$model) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$validators = \Validator::make($request->all(), [
+			'name' => 'required|max:50',
+			'number' => 'required|numeric',
+			'branch' => 'required|max:100',
+			'behalf_of' => 'required',
+		]);
+		
+		if ($validators->fails()) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Some parameters is invalid',
+				'validators' => FormatConverter::parseValidatorErrors($validators)
+			], 400);
+		}
+		
+		$request['user_id'] = $user->id;
+		$attributes = $request->only([
+			'user_id', 'name', 'number', 'branch', 'behalf_of'
+		]);
+		if (isset($model->teacherProfile->teacherBank)) {
+			$model->teacherProfile->teacherBank->fill($attributes);
+			$model->teacherProfile->teacherBank->updated_at = Carbon::now()->toDateTimeString();
+			$model->teacherProfile->teacherBank->save();
+		} else {
+			$teacherBank = new \App\TeacherBank();
+			$teacherBank->fill($attributes);
+			$teacherBank->created_at = $teacherBank->updated_at = Carbon::now()->toDateTimeString();
+			$teacherBank->save();
+		}
+		
+		$result = User::whereUniqueNumber($model->unique_number)
+			->roleApps()
+			->appsActived()
+			->first();
+		
+		return response()->json([
+			'status' => 200,
+			'message' => 'Update success',
+			'data' => $result,
+		], 200);
+	}
 }

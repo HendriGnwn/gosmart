@@ -64,8 +64,8 @@ API
 - create teacher course by token [ok]
 - update teacher course by token [ok] -
 - delete teacher course by token [ok] -
-- update teacher bank
-- list teacher total histories
+- update teacher bank [ok]
+- list teacher total histories [ok]
 - create request honor
 - list availably courses with teachers [ok]
 - create order with order details
@@ -73,7 +73,9 @@ API
 - create order confirmation with upload photo (base64)
 - list order histories by token
 - list private histories
+	- detail private histories
 - get available private
+	- detail private
 - set check on at student or teacher
 - add review if private has been cleared
 

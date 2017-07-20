@@ -53,6 +53,10 @@ class TeacherTotalHistory extends BaseModel
 		'done_at',
     ];
 	
+	protected $with = [
+		'privateModel'
+	];
+
 	public function __construct(array $attributes = array()) {
 		parent::__construct($attributes);
 		$this->setPath(public_path(self::DESTINATION_PATH));

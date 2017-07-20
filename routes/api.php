@@ -36,6 +36,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 			Route::post('/choose-course/{uniqueNumber}', 'Api\CourseController@chooseCourse');
 			Route::put('/choose-course/update/{uniqueNumber}/{id}', 'Api\CourseController@updateChooseCourse');
 			Route::delete('/choose-course/delete/{uniqueNumber}/{id}', 'Api\CourseController@deleteChooseCourse');
+			Route::post('/update-teacher-bank/{uniqueNumber}', 'Api\UserController@updateTeacherBank');
 		});
 		
 		Route::get('/courses-availability', 'Api\CourseController@listAvailability');
