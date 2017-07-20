@@ -360,4 +360,78 @@ class UserController extends Controller
 			'data' => $result,
 		], 200);
 	}
+	
+	public function requestHonor($uniqueNumber, Request $request)
+	{
+		$user = JWTAuth::parseToken()->authenticate();
+		if ($user->unique_number != $uniqueNumber && $user->role != User::ROLE_TEACHER) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$model = User::whereId($user->id)->roleTeacher()->actived()->first();
+		if (!$model) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$validators = \Validator::make($request->all(), [
+			'private_id' => 'required|exists:private,id',
+			'total' => 'required|numeric',
+		]);
+		
+		if ($validators->fails()) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Some parameters is invalid',
+				'validators' => FormatConverter::parseValidatorErrors($validators)
+			], 400);
+		}
+		
+		$privateModel = \App\PrivateModel::whereId($request->private_id)->statusDone()->first();
+		if (!$privateModel) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Some parameters is invalid',
+				'validators' => [
+					'private_id' => 'Private must be status is done',
+					'total' => null
+				],
+			], 400);
+		}
+		
+		if ($request->total > $user->teacherProfile->total) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Some parameters is invalid',
+				'validators' => [
+					'private_id' => null,
+					'total' => 'Total not more than IDR ' . $user->teacherProfile->getFormattedTotal(),
+				],
+			], 400);
+		}
+		
+		$requestHonor = new \App\TeacherTotalHistory();
+		$requestHonor->fill($request->only(['private_id', 'total']));
+		$requestHonor->user_id = $model->id;
+		$requestHonor->operation = \App\TeacherTotalHistory::OPERATION_MINUS;
+		$requestHonor->status = \App\TeacherTotalHistory::STATUS_WAITING_FOR_APPROVE;
+		$requestHonor->created_at =$requestHonor->updated_at = Carbon::now()->toDateTimeString();
+		$requestHonor->save();
+		
+		$result = User::whereUniqueNumber($model->unique_number)
+			->roleApps()
+			->appsActived()
+			->first();
+		
+		return response()->json([
+			'status' => 200,
+			'message' => 'Thank you, Your request will be processed',
+			'data' => $result,
+		], 200);
+	}
 }

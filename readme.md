@@ -72,6 +72,7 @@ API
 	- choose on at in order details
 - create order confirmation with upload photo (base64)
 - list order histories by token
+	- order detail
 - list private histories
 	- detail private histories
 - get available private

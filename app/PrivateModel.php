@@ -89,6 +89,11 @@ class PrivateModel extends BaseModel
 		];
 	}
 	
+	public function scopeStatusDone($query)
+	{
+		return $this->where($this->table . '.status', '=', self::STATUS_DONE);
+	}
+	
 	public function getStatusLabel()
 	{
 		$list = self::statusLabels();
