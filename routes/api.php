@@ -48,5 +48,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 	Route::get('/payments', 'Api\PaymentController@listPayments');
 	
 	Route::get('/teacher-term-condition', 'Api\RequestController@teacherTermCondition');
+	Route::get('/store-review/{uniqueNumber}', 'Api\RequestController@storeReview');
 	
 });

@@ -15,8 +15,8 @@ class TeacherTotalHistory extends BaseModel
 	const STATUS_APPROVED = 1;
 	const STATUS_DONE = 10;
 	
-	const OPERATION_PLUS = '+';
-	const OPERATION_MINUS = '-';
+	const OPERATION_PLUS = 1;
+	const OPERATION_MINUS = 0;
 
 	/**
      * The attributes that are mass assignable.
