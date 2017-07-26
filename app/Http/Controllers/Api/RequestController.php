@@ -3,6 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Config;
+use App\Helpers\FormatConverter;
+use App\PrivateModel;
+use App\Review;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RequestController extends Controller 
 {
@@ -16,6 +23,69 @@ class RequestController extends Controller
 			'data' => [
 				'description' => $termCondition,
 			],
+		], 200);
+	}
+	
+	public function storeReview($uniqueNumber, Request $request)
+	{
+		$user = JWTAuth::parseToken()->authenticate();
+		if ($user->unique_number != $uniqueNumber && $user->role != User::ROLE_TEACHER) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$model = User::whereId($user->id)->roleStudent()->actived()->first();
+		if (!$model) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$validators = \Validator::make($request->all(), [
+			'private_id' => 'required|exists:private,id',
+			'rate' => 'required|numeric',
+			'description' => 'required',
+		]);
+		
+		if ($validators->fails()) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Some parameters is invalid',
+				'validators' => FormatConverter::parseValidatorErrors($validators)
+			], 400);
+		}
+		
+		$privateModel = PrivateModel::whereId($request->private_id)->statusDone()->first();
+		if (!$privateModel) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Some parameters is invalid',
+				'validators' => [
+					'private_id' => 'Private status must be done',
+					'rate' => null,
+					'description' => null
+				]
+			], 400);
+		}
+		
+		$review = new Review();
+		$review->fill($request->only([
+			'private_id',
+			'rate',
+			'description'
+		]));
+		$review->user_id = $model->id;
+		$review->teacher_id = $privateModel->teacher_id;
+		$review->status = Review::STATUS_ACTIVE;
+		$review->created_at =$review->updated_at = Carbon::now()->toDateTimeString();
+		$review->save();
+		
+		return response()->json([
+			'status' => 200,
+			'message' => 'Success',
 		], 200);
 	}
 }

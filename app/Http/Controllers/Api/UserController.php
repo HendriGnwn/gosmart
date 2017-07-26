@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\FormatConverter;
 use App\Helpers\ImageHelper;
+use App\TeacherBank;
+use App\TeacherTotalHistory;
 use App\User;
 use Carbon\Carbon;
+use Eventviva\ImageResize;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -107,7 +110,7 @@ class UserController extends Controller
 				]);
 			}
 			$photoData = ImageHelper::getImageBase64Information($photoBase64);
-			$img = \Eventviva\ImageResize::createFromString(base64_decode($photoData['data']));
+			$img = ImageResize::createFromString(base64_decode($photoData['data']));
 			$img->resizeToWidth(500);
 			
 			$user->deleteFile();
@@ -139,7 +142,7 @@ class UserController extends Controller
 				]);
 			}
 			$data = ImageHelper::getImageBase64Information($izajahBase64);
-			$img = \Eventviva\ImageResize::createFromString(base64_decode($data['data']));
+			$img = ImageResize::createFromString(base64_decode($data['data']));
 			
 			$user->teacherProfile->deleteFile();
 			$imageFilename = str_slug($request->first_name . ' ' . $request->last_name . ' ' . time()) . '.' . $data['extension'];
@@ -245,7 +248,7 @@ class UserController extends Controller
 				]);
 			}
 			$photoData = ImageHelper::getImageBase64Information($photoBase64);
-			$img = \Eventviva\ImageResize::createFromString(base64_decode($photoData['data']));
+			$img = ImageResize::createFromString(base64_decode($photoData['data']));
 			$img->resizeToWidth(500);
 			
 			$user->deleteFile();
@@ -343,7 +346,7 @@ class UserController extends Controller
 			$model->teacherProfile->teacherBank->updated_at = Carbon::now()->toDateTimeString();
 			$model->teacherProfile->teacherBank->save();
 		} else {
-			$teacherBank = new \App\TeacherBank();
+			$teacherBank = new TeacherBank();
 			$teacherBank->fill($attributes);
 			$teacherBank->created_at = $teacherBank->updated_at = Carbon::now()->toDateTimeString();
 			$teacherBank->save();
@@ -380,7 +383,6 @@ class UserController extends Controller
 		}
 		
 		$validators = \Validator::make($request->all(), [
-			'private_id' => 'required|exists:private,id',
 			'total' => 'required|numeric',
 		]);
 		
@@ -392,14 +394,23 @@ class UserController extends Controller
 			], 400);
 		}
 		
-		$privateModel = \App\PrivateModel::whereId($request->private_id)->statusDone()->first();
-		if (!$privateModel) {
+		$history = TeacherTotalHistory::whereUserId($user->id)->where('status', '!=', TeacherTotalHistory::STATUS_DONE)->count();
+		if ($history) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Honor already to requested.',
+				'validators' => [
+					'total' => null
+				],
+			], 400);
+		}
+		
+		if ($request->total <= 0) {
 			return response()->json([
 				'status' => 400,
 				'message' => 'Some parameters is invalid',
 				'validators' => [
-					'private_id' => 'Private must be status is done',
-					'total' => null
+					'total' => 'Total is invalid',
 				],
 			], 400);
 		}
@@ -409,17 +420,17 @@ class UserController extends Controller
 				'status' => 400,
 				'message' => 'Some parameters is invalid',
 				'validators' => [
-					'private_id' => null,
 					'total' => 'Total not more than IDR ' . $user->teacherProfile->getFormattedTotal(),
 				],
 			], 400);
 		}
 		
-		$requestHonor = new \App\TeacherTotalHistory();
-		$requestHonor->fill($request->only(['private_id', 'total']));
+		$requestHonor = new TeacherTotalHistory();
+		$requestHonor->fill($request->only(['total']));
+		$requestHonor->private_id = 0; // must be null
 		$requestHonor->user_id = $model->id;
-		$requestHonor->operation = \App\TeacherTotalHistory::OPERATION_MINUS;
-		$requestHonor->status = \App\TeacherTotalHistory::STATUS_WAITING_FOR_APPROVE;
+		$requestHonor->operation = TeacherTotalHistory::OPERATION_MINUS;
+		$requestHonor->status = TeacherTotalHistory::STATUS_WAITING_FOR_APPROVE;
 		$requestHonor->created_at =$requestHonor->updated_at = Carbon::now()->toDateTimeString();
 		$requestHonor->save();
 		

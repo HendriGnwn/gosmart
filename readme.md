@@ -66,7 +66,7 @@ API
 - delete teacher course by token [ok] -
 - update teacher bank [ok]
 - list teacher total histories [ok]
-- create request honor
+- create request honor [ok]
 - list availably courses with teachers [ok]
 - create order with order details
 	- choose on at in order details
@@ -78,5 +78,5 @@ API
 - get available private
 	- detail private
 - set check on at student or teacher
-- add review if private has been cleared
+- add review if private has been cleared [ok]
 
