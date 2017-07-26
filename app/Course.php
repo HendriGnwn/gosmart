@@ -35,6 +35,15 @@ class Course extends BaseModel
 		'status'
     ];
 	
+	protected $appends = [
+		'teacher_availability',
+	];
+	
+	public function getTeacherAvailabilityAttribute()
+	{
+		return TeacherCourse::actived()->whereCourseId($this->id)->count();
+	}
+	
 	public function courseLevel()
 	{
 		return $this->hasOne('\App\CourseLevel', 'id', 'course_level_id');

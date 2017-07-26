@@ -33,9 +33,9 @@ class CourseLevel extends BaseModel
 		'status'
     ];
 	
-	protected $with = [
-		'courses'
-	];
+//	protected $with = [
+//		'courses'
+//	];
 
 	public function courses() 
 	{

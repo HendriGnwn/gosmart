@@ -12,6 +12,32 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class CourseController extends Controller 
 {
 	/**
+	 * @param Request $request
+	 * @return type
+	 */
+	public function index(Request $request)
+	{
+		$search = $request->get('search');
+		$sort = $request->get('sort');
+		$perPage = 50;
+
+		$model = \App\Course::with(['courseLevel'])
+			->select(['course.*'])
+			->leftJoin('course_level', 'course_level.id', '=', 'course.course_level_id')
+			->actived();
+		if (!empty($search)) {
+			$model = $model->where('course.name', 'LIKE', "%$search%")
+					->orWhere('course_level.name', 'LIKE', "%$search%");
+		}
+		$model = $model->orderBy('course.name', 'asc')->paginate($perPage);
+		$model = $model->toArray();
+		$model['status'] = 200;
+		$model['message'] = 'Success';
+
+		return response()->json($model, 200);
+	}
+	
+	/**
 	 * @param type $uniqueNumber
 	 * @param Request $request
 	 * @return type
