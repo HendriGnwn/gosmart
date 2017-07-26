@@ -80,3 +80,11 @@ API
 - set check on at student or teacher
 - add review if private has been cleared [ok]
 
+Mobile
+- Sign In [ok]
+- Register Student [ok]
+- Register Teacher [ok]
+- Forgot Password [ok]
+- Change Password [ok]
+- Edit Profile Student
+- Edit Profile Teacher

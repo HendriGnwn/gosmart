@@ -427,7 +427,7 @@ class UserController extends Controller
 		
 		$requestHonor = new TeacherTotalHistory();
 		$requestHonor->fill($request->only(['total']));
-		$requestHonor->private_id = 0; // must be null
+		$requestHonor->private_id = null;
 		$requestHonor->user_id = $model->id;
 		$requestHonor->operation = TeacherTotalHistory::OPERATION_MINUS;
 		$requestHonor->status = TeacherTotalHistory::STATUS_WAITING_FOR_APPROVE;
