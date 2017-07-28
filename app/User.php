@@ -305,4 +305,16 @@ class User extends BaseModel implements
 		}
 		return '-';
 	}
+	
+	public function getUserDetailHtml()
+	{
+		switch ($this->role) {
+			case self::ROLE_STUDENT:
+				return '<a href="' . url("admin/student/{$this->id}") . '" data-toggle="tooltip" title="" data-original-title="'. $this->getFullName() .'">'. $this->getFullName() .'</a>';
+			case self::ROLE_TEACHER:
+				return '<a href="' . url("admin/teacher/{$this->id}") . '" data-toggle="tooltip" title="" data-original-title="'. $this->getFullName() .'">'. $this->getFullName() .'</a>';
+			case self::ROLE_SUPERADMIN:
+				return '<a href="' . url("admin/user/{$this->id}") . '" data-toggle="tooltip" title="" data-original-title="'. $this->getFullName() .'">'. $this->getFullName() .'</a>';
+		}
+	}
 }

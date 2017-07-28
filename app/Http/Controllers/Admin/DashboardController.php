@@ -76,7 +76,7 @@ class DashboardController extends Controller
 				return isset($model->user) ? $model->user->unique_number : null;
 			})
 			->editColumn('first_name', function ($model) {
-				return isset($model->user) ? '<a href="admin/teacher/'.$model->user_id.'" data-toggle="tooltip" title="" data-original-title="'. trans('systems.edit') .'">'. $model->user->getFullName() .'</a> ' : $model->user_id;
+				return isset($model->user) ? $model->user->getUserDetailHtml() : null;
 			})
 			->editColumn('total', function ($model) {
 				return $model->getFormattedTotal();

@@ -13,7 +13,7 @@ class PrivateDetail extends BaseModel
      */
     protected $fillable = [
         'private_id', 
-        'course_id', 
+        'teacher_course_id', 
         'on_at', 
         'section', 
         'section_time', 
@@ -33,9 +33,9 @@ class PrivateDetail extends BaseModel
     protected $hidden = [
     ];
 	
-	public function course() 
+	public function teacherCourse() 
 	{
-		return $this->hasOne('\App\Course', 'id', 'course_id');
+		return $this->hasOne('\App\TeacherCourse', 'id', 'teacher_course_id');
 	}
 	
 	public function privateModel()

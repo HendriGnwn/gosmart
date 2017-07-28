@@ -112,4 +112,14 @@ class TeacherCourse extends BaseModel
 		}
 		return '-';
 	}
+	
+	public function getUserDetailHtml()
+	{
+		return isset($this->user) ? $this->user->getUserDetailHtml() : null;
+	}
+	
+	public function getCourseName()
+	{
+		return isset($this->course) ? $this->course->name : null;
+	}
 }

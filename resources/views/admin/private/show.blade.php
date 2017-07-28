@@ -39,11 +39,11 @@
 						</tr>
 						<tr>
 							<th> Student </th>
-							<td> {{ isset($model->student) ? $model->student->getFullName() : $model->user_id }} </td>
+							<td> {!! isset($model->student) ? $model->student->getUserDetailHtml() : $model->user_id !!} </td>
 						</tr>
 						<tr>
 							<th> Teacher </th>
-							<td> {{ isset($model->teacher) ? $model->teacher->getFullName() : $model->teacher_id }} </td>
+							<td> {!! isset($model->teacher) ? $model->teacher->getUserDetailHtml() : $model->teacher_id !!} </td>
 						</tr>
 						<tr>
 							<th> Section </th>
@@ -90,6 +90,7 @@
 						<thead>
 							<tr>
 								<th width="20%">Course</th>
+								<th width="20%">Teacher</th>
 								<th width="80%">Details</th>
 								
 							</tr>
@@ -97,7 +98,8 @@
 						<tbody>
 							@foreach($model->privateDetails as $detail)
 							<tr>
-								<td>{{ isset($detail->course) ? $detail->course->name : $detail->course_id }}</td>
+								<td>{{ isset($detail->teacherCourse) ? $detail->teacherCourse->getCourseName() : $detail->teacher_course_id }}</td>
+								<td>{!! isset($detail->teacherCourse) ? $detail->teacherCourse->getUserDetailHtml() : $detail->teacher_course_id !!}</td>
 								<td>
 									<table class="table table-bordered table-hover">
 										<tbody>

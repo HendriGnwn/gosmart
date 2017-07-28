@@ -173,7 +173,7 @@ class Order extends BaseModel
 				
 				$attributes = [
 					'private_id' => $private->id,
-					'course_id' => $orderDetail->course_id,
+					'teacher_course_id' => $orderDetail->teacher_course_id,
 					'on_at' => $orderDetail->on_at,
 					'section' => $orderDetail->section,
 					'section_time' => $orderDetail->section_time,
