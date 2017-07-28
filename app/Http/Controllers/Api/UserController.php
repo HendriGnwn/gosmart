@@ -88,7 +88,7 @@ class UserController extends Controller
 		
 		$user = User::whereId($user->id)->roleTeacher()->first();
 		
-		if (!empty($request->photo)) {
+		if (!empty($request->photo) || $request->photo!= '') {
 			$photoBase64 = $request->photo;
 			if (!ImageHelper::isImageBase64($photoBase64)) {
 				return response()->json([
@@ -151,16 +151,29 @@ class UserController extends Controller
 			$request['upload_izajah'] = $imageFilename;
 		}
 		
-		$userRequest = $request->only([
-			'first_name',
-			'last_name',
-			'phone_number',
-			'latitude',
-			'longitude',
-			'address',
-			'email',
-			'photo',
-		]);
+		
+		if (isset($request['photo']) && $request['photo'] != '') {
+			$userRequest = $request->only([
+				'first_name',
+				'last_name',
+				'phone_number',
+				'latitude',
+				'longitude',
+				'address',
+				'email',
+				'photo'
+			]);
+		} else {
+			$userRequest = $request->only([
+				'first_name',
+				'last_name',
+				'phone_number',
+				'latitude',
+				'longitude',
+				'address',
+				'email',
+			]);
+		}
 		
 		$profileRequest = $request->only([
 			'title',
@@ -258,16 +271,29 @@ class UserController extends Controller
 			$request['photo'] = $imageFilename;
 		}
 		
-		$userRequest = $request->only([
-			'first_name',
-			'last_name',
-			'phone_number',
-			'latitude',
-			'longitude',
-			'address',
-			'email',
-			'photo',
-		]);
+		if (isset($request['photo']) && $request['photo'] != '') {
+			$userRequest = $request->only([
+				'first_name',
+				'last_name',
+				'phone_number',
+				'latitude',
+				'longitude',
+				'address',
+				'email',
+				'photo',
+			]);
+		} else {
+			$userRequest = $request->only([
+				'first_name',
+				'last_name',
+				'phone_number',
+				'latitude',
+				'longitude',
+				'address',
+				'email',
+			]);
+		}
+		
 		
 		$profileRequest = $request->only([
 			'school',
