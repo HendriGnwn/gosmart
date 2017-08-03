@@ -226,6 +226,7 @@ class CourseController extends Controller
 		$latitude = $request->get('latitude');
 		$longitude = $request->get('longitude');
 		$radius = $request->get('radius');
+		$courseId = $request->get('course_id');
 		$R = 6371;
 		$perPage = 16;
 		
@@ -238,9 +239,14 @@ class CourseController extends Controller
 			->join('user', 'user.id', '=', 'teacher_course.user_id')
 			->join('course', 'course.id', '=', 'teacher_course.course_id')
 				->actived();
+		if (!empty($courseId)) {
+			$models = $models->where('course.id', '=', $courseId);
+		}
 		
         if (!empty($search)) {
-            $models = $models->where('course.name', 'LIKE', "%$search%");
+            $models = $models->where('course.name', 'LIKE', "%$search%")
+					->orWhere('user.first_name', 'LIKE', "%$search%")
+					->orWhere('user.last_name', 'LIKE', "%$search%");
         }
 		if (!empty($latitude) && !empty($longitude) && !empty($radius)) {
 			$maxLatitude = $latitude + rad2deg($radius/$R);
