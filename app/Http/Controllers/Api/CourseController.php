@@ -265,4 +265,28 @@ class CourseController extends Controller
 		
 		return response()->json($models, 200);
 	}
+	
+	public function getSimiliarTeacherCourses($id) 
+	{
+		$perPage = 16;
+		$teacherCourse = \App\TeacherCourse::whereId($id)->first();
+		
+		$models = \App\TeacherCourse::select([
+				'teacher_course.*',
+			])->with([
+				'course',
+				'user',
+			])
+			->join('user', 'user.id', '=', 'teacher_course.user_id')
+			->join('course', 'course.id', '=', 'teacher_course.course_id')
+			->actived()
+			->where('user.id', '=', $teacherCourse->user_id)
+			->where('teacher_course.id', '!=', $id)
+			->paginate($perPage);
+		
+		$models = $models->toArray();
+		$models['status'] = 200;
+		
+		return response()->json($models, 200);
+	}
 }

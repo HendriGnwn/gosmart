@@ -41,6 +41,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 		});
 		
 		Route::get('/courses-availability', 'Api\CourseController@listAvailability');
+		Route::get('/similiar-courses/{id}', 'Api\CourseController@getSimiliarTeacherCourses');
 		Route::get('/courses', 'Api\CourseController@index');
 	});
 	

@@ -1,4 +1,4 @@
--- Adminer 4.3.1 MySQL dump
+-- Adminer 4.2.5 MySQL dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -298,7 +298,7 @@ CREATE TABLE `teacher_bank` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `teacher_bank` (`id`, `user_id`, `name`, `number`, `branch`, `behalf_of`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(3,	2,	'BCA',	'2240026255',	'KCP Sawah Besar Jakarta',	'Hendri Gunawan',	NULL,	'2017-07-20 09:04:00',	'2017-07-20 09:05:39');
+(3,	2,	'test',	'123123',	'He',	'Hendri Gunawan',	NULL,	'2017-07-20 09:04:00',	'2017-07-28 08:55:37');
 
 DROP TABLE IF EXISTS `teacher_course`;
 CREATE TABLE `teacher_course` (
@@ -350,7 +350,7 @@ INSERT INTO `teacher_profile` (`id`, `user_id`, `title`, `izajah_number`, `gradu
 (1,	2,	1,	'NC821920192',	'Universitas Mercu Buana Jakarta',	NULL,	'hendri-teacher.jpg',	'ijazah-hendri.jpg',	NULL,	0.00,	NULL,	NULL,	'2017-06-24 07:25:16'),
 (2,	12,	1,	'DC-0290-01292',	'Universitas Mercu Buana Jakarta',	NULL,	NULL,	NULL,	NULL,	0.00,	NULL,	'2017-06-24 06:45:40',	'2017-06-30 06:24:23'),
 (3,	16,	2,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	0.00,	NULL,	'2017-07-18 13:25:10',	'2017-07-18 13:25:10'),
-(4,	19,	2,	'DC-0290-01292',	'Universitas Mercu Buana Jakarta',	'I\'m Web Developer',	'gunawan-teacher-1500386440.png',	'gunawan-teacher-1500386527.png',	NULL,	0.00,	NULL,	'2017-07-18 13:46:01',	'2017-07-18 14:02:07');
+(4,	19,	2,	'DC-0290-01292',	'Universitas Mercu Buana Jakarta',	'I\'m Web Developer',	'gunawan-teacher-1500386440.png',	'gunawan-teacher-1501228427.png',	NULL,	0.00,	NULL,	'2017-07-18 13:46:01',	'2017-07-28 07:53:48');
 
 DROP TABLE IF EXISTS `teacher_total_history`;
 CREATE TABLE `teacher_total_history` (
@@ -410,9 +410,9 @@ INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_num
 (16,	'TEA2017070001',	'Gunawan',	'Teacher',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2 Bogor',	'gunawan.teacher@gmail.com',	'$2y$10$gNaLYctRyPz.EWW1L4ZreuLU5jycsNXUQ128kg.Z.fhCwWfHXlBfu',	NULL,	NULL,	0,	2,	'2017-07-18 13:25:10',	NULL,	'2017-07-18 13:25:10',	'2017-07-18 13:25:10'),
 (17,	'STU2017070001',	'Gunawan',	'Student',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2 Jakarta',	'gunawan.student@gmail.com',	'$2y$10$Tlc8qU9ylLn541j3r8vImu3V/DkV1I8T8Y3xEHPzy4nvuEdjIBCJC',	NULL,	NULL,	0,	3,	'2017-07-18 13:27:14',	NULL,	'2017-07-18 13:27:14',	'2017-07-18 13:38:51'),
 (18,	'STU2017070002',	'Gunawan',	'Student',	'085711202889',	'gunawan-student-1500387056.png',	-6.55592,	106.9928,	'PGRI Ciampea 2 Jakarta',	'gunawan.students@gmail.com',	'$2y$10$DXHg/pC4YSC24htDJP.H2uBee0zhOtDCrwXMtvSht.wuJRNc/oCBO',	NULL,	NULL,	1,	3,	'2017-07-18 13:45:39',	NULL,	'2017-07-18 13:45:39',	'2017-07-18 14:10:56'),
-(19,	'TEA2017070002',	'Gunawan',	'Teacher',	'085711202889',	'gunawan-teacher-1500386527.png',	-6.55592,	106.9928,	'PGRI Ciampea 2 Bogor',	'gunawan.teachers@gmail.com',	'$2y$10$8IzlTx9JlLve3ptfBg8Whe.2E2W/IsoWlzVLvDR499y29N3m3n81K',	NULL,	NULL,	0,	2,	'2017-07-18 13:46:01',	NULL,	'2017-07-18 13:46:00',	'2017-07-18 14:02:07'),
+(19,	'TEA2017070002',	'Gunawan',	'Teacher',	'085711202889',	'gunawan-teacher-1501228427.png',	-6.55592,	106.9928,	'PGRI Ciampea 2 Bogor',	'gunawan.teachers@gmail.com',	'$2y$10$8IzlTx9JlLve3ptfBg8Whe.2E2W/IsoWlzVLvDR499y29N3m3n81K',	NULL,	NULL,	0,	2,	'2017-07-18 13:46:01',	NULL,	'2017-07-18 13:46:00',	'2017-07-28 07:53:48'),
 (20,	'STU2017070003',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina971@gmail.com',	'$2y$10$3E17vBivAY5U0k94LIh5tO6uwJstRuKmzjjBCTUUjEeM7yQIeZl0q',	NULL,	NULL,	0,	3,	NULL,	NULL,	'2017-07-21 06:33:39',	'2017-07-21 06:33:39'),
 (21,	'STU2017070004',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina972@gmail.com',	'$2y$10$ml2G0GJmzA7t2jVDhM68vObasTzoulUVuoL5LTRBPZiiYqUKlbCoq',	NULL,	NULL,	0,	3,	NULL,	NULL,	'2017-07-21 06:33:52',	'2017-07-21 06:33:52'),
 (22,	'STU2017070005',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina973@gmail.com',	'$2y$10$r4oXG.6dAS53IsRGQLXgVOInlLfeV5ZuFHak8NJ9w8YfA1rZq2aSW',	NULL,	NULL,	0,	3,	'2017-07-21 06:35:14',	NULL,	'2017-07-21 06:35:14',	'2017-07-21 06:35:14');
 
--- 2017-07-28 04:42:05
+-- 2017-08-03 08:14:51
