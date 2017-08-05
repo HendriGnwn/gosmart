@@ -76,7 +76,7 @@ class TeacherProfile extends BaseModel
 	
 	public function teacherCourses()
 	{
-		return $this->hasMany('\App\TeacherCourse', 'user_id', 'user_id');
+		return $this->hasMany('\App\TeacherCourse', 'user_id', 'user_id')->orderBy('teacher_course.created_at', 'desc');
 	}
 	
 	public function teacherBank()

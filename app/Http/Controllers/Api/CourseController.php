@@ -111,7 +111,7 @@ class CourseController extends Controller
 		if ($available > 0) {
 			return response()->json([
 				'status' => 400,
-				'message' => 'Some parameters is invalid',
+				'message' => 'Course is already to use',
 				'validators' => [
 					'course_id' => 'Course is already to use',
 					'description' => null,
@@ -131,12 +131,21 @@ class CourseController extends Controller
 		$teacherCourse->created_at = $teacherCourse->updated_at = Carbon::now()->toDateTimeString();
 		$teacherCourse->save();
 		
-		$teacherCourse = \App\TeacherCourse::find($teacherCourse->id);
+		$user = User::whereUniqueNumber($uniqueNumber)
+			->roleApps()
+			->appsActived()
+			->first();
+		if (!$user) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
 		
 		return response()->json([
 			'status' => 201,
-			'message' => 'save success',
-			'data' => $teacherCourse,
+			'message' => 'Success',
+			'data' => $user,
 		], 201);
 	}
 	
@@ -152,7 +161,7 @@ class CourseController extends Controller
 		
 		$model = \App\TeacherCourse::whereId($id)->first();
 		$validators = \Validator::make($request->all(), [
-			'course_id' => 'required|exists:course,id,' . $model->course_id,
+			'course_id' => 'required|exists:course,id',
 			'description' => 'required',
 			'expected_cost' => 'required|numeric',
 		]);
@@ -165,12 +174,11 @@ class CourseController extends Controller
 			], 400);
 		}
 		
-		
-		$available = \App\TeacherCourse::whereNot('course_id', '=', $model->course_id)->whereCourseId($request['course_id'])->whereUserId($user->id)->count();
+		$available = \App\TeacherCourse::where('course_id', '!=', $model->course_id)->whereCourseId($request['course_id'])->whereUserId($user->id)->count();
 		if ($available > 0) {
 			return response()->json([
 				'status' => 400,
-				'message' => 'Some parameters is invalid',
+				'message' => 'Course is already to use',
 				'validators' => [
 					'course_id' => 'Course is already to use',
 					'description' => null,
@@ -189,12 +197,21 @@ class CourseController extends Controller
 		$model->updated_at = Carbon::now()->toDateTimeString();
 		$model->save();
 		
-		$model = \App\TeacherCourse::find($model->id);
+		$user = User::whereUniqueNumber($uniqueNumber)
+			->roleApps()
+			->appsActived()
+			->first();
+		if (!$user) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
 		
 		return response()->json([
 			'status' => 200,
-			'message' => 'save success',
-			'data' => $model,
+			'message' => 'Success',
+			'data' => $user,
 		], 200);
 	}
 	
@@ -212,10 +229,21 @@ class CourseController extends Controller
 		$model->deleteFile();
 		$model->delete();
 		
+		$user = User::whereUniqueNumber($uniqueNumber)
+			->roleApps()
+			->appsActived()
+			->first();
+		if (!$user) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
 		return response()->json([
 			'status' => 200,
-			'message' => 'delete success',
-			'data' => [],
+			'message' => 'Success',
+			'data' => $user,
 		], 200);
 	}
 	

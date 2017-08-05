@@ -44,7 +44,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 		Route::get('/similiar-courses/{id}', 'Api\CourseController@getSimiliarTeacherCourses');
 		Route::get('/courses', 'Api\CourseController@index');
 	});
-	
+
 	Route::get('/course-levels', 'Api\CourseController@getCourseLevelWithRelations');
 	Route::get('/courses-spinner', 'Api\CourseController@listCourseLevels');
 	Route::get('/payments', 'Api\PaymentController@listPayments');
