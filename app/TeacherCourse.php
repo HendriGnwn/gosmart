@@ -40,8 +40,6 @@ class TeacherCourse extends BaseModel
     protected $hidden = [
         'user_id', 
 		'approved_by', 
-		'approved_at', 
-		'status', 
 		'created_at', 
 		'updated_at', 
     ];
