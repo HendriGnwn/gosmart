@@ -230,6 +230,7 @@ class Order extends BaseModel
 		return $scope->whereIn($this->table . '.status', [
 			self::STATUS_DRAFT,
 			self::STATUS_WAITING_PAYMENT,
+			self::STATUS_CONFIRMED
 		]);
 	}
 }
