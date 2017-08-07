@@ -7,7 +7,8 @@ use App\Helpers\FormatConverter;
 class Order extends BaseModel
 {
 	const STATUS_CANCELED = 0;
-	const STATUS_WAITING_PAYMENT = 1;
+	const STATUS_DRAFT = 1;
+	const STATUS_WAITING_PAYMENT = 3;
 	const STATUS_CONFIRMED = 5;
 	const STATUS_PAID = 10;
 	
@@ -45,6 +46,22 @@ class Order extends BaseModel
 		'paid_by', 
 		'paid_at', 
     ];
+	
+	protected $with = [
+		'teacher',
+		'payment',
+		'orderConfirmation',
+		'orderDetails',
+	];
+	
+	protected $appends = [
+		'status_message',
+	];
+	
+	public function getStatusMessageAttribute()
+	{
+		return $this->getStatusLabel();
+	}
 	
 	public function student() 
 	{
@@ -95,6 +112,7 @@ class Order extends BaseModel
 	{
 		return [
 			self::STATUS_CANCELED => 'Canceled',
+			self::STATUS_DRAFT => 'Draft',
 			self::STATUS_WAITING_PAYMENT => 'Waiting for Payment',
 			self::STATUS_CONFIRMED => 'Confirmed',
 			self::STATUS_PAID => 'Paid',
@@ -200,5 +218,18 @@ class Order extends BaseModel
 	{
 		$label = $label == null ? $this->getDetailUrl() : $label;
 		return "<a href='{$this->getDetailUrl()}' target='_blank'>{$label}</a>";
+	}
+	
+	public function getAdminFeeValue()
+	{
+		return 0;
+	}
+	
+	public function scopeStatusDisplayAppsOrder($scope)
+	{
+		return $scope->whereIn($this->table . '.status', [
+			self::STATUS_DRAFT,
+			self::STATUS_WAITING_PAYMENT,
+		]);
 	}
 }

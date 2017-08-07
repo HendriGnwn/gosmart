@@ -266,7 +266,7 @@ class CourseController extends Controller
 			])
 			->join('user', 'user.id', '=', 'teacher_course.user_id')
 			->join('course', 'course.id', '=', 'teacher_course.course_id')
-				->actived();
+			->actived();
 		if (!empty($courseId)) {
 			$models = $models->where('course.id', '=', $courseId);
 		}

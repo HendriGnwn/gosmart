@@ -23,6 +23,14 @@ class OrderDetail extends BaseModel
 		'created_at', 
 		'updated_at', 
     ];
+	
+	protected $with = [
+		'teacherCourse',
+	];
+	
+	protected $appends = [
+		'on_details'
+	];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -31,6 +39,11 @@ class OrderDetail extends BaseModel
      */
     protected $hidden = [
     ];
+	
+	public function getOnDetailsAttribute()
+	{
+		return explode(',', $this->on_at);
+	}
 	
 	public function order() 
 	{

@@ -39,6 +39,13 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 			Route::post('/update-teacher-bank/{uniqueNumber}', 'Api\UserController@updateTeacherBank');
 			Route::post('/request-honor/{uniqueNumber}', 'Api\UserController@requestHonor');
 		});
+		Route::group(['prefix' => 'order'], function () {
+			Route::post('/create/{uniqueNumber}', 'Api\OrderController@create');
+			Route::get('/show/{uniqueNumber}', 'Api\OrderController@show');
+			Route::patch('/update/on-at/{uniqueNumber}/{orderId}', 'Api\OrderController@updateOnAt');
+			Route::delete('/delete/{uniqueNumber}/{orderId}', 'Api\OrderController@deleteOrder');
+			Route::patch('/checkout/{uniqueNumber}/{orderId}', 'Api\OrderController@checkout');
+		});
 		
 		Route::get('/courses-availability', 'Api\CourseController@listAvailability');
 		Route::get('/similiar-courses/{id}', 'Api\CourseController@getSimiliarTeacherCourses');

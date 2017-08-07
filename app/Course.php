@@ -41,7 +41,7 @@ class Course extends BaseModel
 	
 	public function getTeacherAvailabilityAttribute()
 	{
-		return TeacherCourse::actived()->whereCourseId($this->id)->count();
+		return TeacherCourse::actived()->whereCourseId($this->id)->actived()->count();
 	}
 	
 	public function courseLevel()
