@@ -55,7 +55,7 @@ class OrderConfirmation extends BaseModel
 	
 	public function order() 
 	{
-		return $this->hasOne('\App\Order', 'id', 'user_id');
+		return $this->hasOne('\App\Order', 'id', 'order_id');
 	}
 	
 	public function bank() 

@@ -45,6 +45,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 			Route::patch('/update/on-at/{uniqueNumber}/{orderId}', 'Api\OrderController@updateOnAt');
 			Route::delete('/delete/{uniqueNumber}/{orderId}', 'Api\OrderController@deleteOrder');
 			Route::patch('/checkout/{uniqueNumber}/{orderId}', 'Api\OrderController@checkout');
+			Route::post('/confirmation/{uniqueNumber}/{orderId}', 'Api\OrderController@confirmation');
 		});
 		
 		Route::get('/courses-availability', 'Api\CourseController@listAvailability');

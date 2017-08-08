@@ -4,6 +4,8 @@ namespace App;
 
 class Payment extends BaseModel
 {
+	const PAYMENT_TRANSFER_BANK = 1;
+	
 	protected $table = 'payment';
 	
 	/**
