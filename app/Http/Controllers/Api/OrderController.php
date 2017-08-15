@@ -70,7 +70,7 @@ class OrderController extends Controller
 					'teacher_course_id' => null,
 					'on_at' => null,
 				],
-			]);
+			], 400);
 		}
 		
 		$teacher = User::whereUniqueNumber($request->teacher_unique_number)->appsActived()->first();
@@ -91,7 +91,7 @@ class OrderController extends Controller
 					'teacher_course_id' => null,
 					'on_at' => null,
 				],
-			]);
+			], 400);
 		}
 		
 		$onAt = explode(',', $request->on_at);

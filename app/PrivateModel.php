@@ -39,6 +39,10 @@ class PrivateModel extends BaseModel
 		'teacher_id',
     ];
 	
+	protected $with = [
+		'privateDetails',
+	];
+	
 	public function order() 
 	{
 		return $this->hasOne('\App\Order', 'id', 'order_id');
