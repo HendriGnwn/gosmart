@@ -86,7 +86,7 @@ class TeacherProfile extends BaseModel
 	
 	public function teacherTotalHistories()
 	{
-		return $this->hasMany('\App\TeacherTotalHistory', 'user_id', 'user_id');
+		return $this->hasMany('\App\TeacherTotalHistory', 'user_id', 'user_id')->orderBy('teacher_total_history.created_at', 'desc');
 	}
 	
 	public function privateModels()

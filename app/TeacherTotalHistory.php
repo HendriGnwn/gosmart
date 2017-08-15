@@ -48,9 +48,7 @@ class TeacherTotalHistory extends BaseModel
         'user_id', 
         'deleted_at', 
 		'approved_by',
-		'approved_at',
 		'done_by',
-		'done_at',
     ];
 	
 	protected $with = [
