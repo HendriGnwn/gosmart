@@ -15,7 +15,7 @@ use Eventviva\ImageResize;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class OrderController extends Controller 
+class PrivateController extends Controller 
 {
 	/**
 	 * login credentials
@@ -474,7 +474,7 @@ class OrderController extends Controller
 		
 		$perPage = 50;
 		
-		$model = Order::whereUserId($user->id)
+		$model = \App\PrivateModel::whereUserId($user->id)
 				->orderBy('order.created_at', 'desc')
 				->paginate($perPage);
 		

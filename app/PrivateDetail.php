@@ -24,6 +24,12 @@ class PrivateDetail extends BaseModel
 		'created_at', 
 		'updated_at', 
     ];
+	
+	protected $appends = [
+		'on_details',
+		'student_on_details',
+		'teacher_on_details',
+	];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -32,6 +38,21 @@ class PrivateDetail extends BaseModel
      */
     protected $hidden = [
     ];
+	
+	public function getOnDetailsAttribute()
+	{
+		return explode(',', $this->on_at);
+	}
+	
+	public function getStudentOnDetailsAttribute()
+	{
+		return json_decode($this->student_details, false);
+	}
+	
+	public function getTeacherOnDetailsAttribute()
+	{
+		return json_decode($this->teacher_details, false);
+	}
 	
 	public function teacherCourse() 
 	{
