@@ -66,4 +66,14 @@ class Config extends BaseModel
 	{
 		return (string) self::getValueByName('term_condition_teacher');
 	}
+	
+	public static function getFirebaseCloudMessagingServerKey()
+	{
+		return self::getValueByName('firebase_cloud_messaging_server_key');
+	}
+	
+	public static function getFirebaseCloudMessagingLegacyServerKey()
+	{
+		return self::getValueByName('firebase_cloud_messaging_legacy_server_key');
+	}
 }

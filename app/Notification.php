@@ -64,4 +64,20 @@ class Notification extends BaseModel
 			self::CATEGORY_REMINDER => 'Pengingat',
 		];
 	}
+	
+	public function sendPushNotification() 
+	{
+		$firebase = new \App\Helpers\Firebase();
+		$notifications = [
+			'title' => $this->name,
+			'body' => strip_tags(substr($this->description, 0, 80)),
+			'sound' => 'default',
+			'badge' => 0,
+			'click_action' => 'com.atc.gosmartlesmagistra.firebase.message.NEW_NOTIFICATION',
+		];
+	
+		$firebase->sendNewMessage($this->user->firebase_token, $this, $notifications);
+		
+		return true;
+	}
 }

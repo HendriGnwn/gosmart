@@ -445,7 +445,7 @@ class OrderController extends Controller
 				->first();
 		
 		return response()->json([
-			'status' => 200,
+			'status' => 201,
 			'message' => 'Success',
 			'data' => $result,
 		], 201);
