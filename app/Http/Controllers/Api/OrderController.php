@@ -445,9 +445,43 @@ class OrderController extends Controller
 				->first();
 		
 		return response()->json([
-			'status' => 200,
+			'status' => 201,
 			'message' => 'Success',
 			'data' => $result,
 		], 201);
+	}
+	
+	public function histories($uniqueNumber, Request $request)
+	{
+		$user = JWTAuth::parseToken()->authenticate();
+		if ($user->unique_number != $uniqueNumber) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$user = User::whereUniqueNumber($uniqueNumber)
+			->roleApps()
+			->appsActived()
+			->first();
+		if (!$user) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$perPage = 50;
+		
+		$model = Order::whereUserId($user->id)
+				->orderBy('order.created_at', 'desc')
+				->paginate($perPage);
+		
+		$model = $model->toArray();
+		$model['status'] = 200;
+		$model['message'] = 'Success';
+
+		return response()->json($model, 200);
 	}
 }

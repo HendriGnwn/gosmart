@@ -31,6 +31,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 			Route::get('/get-by-unique/{uniqueNumber}', 'Api\UserController@getByUniqueNumber');
 			Route::put('/update-student', 'Api\UserController@updateStudentProfile');
 			Route::put('/update-teacher', 'Api\UserController@updateTeacherProfile');
+			Route::get('/notification/{uniqueNumber}', 'Api\RequestController@notification');
+			Route::get('/notification/detail/{id}', 'Api\RequestController@getNotification');
 		});
 		Route::group(['prefix' => 'teacher'], function() {
 			Route::post('/choose-course/{uniqueNumber}', 'Api\CourseController@chooseCourse');
@@ -46,6 +48,12 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 			Route::delete('/delete/{uniqueNumber}/{orderId}', 'Api\OrderController@deleteOrder');
 			Route::patch('/checkout/{uniqueNumber}/{orderId}', 'Api\OrderController@checkout');
 			Route::post('/confirmation/{uniqueNumber}/{orderId}', 'Api\OrderController@confirmation');
+			Route::get('/histories/{uniqueNumber}', 'Api\OrderController@histories');
+		});
+		Route::group(['prefix' => 'private'], function () {
+			Route::get('/active/{uniqueNumber}', 'Api\PrivateController@activedPrivate');
+			Route::get('/histories/{uniqueNumber}', 'Api\PrivateController@histories');
+			Route::post('/check/{uniqueNumber}/{privateId}', 'Api\PrivateController@check');
 		});
 		
 		Route::get('/courses-availability', 'Api\CourseController@listAvailability');

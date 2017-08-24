@@ -1,4 +1,4 @@
--- Adminer 4.2.5 MySQL dump
+-- Adminer 4.3.1 MySQL dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -116,6 +116,22 @@ CREATE TABLE `migrations` (
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1,	'2014_10_12_000000_create_users_table',	1);
 
+DROP TABLE IF EXISTS `notification`;
+CREATE TABLE `notification` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `category` smallint(6) NOT NULL COMMENT '1=general;5=order confirmation;10=private confirmation;15=honor confirmation;20=teacher course confirmation',
+  `read_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `notification` (`id`, `user_id`, `name`, `description`, `category`, `read_at`, `created_at`, `updated_at`) VALUES
+(1,	1,	'Order has been paid',	'Testing',	5,	NULL,	'2017-08-23 09:35:42',	'2017-08-23 09:35:42');
+
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -124,12 +140,12 @@ CREATE TABLE `order` (
   `code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `section` int(11) NOT NULL,
   `section_time` time NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
   `admin_fee` decimal(14,2) NOT NULL,
   `final_amount` decimal(14,2) NOT NULL,
-  `payment_id` int(11) NOT NULL,
-  `status` smallint(6) NOT NULL COMMENT '0=Canceled;1=Waiting Payment;5=Confirmed;10=Paid;',
+  `payment_id` int(11) DEFAULT NULL,
+  `status` smallint(6) NOT NULL COMMENT '0=Canceled;1=Draft;3=Waiting Payment;5=Confirmed;10=Paid;',
   `confirmed_at` timestamp NULL DEFAULT NULL,
   `paid_by` bigint(20) DEFAULT NULL,
   `paid_at` timestamp NULL DEFAULT NULL,
@@ -140,7 +156,8 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `order` (`id`, `user_id`, `teacher_id`, `code`, `section`, `section_time`, `start_date`, `end_date`, `admin_fee`, `final_amount`, `payment_id`, `status`, `confirmed_at`, `paid_by`, `paid_at`, `created_at`, `updated_at`) VALUES
-(1,	1,	2,	'INV-201707-00001',	8,	'12:00:00',	'2017-07-05',	'2017-07-08',	5000.00,	235000.00,	1,	10,	'2017-07-02 04:20:14',	3,	'2017-07-12 15:01:44',	'2017-07-02 04:10:57',	'2017-07-12 15:01:44');
+(1,	1,	2,	'INV-201707-00001',	8,	'12:00:00',	'2017-07-05',	'2017-07-08',	5000.00,	235000.00,	1,	10,	NULL,	3,	'2017-07-12 15:01:44',	'2017-07-02 04:10:57',	'2017-08-07 09:44:27'),
+(5,	1,	2,	'INV-2017-08-0001',	4,	'01:30:00',	'2017-07-05',	'2017-07-08',	0.00,	115000.00,	1,	5,	'2017-08-07 09:48:31',	NULL,	NULL,	'2017-08-07 09:07:33',	'2017-08-07 09:48:31');
 
 DROP TABLE IF EXISTS `order_confirmation`;
 CREATE TABLE `order_confirmation` (
@@ -160,7 +177,7 @@ CREATE TABLE `order_confirmation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `order_confirmation` (`id`, `user_id`, `order_id`, `bank_id`, `bank_number`, `bank_behalf_of`, `amount`, `upload_bukti`, `description`, `created_at`, `updated_at`) VALUES
-(1,	1,	1,	1,	'2240026256',	'Rendi Gunawan',	235000.00,	'order-confirmation-inv-201707-00001.jpg',	'telahj di bayar',	'2017-07-02 04:20:14',	'2017-07-02 04:20:14');
+(10,	1,	5,	1,	'100000',	'Hedri Gunawan',	115000.00,	'stu2017060001-1502099311.png',	'',	'2017-08-07 09:48:31',	'2017-08-07 09:48:31');
 
 DROP TABLE IF EXISTS `order_detail`;
 CREATE TABLE `order_detail` (
@@ -178,7 +195,8 @@ CREATE TABLE `order_detail` (
 
 INSERT INTO `order_detail` (`id`, `order_id`, `teacher_course_id`, `on_at`, `section`, `section_time`, `amount`, `created_at`, `updated_at`) VALUES
 (1,	1,	2,	'2017-07-05 10:00:00,2017-07-06 10:00:00,2017-07-07 10:00:00,2017-07-08 10:00:00',	4,	'01:30:00',	1150000.00,	'2017-07-02 04:12:25',	'2017-07-02 04:12:25'),
-(2,	1,	2,	'2017-07-05 11:30:00,2017-07-06 11:30:00,2017-07-07 11:30:00,2017-07-08 11:30:00',	4,	'01:30:00',	1150000.00,	'2017-07-02 04:12:51',	'2017-07-02 04:12:51');
+(2,	1,	2,	'2017-07-05 11:30:00,2017-07-06 11:30:00,2017-07-07 11:30:00,2017-07-08 11:30:00',	4,	'01:30:00',	1150000.00,	'2017-07-02 04:12:51',	'2017-07-02 04:12:51'),
+(6,	5,	2,	'2017-07-05 10:00:00,2017-07-06 10:00:00,2017-07-07 10:00:00,2017-07-08 10:00:00',	4,	'01:30:00',	115000.00,	'2017-08-07 09:07:33',	'2017-08-07 09:07:33');
 
 DROP TABLE IF EXISTS `password_resets`;
 CREATE TABLE `password_resets` (
@@ -323,10 +341,10 @@ CREATE TABLE `teacher_course` (
 INSERT INTO `teacher_course` (`id`, `user_id`, `course_id`, `description`, `expected_cost`, `expected_cost_updated_at`, `additional_cost`, `admin_fee`, `final_cost`, `approved_by`, `approved_at`, `module`, `status`, `created_at`, `updated_at`) VALUES
 (1,	2,	1,	'',	80000.00,	'2017-06-24 07:33:51',	30000.00,	5000.00,	115000.00,	3,	'2017-06-24 07:33:51',	'module-matematika.pdf',	1,	'2017-06-24 07:33:51',	'2017-06-24 14:33:51'),
 (2,	2,	13,	'Matematika kelas 7',	80000.00,	'2017-06-24 07:33:51',	30000.00,	5000.00,	115000.00,	3,	'2017-06-24 07:33:51',	'module-matematika.pdf',	1,	'2017-06-24 07:33:51',	'2017-06-24 14:33:51'),
-(3,	2,	14,	'Bahasa indonesia kelas 7',	80000.00,	'2017-06-24 07:33:51',	30000.00,	5000.00,	115000.00,	3,	'2017-06-24 07:33:51',	'module-bahasaindonesia.pdf',	1,	'2017-06-24 07:33:51',	'2017-06-24 14:33:51'),
 (4,	2,	2,	'lorem ipsum dolor de',	80000.00,	'2017-07-02 06:12:35',	30000.00,	5000.00,	115000.00,	NULL,	NULL,	NULL,	0,	'2017-07-02 06:12:35',	'2017-07-02 13:12:35'),
 (7,	2,	16,	'Saya ingin mengajar Bahasa Indonesia Viii',	160000.00,	'2017-07-14 11:31:25',	30000.00,	5000.00,	195000.00,	3,	'2017-07-14 11:31:25',	'45161.pdf',	1,	'2017-07-14 11:31:25',	'2017-07-14 18:31:25'),
-(9,	2,	3,	'lorem ipsum dolor de',	80000.00,	'2017-07-18 14:34:41',	30000.00,	5000.00,	115000.00,	NULL,	NULL,	NULL,	0,	'2017-07-18 14:34:41',	'2017-07-18 21:34:41');
+(9,	2,	3,	'lorem ipsum dolor de',	80000.00,	'2017-07-18 14:34:41',	30000.00,	5000.00,	115000.00,	NULL,	NULL,	NULL,	0,	'2017-07-18 14:34:41',	'2017-07-18 21:34:41'),
+(10,	2,	5,	'lorem ipsum dolor de',	80000.00,	'2017-08-10 11:23:06',	30000.00,	5000.00,	115000.00,	NULL,	NULL,	NULL,	0,	'2017-08-10 11:23:06',	'2017-08-10 18:23:06');
 
 DROP TABLE IF EXISTS `teacher_profile`;
 CREATE TABLE `teacher_profile` (
@@ -402,8 +420,8 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Master User';
 
 INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_number`, `photo`, `latitude`, `longitude`, `address`, `email`, `password`, `remember_token`, `firebase_token`, `status`, `role`, `last_login_at`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1,	'STU2017060001',	'Hendri',	'Student',	'08561471500',	NULL,	-6.55592,	106.9928,	'Jl Batu Ceper X No 2Y, Kebon Kelapa Gambir Jakarta Pusat',	'hendri.gnw@gmail.com',	'$2y$10$7AF6ohzaJE.Rweru5dYFueK9bzuqfwcSr8.EvIhZ1xMC46a.TCfzC',	'JnDMEpUe4vbuvW7hXQNVdQeVUwXlJB3OE8Hm7iRHq6tuLL0N0aKLf1RMbgo4',	'test',	1,	3,	'2017-07-24 03:03:31',	NULL,	'2017-06-20 12:37:16',	'2017-07-24 03:03:31'),
-(2,	'TEA2017060001',	'Hendri',	'Teacher',	'085711202889',	NULL,	-6.920291,	106.9292812,	'Jl Lapangan Tembak 300 Ciaruteun Ilir Cibungbulang Bogor',	'hendrigunawan195@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	NULL,	'testes',	1,	2,	'2017-07-26 10:04:38',	NULL,	'2017-06-24 07:12:21',	'2017-07-26 10:04:38'),
+(1,	'STU2017060001',	'Hendri',	'Student',	'08561471500',	NULL,	-6.55592,	106.9928,	'Jl Batu Ceper X No 2Y, Kebon Kelapa Gambir Jakarta Pusat',	'hendri.gnw@gmail.com',	'$2y$10$7AF6ohzaJE.Rweru5dYFueK9bzuqfwcSr8.EvIhZ1xMC46a.TCfzC',	'JnDMEpUe4vbuvW7hXQNVdQeVUwXlJB3OE8Hm7iRHq6tuLL0N0aKLf1RMbgo4',	'testes',	1,	3,	'2017-08-07 03:53:52',	NULL,	'2017-06-20 12:37:16',	'2017-08-07 03:53:52'),
+(2,	'TEA2017060001',	'Hendri',	'Teacher',	'085711202889',	NULL,	-6.920291,	106.9292812,	'Jl Lapangan Tembak 300 Ciaruteun Ilir Cibungbulang Bogor',	'hendrigunawan195@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	NULL,	'testes',	1,	2,	'2017-08-07 03:57:46',	NULL,	'2017-06-24 07:12:21',	'2017-08-07 03:57:46'),
 (3,	'USR2017060001',	'Administrator',	NULL,	'08561471500',	NULL,	-6.920291,	106.9292812,	'Jl Batu Ceper X No 2Y Jakarta',	'administrator@gmail.com',	'$2y$10$iw/7PewIbwAEkRuUyRJ1O.Uru6ghgKZCMvNkVY9NiF436q8cYM2VW',	'8Pyf6K0qtcNTAwV7CnYS8zzXhNodCRtsoP32FDD6b2CWUZnmeGMS9aqLkOm0',	NULL,	1,	1,	'2017-06-24 00:31:12',	NULL,	'2017-06-24 07:12:21',	'2017-06-24 00:31:12'),
 (6,	'STU2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina97@gmail.com',	'$2y$10$Db1NEtx4r9wu.TgeowxuCe434LzeAwT8rium6Qz.ID/syr4wFXwMK',	NULL,	NULL,	0,	3,	'2017-06-24 06:46:47',	NULL,	'2017-06-24 06:37:26',	'2017-06-24 06:46:47'),
 (12,	'TEA2017060002',	'Wina',	'Marlina',	'085711202889',	NULL,	-6.55592,	106.9928,	'PGRI Ciampea 2',	'winamarlina977@gmail.com',	'$2y$10$PeQ/lmOvrhLT4QIm5yrJW..jBt/d7zB0udhvzoIk9VO6muvs4xG7S',	NULL,	NULL,	0,	2,	'2017-07-02 04:58:47',	NULL,	'2017-06-24 06:45:40',	'2017-07-02 04:58:47'),
@@ -415,4 +433,4 @@ INSERT INTO `user` (`id`, `unique_number`, `first_name`, `last_name`, `phone_num
 (21,	'STU2017070004',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina972@gmail.com',	'$2y$10$ml2G0GJmzA7t2jVDhM68vObasTzoulUVuoL5LTRBPZiiYqUKlbCoq',	NULL,	NULL,	0,	3,	NULL,	NULL,	'2017-07-21 06:33:52',	'2017-07-21 06:33:52'),
 (22,	'STU2017070005',	'Wina',	'Marlina',	'085711202889',	NULL,	NULL,	NULL,	'PGRI Ciampea 2',	'winamarlina973@gmail.com',	'$2y$10$r4oXG.6dAS53IsRGQLXgVOInlLfeV5ZuFHak8NJ9w8YfA1rZq2aSW',	NULL,	NULL,	0,	3,	'2017-07-21 06:35:14',	NULL,	'2017-07-21 06:35:14',	'2017-07-21 06:35:14');
 
--- 2017-08-03 08:14:51
+-- 2017-08-23 09:44:28

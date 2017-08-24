@@ -40,6 +40,7 @@ class PrivateModel extends BaseModel
     ];
 	
 	protected $with = [
+		//'order',
 		'privateDetails',
 	];
 	

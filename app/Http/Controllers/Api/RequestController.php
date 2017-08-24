@@ -88,4 +88,56 @@ class RequestController extends Controller
 			'message' => 'Success',
 		], 200);
 	}
+	
+	public function notification($uniqueNumber, Request $request)
+	{
+		$user = JWTAuth::parseToken()->authenticate();
+		if ($user->unique_number != $uniqueNumber) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$model = \App\Notification::whereUserId($user->id)->orderBy('created_at', 'desc')->paginate(50);
+		if (!$model) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'Notification is not found',
+			], 404);
+		}
+		
+		$model = $model->toArray();
+		$model['status'] = 200;
+		$model['message'] = 'Success';
+
+		return response()->json($model, 200);
+	}
+	
+	public function getNotification($id, Request $request)
+	{
+		$user = JWTAuth::parseToken()->authenticate();
+		if (!$user) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$model = \App\Notification::whereId($id)->first();
+		if (!$model) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'Notification is not found',
+			], 404);
+		}
+		$model->read_at = Carbon::now()->toDateTimeString();
+		$model->save();
+
+		return response()->json([
+			'status' => 200,
+			'message' => 'success',
+			'data' => $model
+		], 200);
+	}
 }

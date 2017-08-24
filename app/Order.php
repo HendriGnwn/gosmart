@@ -171,7 +171,7 @@ class Order extends BaseModel
 			'code' => PrivateModel::generateCode(),
 			'start_date' => $this->start_date,
 			'end_date' => $this->end_date,
-			'status' => PrivateModel::STATUS_NOT_YET_GOING,
+			'status' => PrivateModel::STATUS_ON_GOING,
 		];
 		$private->fill($attributes);
 		$private->save();
@@ -205,6 +205,15 @@ class Order extends BaseModel
 				$privateDetail->save();
 			};
 		}
+		
+		$notification = new Notification();
+		$notification->user_id = $this->user_id;
+		$notification->name = 'Order #' . $this->code . ' telah dinyatakan Lunas';
+		$notification->description = 'Order dengan #' . $this->code . ' telah lunas pada tanggal  ' . $this->paid_at . '. Les bisa dimulai sekarang dengan Guru ' . $this->teacher->getFullName();
+		$notification->category = Notification::CATEGORY_ORDER_CONFIRMATION;
+		$notification->created_at = $notification->updated_at = \Carbon\Carbon::now()->toDateTimeString();
+		$notification->save();
+		$notification->sendPushNotification();
 		
 		return true;
 	}
