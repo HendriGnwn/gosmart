@@ -171,7 +171,7 @@ class Order extends BaseModel
 			'code' => PrivateModel::generateCode(),
 			'start_date' => $this->start_date,
 			'end_date' => $this->end_date,
-			'status' => PrivateModel::STATUS_NOT_YET_GOING,
+			'status' => PrivateModel::STATUS_ON_GOING,
 		];
 		$private->fill($attributes);
 		$private->save();

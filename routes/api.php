@@ -50,6 +50,11 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 			Route::post('/confirmation/{uniqueNumber}/{orderId}', 'Api\OrderController@confirmation');
 			Route::get('/histories/{uniqueNumber}', 'Api\OrderController@histories');
 		});
+		Route::group(['prefix' => 'private'], function () {
+			Route::get('/active/{uniqueNumber}', 'Api\PrivateController@activedPrivate');
+			Route::get('/histories/{uniqueNumber}', 'Api\PrivateController@histories');
+			Route::post('/check/{uniqueNumber}/{privateId}', 'Api\PrivateController@check');
+		});
 		
 		Route::get('/courses-availability', 'Api\CourseController@listAvailability');
 		Route::get('/similiar-courses/{id}', 'Api\CourseController@getSimiliarTeacherCourses');
