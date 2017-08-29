@@ -52,6 +52,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['requiredParameterJson']], func
 		});
 		Route::group(['prefix' => 'private'], function () {
 			Route::get('/active/{uniqueNumber}', 'Api\PrivateController@activedPrivate');
+			Route::get('/actives-by-teacher/{uniqueNumber}', 'Api\PrivateController@activedPrivates');
 			Route::get('/histories/{uniqueNumber}', 'Api\PrivateController@histories');
 			Route::post('/check/{uniqueNumber}/{privateId}', 'Api\PrivateController@check');
 		});

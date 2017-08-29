@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Config;
+use function GuzzleHttp\json_encode;
 
 class Firebase {
 	
@@ -48,7 +49,7 @@ class Firebase {
  
     // function makes curl request to firebase servers
     private function sendPushNotification($fields) {
-         
+         return true;
         // Set POST variables
         $url = 'https://fcm.googleapis.com/fcm/send';
  

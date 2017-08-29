@@ -377,19 +377,52 @@ class TeacherController extends Controller
 			$request['approved_at'] = null;
 		}
 		
+		if (isset($request->file)) {
+			$model->deleteFile();
+			$files = $request->file('file');
+			$path = TeacherCourse::DESTINATION_PATH;
+			$name = rand(10000,99999).'.'.$files->getClientOriginalExtension();
+			$request['module'] = $name;
+			$files->move($path,$name);
+		}
+		
 		if ($model->expected_cost != $request->expected_cost) {
 			$request['expected_cost_updated_at'] = Carbon::now();
 		}
 		$request['final_cost'] = $request->expected_cost + ($request->additional_cost + $request->admin_fee);
 		
         $requestData = $request->all();
+		$model->fill($requestData);
 		
-        $model->update($requestData);
+        $model->save();
+		$model->sendNotificationCourse();
 
         Session::flash('flash_message', 'Teacher Course updated!');
 
         return redirect('admin/teacher/' . $model->user_id);
 	}
+	
+	/**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     *
+     * @return View
+     */
+    public function updateTeacherCourse($id)
+    {
+        $model = TeacherCourse::findOrFail($id);
+		
+		$model->status = TeacherCourse::STATUS_ACTIVE;
+		$model->approved_by = \Auth::user()->id;
+		$model->approved_at = Carbon::now();
+		$model->save();
+		$model->sendNotificationCourse();
+		
+		Session::flash('flash_message', 'Teacher Course '. $model->user->unique_number .', '. $model->course->name .' updated!');
+
+        return redirect('admin');
+    }
 	
 	/**
      * Remove the specified resource from storage.
@@ -417,6 +450,8 @@ class TeacherController extends Controller
 		$model->status = TeacherTotalHistory::STATUS_REJECTED;
 		$model->save();
 		
+		$model->sendNotificationTotalHistoryReject();
+		
 		$model->sendEmailReject();
 		
 		Session::flash('flash_message', 'Total History successfully saved to reject!');
@@ -431,6 +466,8 @@ class TeacherController extends Controller
 		$model->approved_at = Carbon::now();
 		$model->status = TeacherTotalHistory::STATUS_APPROVED;
 		$model->save();
+		
+		$model->sendNotificationTotalHistoryApproved();
 		
 		Session::flash('flash_message', 'Total History successfully saved to approve!');
 		
@@ -463,6 +500,8 @@ class TeacherController extends Controller
 		$model->done_at = Carbon::now();
 		$model->status = TeacherTotalHistory::STATUS_DONE;
 		$model->save();
+		
+		$model->sendNotificationTotalHistoryDone();
 		
 		$model->sendEmailDone();
 		

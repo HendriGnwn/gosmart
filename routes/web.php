@@ -20,6 +20,7 @@ Auth::routes();
 Route::group(['middleware' => ['auth', 'AdminAccess'], 'prefix' => 'admin'], function() {
 	Route::get('/dashboard/list-teacher', ['as' => 'dashboard.listteacher', 'uses' => 'Admin\\DashboardController@listTeachers']);
 	Route::get('/dashboard/list-total-histories', ['as' => 'dashboard.listotalhistories', 'uses' => 'Admin\\DashboardController@listTotalHistories']);
+	Route::get('/dashboard/list-teacher-course-confirmations', ['as' => 'dashboard.listTeacherCourseConfirmations', 'uses' => 'Admin\\DashboardController@listTeacherCourseConfirmation']);
 	Route::get('/', 'Admin\\DashboardController@index');
 	
 	Route::get('/payment/data', ['as' => 'payment.data', 'uses' => 'Admin\\PaymentController@anyData']);
@@ -53,6 +54,9 @@ Route::group(['middleware' => ['auth', 'AdminAccess'], 'prefix' => 'admin'], fun
 	Route::delete('/teacher/course/delete/{id}', 'Admin\\TeacherController@destroyCourse');
 	
 	Route::get('/teacher/{id}/edit-course', 'Admin\\TeacherController@editCourse');
+	Route::patch('/teacher/edit-course/{id}', 'Admin\\TeacherController@updateCourse');
+	
+	Route::get('/teacher/{id}/update-teacher-course', 'Admin\\TeacherController@updateTeacherCourse');
 	
 	Route::get('/teacher/{id}/total-history-reject', 'Admin\\TeacherController@totalHistoryReject');
 	Route::get('/teacher/{id}/total-history-approve', 'Admin\\TeacherController@totalHistoryApprove');
