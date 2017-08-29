@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('testapi', function () {
+	$notification = \App\Notification::findOrfail(1);
+	var_dump($notification->sendPushNotification());
+});
+
 Auth::routes();
 
 Route::group(['middleware' => ['auth', 'AdminAccess'], 'prefix' => 'admin'], function() {
