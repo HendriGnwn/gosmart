@@ -317,4 +317,18 @@ class User extends BaseModel implements
 				return '<a href="' . url("admin/user/{$this->id}") . '" data-toggle="tooltip" title="" data-original-title="'. $this->getFullName() .'">'. $this->getFullName() .'</a>';
 		}
 	}
+	
+	public function sendNotificationTeacherActive()
+	{
+		$notification = new Notification();
+		$notification->user_id = $this->id;
+		$notification->name = 'Selamat, Admin telah mengaktifkan Anda menjadi Guru';
+		$notification->description = 'Anda telah resmi menjadi Guru di Go Smart Les Magistra, silakan untuk melengkapi data pribadi dan tambah pelajaran yang Anda ingin ajar.';
+		$notification->category = Notification::CATEGORY_USER_CONFIRMATION;
+		$notification->created_at = $notification->updated_at = \Carbon\Carbon::now()->toDateTimeString();
+		$notification->save();
+		$notification->sendPushNotification();
+		
+		return true;
+	}
 }

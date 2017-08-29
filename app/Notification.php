@@ -10,6 +10,7 @@ class Notification extends BaseModel
 	const CATEGORY_HONOR_CONFIRMATION = 15;
 	const CATEGORY_TEACHER_COURSE_CONFIRMATION = 20;
 	const CATEGORY_REMINDER = 25;
+	const CATEGORY_USER_CONFIRMATION = 30;
 	
 	
 	protected $table = 'notification';
@@ -73,10 +74,12 @@ class Notification extends BaseModel
 			'body' => strip_tags(substr($this->description, 0, 80)),
 			'sound' => 'default',
 			'badge' => 0,
-			'click_action' => 'com.atc.gosmartlesmagistra.firebase.message.NEW_NOTIFICATION',
+			'click_action' => 'com.atc.gosmartlesmagistra.firebase.notification.NEW_NOTIFICATION',
 		];
 	
-		$firebase->sendNewMessage($this->user->firebase_token, $this, $notifications);
+		if ($this->user->firebase_token != null) {
+			$firebase->sendNewMessage($this->user->firebase_token, $this, $notifications);
+		}
 		
 		return true;
 	}

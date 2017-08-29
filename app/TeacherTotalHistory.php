@@ -126,6 +126,42 @@ class TeacherTotalHistory extends BaseModel
 		}
 	}
 	
+	public function sendNotificationTotalHistoryReject()
+	{
+		$notification = new Notification();
+		$notification->user_id = $this->user_id;
+		$notification->name = 'Request Honor di tolak';
+		$notification->description = 'Permohonan pencairan uang honor sebesar Rp. ' . $this->getFormattedTotal() . ' telah ditolak.';
+		$notification->category = Notification::CATEGORY_HONOR_CONFIRMATION;
+		$notification->created_at = $notification->updated_at = \Carbon\Carbon::now()->toDateTimeString();
+		$notification->save();
+		$notification->sendPushNotification();
+	}
+	
+	public function sendNotificationTotalHistoryApproved()
+	{
+		$notification = new Notification();
+		$notification->user_id = $this->user_id;
+		$notification->name = 'Request Honor di konfirmasi';
+		$notification->description = 'Permohonan pencairan uang honor sebesar Rp. ' . $this->getFormattedTotal() . ' telah konfirmasi oleh admin, mohon tunggu sampai Status Done / Selesai karena pada status tersebut uang sudah di transfer ke Rekening Anda.';
+		$notification->category = Notification::CATEGORY_HONOR_CONFIRMATION;
+		$notification->created_at = $notification->updated_at = \Carbon\Carbon::now()->toDateTimeString();
+		$notification->save();
+		$notification->sendPushNotification();
+	}
+	
+	public function sendNotificationTotalHistoryDone()
+	{
+		$notification = new Notification();
+		$notification->user_id = $this->user_id;
+		$notification->name = 'Request Honor telah Done';
+		$notification->description = 'Permohonan pencairan uang honor sebesar Rp. ' . $this->getFormattedTotal() . ' telah selesai di proses, Uang sudah di transfer ke Rekening Anda.';
+		$notification->category = Notification::CATEGORY_HONOR_CONFIRMATION;
+		$notification->created_at = $notification->updated_at = \Carbon\Carbon::now()->toDateTimeString();
+		$notification->save();
+		$notification->sendPushNotification();
+	}
+	
 	public function sendEmailReject()
 	{
 		return true;

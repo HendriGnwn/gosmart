@@ -33,7 +33,43 @@ class PrivateController extends Controller
 			], 404);
 		}
 		
-		$model = PrivateModel::whereUserId($user->id)->whereStatus(PrivateModel::STATUS_ON_GOING)->orderBy('private.created_at', 'desc')->first();
+		$model = PrivateModel::whereUserId($user->id)->whereStatus(PrivateModel::STATUS_ON_GOING)->orderBy('private.created_at', 'desc')->get();
+		if (!$model) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'Private Status not `On Going`',
+			], 404);
+		}
+		
+		return response()->json([
+			'status' => 200,
+			'message' => 'success',
+			'data' => $model,
+		], 200);
+	}
+	
+	public function activedPrivates($uniqueNumber, Request $request)
+	{
+		$user = JWTAuth::parseToken()->authenticate();
+		if ($user->unique_number != $uniqueNumber || $user->role != User::ROLE_TEACHER) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$user = User::whereUniqueNumber($uniqueNumber)
+			->roleApps()
+			->appsActived()
+			->first();
+		if (!$user) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$model = PrivateModel::whereTeacherId($user->id)->whereStatus(PrivateModel::STATUS_ON_GOING)->orderBy('private.created_at', 'desc')->get();
 		if (!$model) {
 			return response()->json([
 				'status' => 404,

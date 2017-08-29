@@ -103,4 +103,53 @@ class DashboardController extends Controller
 		
         return $datatables->make(true);
     }
+	
+	public function listTeacherCourseConfirmation(Request $request)
+    {
+        DB::statement(DB::raw('set @rownum=0'));
+        $model = \App\TeacherCourse::join('user', 'teacher_course.user_id', '=', 'user.id')
+			->select([
+            \DB::raw('@rownum  := @rownum  + 1 AS rownum'), 'teacher_course.*', 'user.first_name AS first_name', 'user.unique_number AS unique_number', 'user.email AS email'])
+				->whereIn('teacher_course.status', [\App\TeacherCourse::STATUS_INACTIVE])
+				->orderBy('teacher_course.created_at', 'desc')
+				->with(['course']);
+
+         $datatables = app('datatables')->of($model)
+			->editColumn('unique_number', function ($model) {
+				return isset($model->user) ? $model->user->unique_number : null;
+			})
+			->editColumn('first_name', function ($model) {
+				return isset($model->user) ? $model->user->getUserDetailHtml() : null;
+			})
+			->editColumn('expected_cost', function ($model) {
+				return $model->getFormattedExpectedCost();
+			})
+			->editColumn('final_cost', function ($model) {
+				return $model->getFormattedFinalCost();
+			})
+			->editColumn('created_at', function ($model) {
+				return $model->created_at;
+			})
+			->editColumn('status', function ($model) {
+				return $model->getStatusLabel();
+			})
+            ->addColumn('action', function ($model) {
+				return '<a onclick="return confirm(\'Are you sure you would like to accept this teacher course?\');" href="'.url("admin/teacher/" . $model->id ."/update-teacher-course").'" class="btn btn-xs btn-primary rounded" data-toggle="tooltip" title="Done" data-original-title="'. trans('systems.edit') .'"><i class="fa fa-check-square"></i></a> ';
+            });
+
+        if ($keyword = $request->get('search')['value']) {
+            $datatables->filterColumn('rownum', 'whereRaw', '@rownum  + 1 like ?', ["%{$keyword}%"]);
+        }
+
+        if ($range = $datatables->request->get('range')) {
+            $rang = explode(":", $range);
+            if($rang[0] != "Invalid date" && $rang[1] != "Invalid date" && $rang[0] != $rang[1]){
+                $datatables->whereBetween('teacher_course.created_at', ["$rang[0] 00:00:00", "$rang[1] 23:59:59"]);
+            }else if($rang[0] != "Invalid date" && $rang[1] != "Invalid date" && $rang[0] == $rang[1]) {
+                $datatables->whereBetween('teacher_course.created_at', ["$rang[0] 00:00:00", "$rang[1] 23:59:59"]);
+            }
+        }
+		
+        return $datatables->make(true);
+    }
 }

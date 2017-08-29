@@ -40,6 +40,8 @@ class TeacherCourse extends BaseModel
     protected $hidden = [
         'user_id', 
 		'approved_by', 
+		'approved_at', 
+		'status', 
 		'created_at', 
 		'updated_at', 
     ];
@@ -119,5 +121,20 @@ class TeacherCourse extends BaseModel
 	public function getCourseName()
 	{
 		return isset($this->course) ? $this->course->name : null;
+	}
+	
+	public function sendNotificationCourse()
+	{
+		if ($this->status == self::STATUS_ACTIVE) {
+			$notification = new Notification();
+			$notification->user_id = $this->user_id;
+			$notification->name = "Permintaan Mengajar {$this->course->name} di terima";
+			$notification->description = "Permintaan untuk mengajar {$this->course->name} diterima.";
+			$notification->category = Notification::CATEGORY_TEACHER_COURSE_CONFIRMATION;
+			$notification->created_at = $notification->updated_at = \Carbon\Carbon::now()->toDateTimeString();
+			$notification->save();
+			$notification->sendPushNotification();
+			return true;
+		}
 	}
 }

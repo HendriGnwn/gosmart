@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Config;
+use function GuzzleHttp\json_encode;
 
 class Firebase {
 	

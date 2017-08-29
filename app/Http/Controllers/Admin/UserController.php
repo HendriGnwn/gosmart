@@ -116,12 +116,29 @@ class UserController extends Controller
      */
     public function update($id, Request $request)
     {
-        $this->validate($request, $this->rules);
+		$rules = $this->rules;
+		unset($rules['password']);
+		$rules['email'] = 'required|email|max:100|unique:user,email,' . $id;
+        $this->validate($request, $rules);
 		
 		$model = User::findOrFail($id);
+
+		if (!empty($request->password)) {
+			$request['password'] = bcrypt($request->password);
+		} else {
+			$request['password'] = $model->password;
+		}
+		$oldStatus = $model->status;
+		$model->fill($request->all());
+        $model->save();
 		
-        $requestData = $request->all();
-        $model->update($requestData);
+		if ($model->role == User::ROLE_TEACHER) {
+			if ($oldStatus != User::STATUS_ACTIVE) {
+				if ($model->status == User::STATUS_ACTIVE) {
+					$model->sendNotificationTeacherActive();
+				}
+			}
+		}
 
         Session::flash('flash_message', 'User updated!');
 
