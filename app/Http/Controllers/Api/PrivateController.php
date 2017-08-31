@@ -15,7 +15,7 @@ class PrivateController extends Controller
 	public function activedPrivate($uniqueNumber, Request $request)
 	{
 		$user = JWTAuth::parseToken()->authenticate();
-		if ($user->unique_number != $uniqueNumber || $user->role != User::ROLE_STUDENT) {
+		if ($user->unique_number != $uniqueNumber) {
 			return response()->json([
 				'status' => 404,
 				'message' => 'User is not found',
@@ -33,7 +33,13 @@ class PrivateController extends Controller
 			], 404);
 		}
 		
-		$model = PrivateModel::whereUserId($user->id)->whereStatus(PrivateModel::STATUS_ON_GOING)->orderBy('private.created_at', 'desc')->get();
+		$model = null;
+		if ($user->role == User::ROLE_STUDENT) {
+		    $model = PrivateModel::with(['student', 'teacher'])->whereUserId($user->id)->whereStatus(PrivateModel::STATUS_ON_GOING)->orderBy('private.created_at', 'desc')->get();
+		} else if ($user->role == User::ROLE_TEACHER) {
+		    $model = PrivateModel::with(['student', 'teacher'])->whereTeacherId($user->id)->whereStatus(PrivateModel::STATUS_ON_GOING)->orderBy('private.created_at', 'desc')->get();
+		}
+		
 		if (!$model) {
 			return response()->json([
 				'status' => 404,
@@ -69,7 +75,7 @@ class PrivateController extends Controller
 			], 404);
 		}
 		
-		$model = PrivateModel::whereTeacherId($user->id)->whereStatus(PrivateModel::STATUS_ON_GOING)->orderBy('private.created_at', 'desc')->get();
+		$model = PrivateModel::with(['student', 'teacher'])->whereTeacherId($user->id)->whereStatus(PrivateModel::STATUS_ON_GOING)->orderBy('private.created_at', 'desc')->get();
 		if (!$model) {
 			return response()->json([
 				'status' => 404,
@@ -237,7 +243,7 @@ class PrivateController extends Controller
 		
 		$perPage = 50;
 		
-		$model = PrivateModel::whereUserId($user->id)
+		$model = PrivateModel::with(['student', 'teacher'])->whereUserId($user->id)
 				->orderBy('private.created_at', 'desc')
 				->paginate($perPage);
 		

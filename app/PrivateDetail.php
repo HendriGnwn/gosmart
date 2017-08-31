@@ -30,6 +30,10 @@ class PrivateDetail extends BaseModel
 		'student_on_details',
 		'teacher_on_details',
 	];
+	
+	protected $with = [
+	    'teacherCourse'
+	];
 
     /**
      * The attributes that should be hidden for arrays.

@@ -339,6 +339,13 @@ class OrderController extends Controller
 			return response()->json([
 				'status' => 404,
 				'message' => 'User is not found',
+				'validators' => [
+				        'bank_id' => null,
+						'bank_number' => null,
+						'bank_holder_name' => null,
+						'amount' => null,
+						'evidence' => null,
+				    ],
 			], 404);
 		}
 		
@@ -350,6 +357,13 @@ class OrderController extends Controller
 			return response()->json([
 				'status' => 404,
 				'message' => 'User is not found',
+				'validators' => [
+				        'bank_id' => null,
+						'bank_number' => null,
+						'bank_holder_name' => null,
+						'amount' => null,
+						'evidence' => null,
+				    ],
 			], 404);
 		}
 		
@@ -361,6 +375,13 @@ class OrderController extends Controller
 			return response()->json([
 				'status' => 400,
 				'message' => 'Status order is already confirmed',
+				'validators' => [
+				        'bank_id' => null,
+						'bank_number' => null,
+						'bank_holder_name' => null,
+						'amount' => null,
+						'evidence' => null,
+				    ],
 			], 400);
 		}
 		
