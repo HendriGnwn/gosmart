@@ -243,9 +243,16 @@ class PrivateController extends Controller
 		
 		$perPage = 50;
 		
-		$model = PrivateModel::with(['student', 'teacher'])->whereUserId($user->id)
+		$model = [];
+		if ($user->role == User::ROLE_TEACHER) {
+			$model = PrivateModel::with(['student', 'teacher'])->whereTeacherId($user->id)
 				->orderBy('private.created_at', 'desc')
 				->paginate($perPage);
+		} else if ($user->role == User::ROLE_STUDENT) {
+			$model = PrivateModel::with(['student', 'teacher'])->whereUserId($user->id)
+				->orderBy('private.created_at', 'desc')
+				->paginate($perPage);
+		}
 		
 		$model = $model->toArray();
 		$model['status'] = 200;

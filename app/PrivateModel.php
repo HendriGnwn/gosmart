@@ -115,4 +115,9 @@ class PrivateModel extends BaseModel
 		$label = $label == null ? $this->getDetailUrl() : $label;
 		return "<a href='{$this->getDetailUrl()}' target='_blank'>{$label}</a>";
 	}
+	
+	public function getFirstPrivateDetail()
+	{
+		return isset($this->privateDetails[0]) ? $this->privateDetails[0] : null;
+	}
 }

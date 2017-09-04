@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\FormatConverter;
 use App\Helpers\ImageHelper;
+use App\PrivateModel;
 use App\TeacherBank;
 use App\TeacherTotalHistory;
 use App\User;
@@ -469,6 +470,60 @@ class UserController extends Controller
 			'status' => 200,
 			'message' => 'Thank you, Your request will be processed',
 			'data' => $result,
+		], 200);
+	}
+	
+	public function schedules($uniqueNumber, Request $request)
+	{
+		$user = JWTAuth::parseToken()->authenticate();
+		if ($user->unique_number != $uniqueNumber) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		$user = User::whereId($user->id)->roleApps()->actived()->first();
+		if (!$user) {
+			return response()->json([
+				'status' => 404,
+				'message' => 'User is not found',
+			], 404);
+		}
+		
+		if ($user->role == User::ROLE_TEACHER) {
+			$privateModels = PrivateModel::with(['student', 'teacher'])->whereTeacherId($user->id)->whereStatus(PrivateModel::STATUS_ON_GOING)->orderBy('private.created_at', 'desc')->get();
+		} else if ($user->role == User::ROLE_STUDENT) {
+			$privateModels = PrivateModel::with(['student', 'teacher'])->whereUserId($user->id)->whereStatus(PrivateModel::STATUS_ON_GOING)->orderBy('private.created_at', 'desc')->get();
+		}
+		
+		$schedules = [];
+		if (count($privateModels) > 0) {
+			$no = 0;
+			foreach ($privateModels as $privateModel) {
+				$onAts = explode(',', $privateModel->getFirstPrivateDetail()->on_at);
+				$dates = [];
+				foreach ($onAts as $onAt) {
+					if (\Carbon\Carbon::now()->toDateString() == \Carbon\Carbon::parse($onAt)->toDateString()) {
+						$schedules[$no]['private_model'] = $privateModel;
+						if ($user->role == User::ROLE_TEACHER) {
+							$schedules[$no]['message'] = "Jadwal ngajar  ". Carbon::parse($onAt)->toDateTimeString() ." dengan mata pelajaran " . $privateModel->getFirstPrivateDetail()->teacherCourse->course->name . " untuk siswa " . $privateModel->student->getFullName();
+						} else if ($user->role == User::ROLE_STUDENT) {
+							$schedules[$no]['message'] = "Jadwal belajar ". Carbon::parse($onAt)->toDateTimeString() ." dengan mata pelajaran " . $privateModel->getFirstPrivateDetail()->teacherCourse->course->name . " untuk Guru " . $privateModel->teacher->getFullName();
+						}
+						$schedules[$no]['date'] = $onAt;
+						$no++;
+						break;
+					}
+				}
+				
+			}
+		}
+		
+		return response()->json([
+			'status' => 200,
+			'message' => 'Success',
+			'data' => $schedules,
 		], 200);
 	}
 }

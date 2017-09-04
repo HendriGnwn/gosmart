@@ -206,10 +206,21 @@ class Order extends BaseModel
 			};
 		}
 		
+		// to student
 		$notification = new Notification();
 		$notification->user_id = $this->user_id;
 		$notification->name = 'Order #' . $this->code . ' telah dinyatakan Lunas';
 		$notification->description = 'Order dengan #' . $this->code . ' telah lunas pada tanggal  ' . $this->paid_at . '. Les bisa dimulai sekarang dengan Guru ' . $this->teacher->getFullName();
+		$notification->category = Notification::CATEGORY_ORDER_CONFIRMATION;
+		$notification->created_at = $notification->updated_at = \Carbon\Carbon::now()->toDateTimeString();
+		$notification->save();
+		$notification->sendPushNotification();
+		
+		// to teacher
+		$notification = new Notification();
+		$notification->user_id = $this->teacher_id;
+		$notification->name = 'Selamat. Anda mendapat Order untuk mengajar #' . $private->code;
+		$notification->description = 'Anda ditugaskan untuk mengajar ' . $this->getFirstOrderDetail()->teacherCourse->course->name . ' dengan siswa ' . $this->student->getFullName() . ' yang beralamatkan di ' . $this->student->address;
 		$notification->category = Notification::CATEGORY_ORDER_CONFIRMATION;
 		$notification->created_at = $notification->updated_at = \Carbon\Carbon::now()->toDateTimeString();
 		$notification->save();
@@ -241,5 +252,10 @@ class Order extends BaseModel
 			self::STATUS_WAITING_PAYMENT,
 			self::STATUS_CONFIRMED
 		]);
+	}
+	
+	public function getFirstOrderDetail()
+	{
+		return isset($this->orderDetails[0]) ? $this->orderDetails[0] : null;
 	}
 }
