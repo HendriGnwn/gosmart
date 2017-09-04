@@ -185,7 +185,8 @@ class Order extends BaseModel
 					$studentDetails[] = $teacherDetails[] =  [
 						'on_at' => $detail,
 						'check' => 0,
-						'check_at' => ''
+						'check_at' => '',
+						'description' => ''
 					];
 				}
 				

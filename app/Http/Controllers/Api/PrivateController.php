@@ -115,6 +115,7 @@ class PrivateController extends Controller
 			'private_detail_id' => 'required|exists:private_detail,id',
 			'on_at' => 'required',
 			'checklist' => 'required',
+			'description' => 'required',
 		]);
 		
 		if ($validators->fails()) {
@@ -164,6 +165,7 @@ class PrivateController extends Controller
 			if ($onAt['on_at'] == $request->on_at) {
 				$onAt['check'] = $request->checklist;
 				$onAt['check_at'] = Carbon::now()->toDateTimeString();
+				$onAt['description'] = $request->description;
 			}
 			$detail[] = $onAt;
 		}

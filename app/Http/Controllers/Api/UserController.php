@@ -506,10 +506,11 @@ class UserController extends Controller
 				foreach ($onAts as $onAt) {
 					if (\Carbon\Carbon::now()->toDateString() == \Carbon\Carbon::parse($onAt)->toDateString()) {
 						$schedules[$no]['private_model'] = $privateModel;
+						$formattedDate = FormatConverter::indoDateFormat(Carbon::parse($onAt)->toDateTimeString(), '%A, %d %b %Y %H:%M');
 						if ($user->role == User::ROLE_TEACHER) {
-							$schedules[$no]['message'] = "Jadwal ngajar  ". Carbon::parse($onAt)->toDateTimeString() ." dengan mata pelajaran " . $privateModel->getFirstPrivateDetail()->teacherCourse->course->name . " untuk siswa " . $privateModel->student->getFullName();
+							$schedules[$no]['message'] = "Jadwal ngajar {$formattedDate} dengan mata pelajaran " . $privateModel->getFirstPrivateDetail()->teacherCourse->course->name . " untuk siswa " . $privateModel->student->getFullName();
 						} else if ($user->role == User::ROLE_STUDENT) {
-							$schedules[$no]['message'] = "Jadwal belajar ". Carbon::parse($onAt)->toDateTimeString() ." dengan mata pelajaran " . $privateModel->getFirstPrivateDetail()->teacherCourse->course->name . " untuk Guru " . $privateModel->teacher->getFullName();
+							$schedules[$no]['message'] = "Jadwal belajar {$formattedDate} dengan mata pelajaran " . $privateModel->getFirstPrivateDetail()->teacherCourse->course->name . " untuk Guru " . $privateModel->teacher->getFullName();
 						}
 						$schedules[$no]['date'] = $onAt;
 						$no++;
