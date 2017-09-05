@@ -140,4 +140,43 @@ class RequestController extends Controller
 			'data' => $model
 		], 200);
 	}
+	
+	public function sendFeedback(Request $request)
+	{
+		$validators = \Validator::make($request->all(), [
+			'first_name' => 'required',
+			'email' => 'required|email',
+			'phone' => 'required|numeric',
+			'message' => 'required',
+		]);
+		
+		if ($validators->fails()) {
+			return response()->json([
+				'status' => 400,
+				'message' => 'Some parameters is invalid',
+				'validators' => FormatConverter::parseValidatorErrors($validators)
+			], 400);
+		}
+		$models = [
+			'first_name' => $request->first_name,
+			'last_name' => $request->last_name,
+			'email' => $request->email,
+			'phone' => $request->phone,
+			'message' => $request->message,
+			'created_at' => Carbon::now()->toDateTimeString(),
+		];
+		\Mail::send('emails.api.send-feedback', [
+			'model' => $models,
+		], function ($message) use($models) {
+			$message->to([
+				'hendri.gnw@gmail.com'
+			], 'Hendri Gunawan')
+					->subject('Go Smart Send Feedback - ' . $models['first_name']);
+		});
+		
+		return response()->json([
+			'status' => 201,
+			'message' => 'Terimakasih atas kritik dan sarannya.'
+		], 201);
+	}
 }
