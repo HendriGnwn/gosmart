@@ -5,6 +5,9 @@ namespace App;
 class PrivateDetail extends BaseModel
 {
 	protected $table = 'private_detail';
+	
+	const CHECK_TRUE = 1;
+	const CHECK_FALSE = 0;
 
 	/**
      * The attributes that are mass assignable.

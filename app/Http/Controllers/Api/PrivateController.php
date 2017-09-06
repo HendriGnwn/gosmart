@@ -207,14 +207,17 @@ class PrivateController extends Controller
 		}
 		
 		if (($studentCheck == true) && ($teacherCheck == true)) {
-			$privateDetail->checklist = 1;
+			$privateDetail->checklist = PrivateDetail::CHECK_TRUE;
 			$privateDetail->checklist_at = Carbon::now()->toDateTimeString();
+			$private->status = PrivateModel::STATUS_DONE;
 		} else {
-			$privateDetail->checklist = 0;
+			$privateDetail->checklist = PrivateDetail::CHECK_FALSE;
 			$privateDetail->checklist_at = null;
+			$private->status = PrivateModel::STATUS_ON_GOING;
 		}
 		
 		$privateDetail->save();
+		$private->save();
 		
 		$model = $model->toArray();
 		$model['status'] = 201;
