@@ -43,7 +43,9 @@ class TeacherProfile extends BaseModel
     ];
 	
 	protected $with = [
-		'teacherBank'
+		'teacherBank',
+		'teacherCourses',
+		'teacherTotalHistories',
 	];
 
 

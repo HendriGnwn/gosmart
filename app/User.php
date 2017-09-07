@@ -72,9 +72,6 @@ class User extends BaseModel implements
 	protected $with = [
 		'studentProfile', 
 		'teacherProfile',
-		'teacherProfile.teacherCourses',
-		'teacherProfile.teacherCourses.course.courseLevel',
-		'teacherProfile.teacherTotalHistories',
 	];
 	
 	public function __construct(array $attributes = array())
