@@ -42,6 +42,7 @@ class PrivateModel extends BaseModel
 	protected $with = [
 		//'order',
 		'privateDetails',
+		'review',
 	];
 	
 	public function order() 
@@ -63,6 +64,11 @@ class PrivateModel extends BaseModel
 	{
 		return $this->hasMany('\App\PrivateDetail', 'private_id', 'id');
 	}
+	public function review()
+	{
+		return $this->hasOne('\App\Review', 'private_id', 'id')->orderBy('review.id', 'desc');
+	}
+	
 	
     public static function generateCode($prefix = 'PRI', $padLength = 4, $separator = '-') 
     {
@@ -70,7 +76,7 @@ class PrivateModel extends BaseModel
         $leftLen = strlen($left);
         $increment = 1;
 
-        $last = self::where('code', 'LIKE', "'%$left%'")
+        $last = self::where('code', 'LIKE', "%$left%")
                 ->orderBy('id', 'desc')
                 ->limit(1)
                 ->first();
@@ -119,5 +125,10 @@ class PrivateModel extends BaseModel
 	public function getFirstPrivateDetail()
 	{
 		return isset($this->privateDetails[0]) ? $this->privateDetails[0] : null;
+	}
+	
+	public function getTeacherTotalHonor()
+	{
+		return $this->order->final_amount - (\App\Config::getAdditionalCost() + \App\Config::getTeacherCourseAdminFee());
 	}
 }

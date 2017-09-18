@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+	var_dump(\App\Order::generateCode());die;
 });
 
 Route::get('testapi', function () {

@@ -47,6 +47,10 @@ class PrivateController extends Controller
 			], 404);
 		}
 		
+		if (count($model) <= 0) {
+			$model = null;
+		}
+		
 		return response()->json([
 			'status' => 200,
 			'message' => 'success',
@@ -143,8 +147,8 @@ class PrivateController extends Controller
 			], 404);
 		}
 		
-		$today = strtotime(date('Y-m-d H:i:s'));
-		$date = strtotime($request->on_at);
+		$today = strtotime(date('Y-m-d'));
+		$date = strtotime(Carbon::parse($request->on_at)->toDateString());
 		if($today < $date) {
 			return response()->json([
 				'status' => 404,
@@ -210,6 +214,21 @@ class PrivateController extends Controller
 			$privateDetail->checklist = PrivateDetail::CHECK_TRUE;
 			$privateDetail->checklist_at = Carbon::now()->toDateTimeString();
 			$private->status = PrivateModel::STATUS_DONE;
+			if ($user->role == User::ROLE_TEACHER) {
+				$totalHistory = new \App\TeacherTotalHistory();
+				$totalHistory->user_id = $user->id;
+				$totalHistory->private_id = $private->id;
+				$totalHistory->operation = \App\TeacherTotalHistory::OPERATION_PLUS;
+				$totalHistory->total = $private->getTeacherTotalHonor();
+				$totalHistory->status = \App\TeacherTotalHistory::STATUS_DONE;
+				$totalHistory->created_at = $totalHistory->updated_at = Carbon::now()->toDateTimeString();
+				$totalHistory->save();
+				
+				$teacherProfile = \App\TeacherProfile::whereUserId($user->id)->first();
+				$teacherProfile->total = $teacherProfile->total + $totalHistory->total;
+				$teacherProfile->total_updated_at = Carbon::now()->toDateTimeString();
+				$teacherProfile->save();
+			}
 		} else {
 			$privateDetail->checklist = PrivateDetail::CHECK_FALSE;
 			$privateDetail->checklist_at = null;

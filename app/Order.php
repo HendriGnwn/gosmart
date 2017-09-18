@@ -131,11 +131,11 @@ class Order extends BaseModel
         $leftLen = strlen($left);
         $increment = 1;
 
-        $last = self::where('code', 'LIKE', "'%$left%'")
+        $last = Order::where('code', 'LIKE', "%$left%")
                 ->orderBy('id', 'desc')
                 ->limit(1)
                 ->first();
-
+		
         if ($last) {
             $increment = (int) substr($last->code, $leftLen, $padLength);
             $increment++;
@@ -216,6 +216,8 @@ class Order extends BaseModel
 		$notification->created_at = $notification->updated_at = \Carbon\Carbon::now()->toDateTimeString();
 		$notification->save();
 		$notification->sendPushNotification();
+		
+		sleep(4);
 		
 		// to teacher
 		$notification = new Notification();

@@ -483,7 +483,7 @@ class UserController extends Controller
 			], 404);
 		}
 		
-		$user = User::whereId($user->id)->roleApps()->actived()->first();
+		$user = User::whereId($user->id)->roleApps()->first();
 		if (!$user) {
 			return response()->json([
 				'status' => 404,
@@ -527,6 +527,10 @@ class UserController extends Controller
 				}
 				
 			}
+		}
+		
+		if (count($schedules) <= 0) {
+			$schedules = null;
 		}
 		
 		return response()->json([

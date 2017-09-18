@@ -83,9 +83,12 @@ class RequestController extends Controller
 		$review->created_at =$review->updated_at = Carbon::now()->toDateTimeString();
 		$review->save();
 		
+		$privateModel = PrivateModel::whereId($request->private_id)->statusDone()->first();
+		
 		return response()->json([
 			'status' => 200,
 			'message' => 'Success',
+			'data' => $privateModel,
 		], 200);
 	}
 	
