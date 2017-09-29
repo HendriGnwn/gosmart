@@ -1,4 +1,10 @@
 
+<div aria-required="true" class="form-group required form-group-default {{ $errors->has('title') ? 'has-error' : ''}}">
+    {!! Form::label('title', 'Title (Lulusan)') !!}
+    {!! Form::select('title', \App\TeacherProfile::titleLabels(), null, ['class' => 'full-width', 'data-init-plugin' => 'select2']) !!}
+</div>
+{!! $errors->first('title', '<p class="help-block">:message</p>') !!}
+
 <div aria-required="true" class="form-group required form-group-default {{ $errors->has('first_name') ? 'has-error' : ''}}">
     {!! Form::label('first_name', 'First Name') !!}
     {!! Form::text('first_name', null, ['class' => 'form-control', 'required' => 'required']) !!}

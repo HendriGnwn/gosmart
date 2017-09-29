@@ -7,7 +7,7 @@
 
 <div aria-required="true" class="form-group required form-group-default {{ $errors->has('last_name') ? 'has-error' : ''}}">
     {!! Form::label('last_name', 'Last Name') !!}
-    {!! Form::text('last_name', null, ['class' => 'form-control', 'required' => 'required']) !!}
+    {!! Form::text('last_name', null, ['class' => 'form-control']) !!}
 </div>
 {!! $errors->first('last_name', '<p class="help-block">:message</p>') !!}
 
@@ -32,20 +32,20 @@
 
 <div aria-required="true" class="form-group required form-group-default {{ $errors->has('latitude') ? 'has-error' : ''}}">
     {!! Form::label('latitude', 'Latitude') !!}
-    {!! Form::text('latitude', null, ['class' => 'form-control', 'required' => 'required', 'type'=>'number']) !!}
+    {!! Form::text('latitude', null, ['class' => 'form-control', 'type'=>'number']) !!}
 </div>
 {!! $errors->first('latitude', '<p class="help-block">:message</p>') !!}
 
 
 <div aria-required="true" class="form-group required form-group-default {{ $errors->has('longitude') ? 'has-error' : ''}}">
     {!! Form::label('longitude', 'Longitude') !!}
-    {!! Form::text('longitude', null, ['class' => 'form-control', 'required' => 'required', 'type'=>'number']) !!}
+    {!! Form::text('longitude', null, ['class' => 'form-control', 'type'=>'number']) !!}
 </div>
 {!! $errors->first('longitude', '<p class="help-block">:message</p>') !!}
 
 <div aria-required="true" class="form-group required form-group-default {{ $errors->has('address') ? 'has-error' : ''}}">
     {!! Form::label('address', 'Address') !!}
-    {!! Form::textarea('address', null, ['class' => 'form-control', 'required' => 'required']) !!}
+    {!! Form::textarea('address', null, ['class' => 'form-control']) !!}
 </div>
 {!! $errors->first('address', '<label class="error">:message</label>') !!}
 

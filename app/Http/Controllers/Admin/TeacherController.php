@@ -19,6 +19,7 @@ use Session;
 class TeacherController extends Controller
 {
 	protected $rules = [
+		'title' => 'required',
 		'first_name' => 'required',
 		'phone_number' => 'required|numeric',
 		'address' => 'required',
@@ -73,6 +74,8 @@ class TeacherController extends Controller
 		$requestData = $request->all();
 		$user = new User();
 		$user->fill($requestData);
+		$user->title = $request['title'];
+		$user->password = bcrypt($user->password);
 		
 		switch ($request->role) {
 			case User::ROLE_SUPERADMIN :
@@ -129,10 +132,20 @@ class TeacherController extends Controller
      */
     public function update($id, Request $request)
     {
-        $this->validate($request, $this->rules);
+		$rules = $this->rules;
+		unset($rules['email']);
+		unset($rules['password']);
+		$rules['email'] = 'required|email|max:100|unique:user,email,'.$id;
+		$rules['password'] = 'required|min:6|max:255';
+        $this->validate($request, $rules);
 		
 		$model = User::findOrFail($id);
 		
+		if (!empty($request->password)) {
+			$request['password'] = bcrypt($request->password);
+		} else {
+			$request['password'] = $model->password;
+		}
         $requestData = $request->all();
         $model->update($requestData);
 

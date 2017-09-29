@@ -60,6 +60,7 @@ class UserController extends Controller
 		$requestData = $request->all();
 		$user = new User();
 		$user->fill($requestData);
+		$user->password = bcrypt($user->password);
 		
 		switch ($request->role) {
 			case User::ROLE_SUPERADMIN :
@@ -117,8 +118,10 @@ class UserController extends Controller
     public function update($id, Request $request)
     {
 		$rules = $this->rules;
+		unset($rules['email']);
 		unset($rules['password']);
-		$rules['email'] = 'required|email|max:100|unique:user,email,' . $id;
+		$rules['email'] = 'required|email|max:100|unique:user,email,'.$id;
+		$rules['password'] = 'required|min:6|max:255';
         $this->validate($request, $rules);
 		
 		$model = User::findOrFail($id);

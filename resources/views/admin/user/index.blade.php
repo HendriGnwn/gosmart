@@ -156,7 +156,7 @@ function hapus(){
     $('#modalDelete').modal('hide');
     var id = $('#did').val();
     $.ajax({
-        url: '{{url("admin/course")}}' + "/" + id + '?' + $.param({"_token" : '{{ csrf_token() }}' }),
+        url: '{{url("admin/user")}}' + "/" + id + '?' + $.param({"_token" : '{{ csrf_token() }}' }),
         type: 'DELETE',
         complete: function(data) {
             oTable.draw();
