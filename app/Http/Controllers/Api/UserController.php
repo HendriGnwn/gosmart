@@ -9,7 +9,7 @@ use App\TeacherBank;
 use App\TeacherTotalHistory;
 use App\User;
 use Carbon\Carbon;
-use Eventviva\ImageResize;
+use \Gumlet\ImageResize;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -89,37 +89,37 @@ class UserController extends Controller
 		
 		$user = User::whereId($user->id)->roleTeacher()->first();
 		
-		if (!empty($request->photo) || $request->photo!= '') {
-			$photoBase64 = $request->photo;
-			if (!ImageHelper::isImageBase64($photoBase64)) {
-				return response()->json([
-					'status' => 400,
-					'message' => 'Some Parameters is invalid',
-					'validators' => [
-						'first_name' => null,
-						'phone_number' => null,
-						'address' => null,
-						'email' => null,
-						'latitude' => null,
-						'longitude' => null,
-						'title' => null,
-						'graduated' => null,
-						'bio' => null,
-						'photo' => 'Photo format is invalid',
-						'upload_izajah' => null,
-					],
-				]);
-			}
-			$photoData = ImageHelper::getImageBase64Information($photoBase64);
-			$img = ImageResize::createFromString(base64_decode($photoData['data']));
-			$img->resizeToWidth(500);
-			
-			$user->deleteFile();
-			$imageFilename = str_slug($request->first_name . ' ' . $request->last_name . ' ' . time()) . '.' . $photoData['extension'];
-			
-			$img->save($user->getPath() . $imageFilename);
-			$request['photo'] = $imageFilename;
-		}
+//		if (!empty($request->photo) || $request->photo!= '') {
+//			$photoBase64 = $request->photo;
+//			if (!ImageHelper::isImageBase64($photoBase64)) {
+//				return response()->json([
+//					'status' => 400,
+//					'message' => 'Some Parameters is invalid',
+//					'validators' => [
+//						'first_name' => null,
+//						'phone_number' => null,
+//						'address' => null,
+//						'email' => null,
+//						'latitude' => null,
+//						'longitude' => null,
+//						'title' => null,
+//						'graduated' => null,
+//						'bio' => null,
+//						'photo' => 'Photo format is invalid',
+//						'upload_izajah' => null,
+//					],
+//				]);
+//			}
+//			$photoData = ImageHelper::getImageBase64Information($photoBase64);
+//			$img = ImageResize::createFromString(base64_decode($photoData['data']));
+//			$img->resizeToWidth(500);
+//			
+//			$user->deleteFile();
+//			$imageFilename = str_slug($request->first_name . ' ' . $request->last_name . ' ' . time()) . '.' . $photoData['extension'];
+//			
+//			$img->save($user->getPath() . $imageFilename);
+//			$request['photo'] = $imageFilename;
+//		}
 		
 		if (!empty($request->upload_izajah)) {
 			$izajahBase64 = $request->upload_izajah;
@@ -162,7 +162,7 @@ class UserController extends Controller
 				'longitude',
 				'address',
 				'email',
-				'photo'
+				//'photo'
 			]);
 		} else {
 			$userRequest = $request->only([
@@ -241,36 +241,36 @@ class UserController extends Controller
 		
 		$user = User::whereId($user->id)->roleStudent()->first();
 		
-		if (!empty($request->photo)) {
-			$photoBase64 = $request->photo;
-			if (!ImageHelper::isImageBase64($photoBase64)) {
-				return response()->json([
-					'status' => 400,
-					'message' => 'Some Parameters is invalid',
-					'validators' => [
-						'first_name' => null,
-						'phone_number' => null,
-						'address' => null,
-						'email' => null,
-						'latitude' => null,
-						'longitude' => null,
-						'school' => null,
-						'degree' => null,
-						'school_address' => null,
-						'photo' => 'Photo format is invalid',
-					],
-				]);
-			}
-			$photoData = ImageHelper::getImageBase64Information($photoBase64);
-			$img = ImageResize::createFromString(base64_decode($photoData['data']));
-			$img->resizeToWidth(500);
-			
-			$user->deleteFile();
-			$imageFilename = str_slug($request->first_name . ' ' . $request->last_name . ' ' . time()) . '.' . $photoData['extension'];
-			
-			$img->save($user->getPath() . $imageFilename);
-			$request['photo'] = $imageFilename;
-		}
+//		if (!empty($request->photo)) {
+//			$photoBase64 = $request->photo;
+//			if (!ImageHelper::isImageBase64($photoBase64)) {
+//				return response()->json([
+//					'status' => 400,
+//					'message' => 'Some Parameters is invalid',
+//					'validators' => [
+//						'first_name' => null,
+//						'phone_number' => null,
+//						'address' => null,
+//						'email' => null,
+//						'latitude' => null,
+//						'longitude' => null,
+//						'school' => null,
+//						'degree' => null,
+//						'school_address' => null,
+//						'photo' => 'Photo format is invalid',
+//					],
+//				]);
+//			}
+//			$photoData = ImageHelper::getImageBase64Information($photoBase64);
+//			$img = ImageResize::createFromString(base64_decode($photoData['data']));
+//			$img->resizeToWidth(500);
+//			
+//			$user->deleteFile();
+//			$imageFilename = str_slug($request->first_name . ' ' . $request->last_name . ' ' . time()) . '.' . $photoData['extension'];
+//			
+//			$img->save($user->getPath() . $imageFilename);
+//			$request['photo'] = $imageFilename;
+//		}
 		
 		if (isset($request['photo']) && $request['photo'] != '') {
 			$userRequest = $request->only([
@@ -281,7 +281,7 @@ class UserController extends Controller
 				'longitude',
 				'address',
 				'email',
-				'photo',
+				//'photo',
 			]);
 		} else {
 			$userRequest = $request->only([

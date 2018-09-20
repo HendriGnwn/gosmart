@@ -64,7 +64,7 @@
 
 <div aria-required="true" class="form-group required form-group-default {{ $errors->has('password') ? 'has-error' : ''}}">
     {!! Form::label('password', 'Password') !!}
-    {!! Form::password('password', ['class' => 'form-control', 'required' => 'required']) !!}
+    {!! Form::password('password', ['class' => 'form-control']) !!}
 </div>
 {!! $errors->first('password', '<p class="help-block">:message</p>') !!}
 

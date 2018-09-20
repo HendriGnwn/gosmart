@@ -136,7 +136,7 @@ class TeacherController extends Controller
 		unset($rules['email']);
 		unset($rules['password']);
 		$rules['email'] = 'required|email|max:100|unique:user,email,'.$id;
-		$rules['password'] = 'required|min:6|max:255';
+		$rules['password'] = 'max:255';
         $this->validate($request, $rules);
 		
 		$model = User::findOrFail($id);

@@ -161,6 +161,7 @@ class Order extends BaseModel
 			return;
 		}
 		
+        \DB::beginTransaction();
 		$private = new PrivateModel();
 		$attributes = [
 			'user_id' => $this->user_id,
@@ -228,6 +229,7 @@ class Order extends BaseModel
 		$notification->created_at = $notification->updated_at = \Carbon\Carbon::now()->toDateTimeString();
 		$notification->save();
 		$notification->sendPushNotification();
+        \DB::commit();
 		
 		return true;
 	}

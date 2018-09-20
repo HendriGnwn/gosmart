@@ -7,14 +7,15 @@
     "require": {
         "php": ">=5.6.4",
         "appzcoder/crud-generator": "^2.0",
+        "gumlet/php-image-resize": "1.9.*",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.3",
+        "symfony/polyfill-iconv": "^1.9",
         "themsaid/laravel-mail-preview": "^1.2",
         "tymon/jwt-auth": "0.5.*",
-		"yajra/laravel-datatables-oracle": "^6.23",
-		"eventviva/php-image-resize": "*"
+        "yajra/laravel-datatables-oracle": "^6.23"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

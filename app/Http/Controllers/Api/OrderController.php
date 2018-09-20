@@ -11,7 +11,7 @@ use App\Payment;
 use App\TeacherCourse;
 use App\User;
 use Carbon\Carbon;
-use Eventviva\ImageResize;
+use \Gumlet\ImageResize;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -97,7 +97,8 @@ class OrderController extends Controller
 		$onAt = explode(',', $request->on_at);
 		$startDate = $onAt[0] ? $onAt[0] : null;
 		$endDate = end($onAt) ? end($onAt): null;
-		
+        
+		\DB::beginTransaction();
 		$model = new Order();
 		$model->code = Order::generateCode();
 		$model->teacher_id = $teacher->id;
@@ -113,15 +114,24 @@ class OrderController extends Controller
 		$model->created_at = $model->updated_at = Carbon::now()->toDateTimeString();
 		$model->save();
 		
+        $teacherCourse = TeacherCourse::find($request->teacher_course_id);
+        if (!$teacherCourse) {
+            $course = 1;
+        } else {
+            $course = $teacherCourse->course_id;
+        }
+        
 		$detail = new OrderDetail();
 		$detail->order_id = $model->id;
 		$detail->teacher_course_id = $request->teacher_course_id;
+        $detail->course_id = $course;
 		$detail->on_at = $request->on_at;
 		$detail->section = $teacherCourse->course->section;
 		$detail->section_time = $teacherCourse->course->section_time;
 		$detail->amount = $teacherCourse->final_cost;
 		$detail->created_at = $detail->updated_at = Carbon::now()->toDateTimeString();
 		$detail->save();
+        \DB::commit();
 
 		$result = Order::statusDisplayAppsOrder()
 				->orderBy('order.created_at', 'desc')
@@ -419,11 +429,12 @@ class OrderController extends Controller
 				]);
 			}
 			$evidenceData = ImageHelper::getImageBase64Information($evidenceBase64);
-			$img = ImageResize::createFromString(base64_decode($evidenceData['data']));
-			
-			$filename = str_slug($uniqueNumber . ' ' . $request->last_name . ' ' . time()) . '.' . $evidenceData['extension'];
-			
-			$img->save($model->getPath() . $filename);
+//			$img = ImageResize::createFromString(base64_decode($evidenceData['data']));
+//			
+//			$filename = str_slug($uniqueNumber . ' ' . $request->last_name . ' ' . time()) . '.' . $evidenceData['extension'];
+//			
+//			$img->save($model->getPath() . $filename);
+            $filename = null;
 			$request['upload_bukti'] = $filename;
 		} else {
 			if (!ImageHelper::isImageBase64($evidenceBase64)) {

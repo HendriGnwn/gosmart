@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
 	/**
 	 * login credentials
-	 * 
+	 * $2y$10$wH1hxf905Uvp93ExgbgcQe7tcZKZpdthoAvWYXa8BMHhpOC/qOQFO
 	 * @param Request $request
 	 * @return json
 	 */
@@ -37,13 +37,13 @@ class AuthController extends Controller
 		
 		try {
 			if (!$token = JWTAuth::attempt($credentials)) {
-				return response()->json([
-					'status' => 401,
-					'message' => 'Invalid Credentials',
-				], 401);
-			}
-		} catch (Exception $ex) {
 			return response()->json([
+				'status' => 401,
+					'message' => 'Invalid Credentials',
+			], 401);
+		}
+		} catch (Exception $ex) {
+            return response()->json([
 				'status' => 400,
 				'message' => 'Could Not Create Token'
 			], 400);
@@ -58,7 +58,7 @@ class AuthController extends Controller
 				'status' => 401,
 				'message' => 'Invalid Credentials'
 			], 401);
-		}
+        }
 		
 		$token = JWTAuth::fromUser($user);
 		$user->last_login_at = Carbon::now()->toDateTimeString();

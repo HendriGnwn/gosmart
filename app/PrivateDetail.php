@@ -16,6 +16,7 @@ class PrivateDetail extends BaseModel
      */
     protected $fillable = [
         'private_id', 
+        'course_id', 
         'teacher_course_id', 
         'on_at', 
         'section', 
